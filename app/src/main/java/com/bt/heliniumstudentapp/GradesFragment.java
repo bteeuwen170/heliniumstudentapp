@@ -573,7 +573,7 @@ public class GradesFragment extends Fragment {
 			int averageCount = 0;
 			double averageTotal = 0;
 
-			String localHTML = gradesHtml.substring(gradesHtml.indexOf("<th class=\"wp3-rotate\" width=\"1%\" title=\"Rapportcijfer\" alt=\"Rapportcijfer\">"), gradesHtml.indexOf("</wissearch:exclude>"));
+			String localHTML = gradesHtml.substring(gradesHtml.indexOf("<th class=\"wp3-rotate\" width=\"1%\" title=\"Rapportcijfer\" alt=\"Rapportcijfer\">"), gradesHtml.indexOf("</wissearch:exclude>")); //FIXME May throw StringIndexOutOfBoundsException
 
 			final Matcher courseMatcher = Pattern.compile("<span title").matcher(localHTML);
 			while (courseMatcher.find()) courseCount ++;
