@@ -76,12 +76,12 @@
         "source": "/home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/drawable-xxxhdpi/abc_btn_radio_to_on_mtrl_000.png"
     },
     {
-        "merged": "/home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/ic_menu_about.png",
-        "source": "/home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/res/drawable-xxxhdpi/ic_menu_about.png"
-    },
-    {
         "merged": "/home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_menu_copy_mtrl_am_alpha.png",
         "source": "/home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/drawable-xxxhdpi/abc_ic_menu_copy_mtrl_am_alpha.png"
+    },
+    {
+        "merged": "/home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/ic_menu_about.png",
+        "source": "/home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/res/drawable-xxxhdpi/ic_menu_about.png"
     },
     {
         "merged": "/home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/build/intermediates/res/merged/debug/drawable-xxxhdpi-v4/abc_ic_voice_search_api_mtrl_alpha.png",
