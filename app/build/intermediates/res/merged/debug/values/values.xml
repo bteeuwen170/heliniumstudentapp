@@ -134,8 +134,6 @@
     <attr format="dimension" name="height"/>
     <attr format="boolean" name="isLightTheme"/>
     <attr format="string" name="title"/>
-    <attr format="reference" name="toolbarHeight"/>
-    <attr format="reference" name="toolbarPadding"/>
     <bool name="abc_action_bar_embed_tabs">true</bool>
     <bool name="abc_action_bar_embed_tabs_pre_jb">false</bool>
     <bool name="abc_action_bar_expanded_action_views_exclusive">true</bool>
@@ -725,7 +723,6 @@
     <string name="dutl">German</string>
     <string name="ec">Economics</string>
     <string name="econ">Economics</string>
-    <string name="email_dev" translatable="false">E-mail</string>
     <string name="en">English</string>
     <string name="entl">English</string>
     <string name="error">An error has occurred</string>
@@ -744,6 +741,7 @@
     <string name="general_class">Class</string>
     <string name="general_language">Language</string>
     <string name="ges">History</string>
+    <string name="github" translatable="false">Github</string>
     <string name="go_to">Go to</string>
     <string name="gr">Greek</string>
     <string name="grades">Grades</string>

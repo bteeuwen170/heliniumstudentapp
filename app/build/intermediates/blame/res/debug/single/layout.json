@@ -1,11 +1,11 @@
 [
     {
-        "merged": "/home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/build/intermediates/res/merged/debug/layout/dialog_update.xml",
-        "source": "/home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/res/layout/dialog_update.xml"
-    },
-    {
         "merged": "/home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/build/intermediates/res/merged/debug/layout/listitem_grades_expanded_compact.xml",
         "source": "/home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/res/layout/listitem_grades_expanded_compact.xml"
+    },
+    {
+        "merged": "/home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/build/intermediates/res/merged/debug/layout/dialog_update.xml",
+        "source": "/home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/res/layout/dialog_update.xml"
     },
     {
         "merged": "/home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/build/intermediates/res/merged/debug/layout/listitem_schedule.xml",
