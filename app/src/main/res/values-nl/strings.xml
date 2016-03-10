@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+	Helinium Leerlingenweb
+
+	Copyright (C) 2015 Bastiaan Teeuwen <bastiaan.teeuwen170@gmail.com>
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+	USA.
+
+-->
+
+<resources>
+
+	<string name="app_name">Helinium Leerlingenapp</string>
+	<string name="app_name_short">Leerlingenapp</string>
+
+	<string name="username">Gebruikersnaam</string>
+	<string name="password">Wachtwoord</string>
+
+	<string name="term">Periode</string>
+	<string name="year">Jaar</string>
+
+	<string name="about">Over</string>
+	<string name="absence">Absentie</string>
+	<string name="authenticating">Authenticeren</string>
+	<string name="automatically">Automatisch</string>
+	<string name="average">Gemiddelde:</string>
+	<string name="cancel">Cancel</string>
+	<string name="database_no">Geen database gevonden</string>
+	<string name="database_version_0">Database versie</string>
+	<string name="database_version_1">Database versie volgende week</string>
+	<string name="database_version_homework">Database versie huiswerk</string>
+	<string name="fulough">Verlof</string>
+	<string name="go_to">Ga naar</string>
+	<string name="homework">Huiswerk</string>
+	<string name="license">Licentie</string>
+	<string name="late">Te laat</string>
+	<string name="login">Inloggen</string>
+	<string name="logout">Uitloggen</string>
+	<string name="logout_confirm">Weet je zeker dat je wilt uitloggen?</string>
+	<string name="medical">Medisch</string>
+	<string name="retry">Opnieuw Proberen</string>
+	<string name="truancy">Spijbelen</string>
+	<string name="update">Update</string>
+	<string name="update_checking">Op updates aan het controleren&#8230;</string>
+	<string name="updated_last">Laatst bijgewerkt:</string>
+	<string name="update_no">Geen updates beschikbaar</string>
+	<string name="while_grades">tijdens het ophalen van cijfers.</string>
+	<string name="while_homework">tijdens het ophalen van huiswerk.</string>
+	<string name="while_login">tijdens het inloggen.</string>
+	<string name="while_schedule">tijdens het ophalen van het rooster.</string>
+
+	<string name="error">Er is een fout opgetreden</string>
+	<string name="error_class">Je klas kon helaas niet automatisch worden gedetecteerd, handmatig selecteren in Instellingen?</string>
+	<string name="error_conn">Kan geen verbinding tot stand te stellen</string>
+	<string name="error_conn_no">Geen verbinding</string>
+	<string name="error_database">Database is verouderd</string>
+	<string name="error_ok">Geen OK of redirect ontvangen</string>
+	<string name="error_update">Niet in staat changelog op te halen, toch apk bestand downloaden?</string>
+	<string name="error_userpass">Verkeerde gebruikersnaam of wachtwoord!</string>
+
+	<string name="ago">geleden</string>
+	<string name="day">dag</string>
+	<string name="days">dagen</string>
+	<string name="hour">uur</string>
+	<string name="hours">uur</string>
+	<string name="minute">minuut</string>
+	<string name="minutes">minuten</string>
+
+	<string name="term_1">Periode 1</string>
+	<string name="term_2">Periode 2</string>
+	<string name="term_3">Periode 3</string>
+	<string name="term_4">Periode 4</string>
+
+	<string name="settings">Instellingen</string>
+	<string name="general">Algemeen</string>
+	<string name="general_advanced">Geavanceerde modus</string>
+	<string name="general_class">Klas</string>
+	<string name="general_language">Taal</string>
+	<string name="customization">Personalisatie</string>
+	<string name="customization_theme">Thema</string>
+	<string name="customization_color_primary">Primaire kleur</string>
+	<string name="customization_color_accent">Accentkleur</string>
+	<string name="pref_customization_compact">Compacte weergave</string>
+	<string name="schedule">Rooster</string>
+	<string name="schedule_init">Ververs bij opstarten</string>
+	<string name="schedule_next_week">Sla volgende week op</string>
+	<string name="grades">Cijfers</string>
+	<string name="grades_term">Standaard periode</string>
+	<string name="updates">Updates</string>
+	<string name="updates_update_auto">Automatisch bijwerken</string>
+	<string name="updates_check">Zoek naar updates&#8230;</string>
+	<string name="updates_check_summary">Versie:</string>
+
+	<string name="color_0">Rood</string>
+	<string name="color_1">Roze</string>
+	<string name="color_2">Paars</string>
+	<string name="color_3">Diep Paars</string>
+	<string name="color_4">Indigo</string>
+	<string name="color_5">Blauw</string>
+	<string name="color_6">Licht Blauw</string>
+	<string name="color_7">Cyaan</string>
+	<string name="color_8">Groenblauw</string>
+	<string name="color_9">Groen</string>
+	<string name="color_10">Licht Groen</string>
+	<string name="color_11">Limoengroen</string>
+	<string name="color_12">Geel</string>
+	<string name="color_13">Amber</string>
+	<string name="color_14">Oranje</string>
+	<string name="color_15">Diep Orange</string>
+	<string name="color_16">Bruin</string>
+	<string name="color_17">Donker Grijs</string>
+	<string name="color_18">Grijs</string>
+	<string name="color_19">Blauw Grijs</string>
+	<string name="color_20">Wit</string>
+
+</resources>

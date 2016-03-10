@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+	Helinium Leerlingenweb
+
+	Copyright (C) 2015 Bastiaan Teeuwen <bastiaan.teeuwen170@gmail.com>
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+	USA.
+
+-->
+
+<resources>
+
+	<color name="theme_light">#E9E9E9</color>
+	<color name="theme_dialog_light">#FFFFFF</color>
+	<color name="text_disabled_light">#9B9B9B</color>
+	<color name="divider_light">#3C3C3C</color>
+
+	<color name="theme_dark">#303030</color>
+	<color name="theme_dialog_dark">#424242</color>
+	<color name="text_disabled_dark">#646464</color>
+	<color name="divider_dark">#DBDBDB</color>
+
+	<color name="text_light">#FFFFFF</color>
+	<color name="text_secondary_light">#BCBCBC</color>
+	<color name="text_dark">#212121</color>
+	<color name="text_secondary_dark">#737373</color>
+
+	<color name="absent">#FFB3B3</color>
+
+	<color name="red_dark">#D32F2F</color>
+	<color name="red">#F44336</color>
+	<color name="red_accent">#FF5252</color>
+	<color name="red_secondary">#FF8A80</color>
+
+	<color name="pink_dark">#C2185B</color>
+	<color name="pink">#E91E63</color>
+	<color name="pink_accent">#FF4081</color>
+	<color name="pink_secondary">#FF80AB</color>
+
+	<color name="purple_dark">#7B1FA2</color>
+	<color name="purple">#9C27B0</color>
+	<color name="purple_accent">#E040FB</color>
+	<color name="purple_secondary">#EA80FC</color>
+
+	<color name="deep_purple_dark">#512DA8</color>
+	<color name="deep_purple">#673AB7</color>
+	<color name="deep_purple_accent">#7C4DFF</color>
+	<color name="deep_purple_secondary">#B388FF</color>
+
+	<color name="indigo_dark">#303F9F</color>
+	<color name="indigo">#3F51B5</color>
+	<color name="indigo_accent">#536DFE</color>
+	<color name="indigo_secondary">#8C9EFF</color>
+
+	<color name="blue_dark">#1976D2</color>
+	<color name="blue">#2196F3</color>
+	<color name="blue_accent">#448AFF</color>
+	<color name="blue_secondary">#82B1FF</color>
+
+	<color name="light_blue_dark">#0288D1</color>
+	<color name="light_blue">#03A9F4</color>
+	<color name="light_blue_accent">#40C4FF</color>
+	<color name="light_blue_secondary">#80D8FF</color>
+
+	<color name="cyan_dark">#0097A7</color>
+	<color name="cyan">#00BCD4</color>
+	<color name="cyan_accent">#18FFFF</color>
+	<color name="cyan_secondary">#84FFFF</color>
+
+	<color name="teal_dark">#00796B</color>
+	<color name="teal">#009688</color>
+	<color name="teal_accent">#64FFDA</color>
+	<color name="teal_secondary">#A7FFEB</color>
+
+	<color name="green_dark">#388E3C</color>
+	<color name="green">#4CAF50</color>
+	<color name="green_accent">#69F0AE</color>
+	<color name="green_secondary">#B9F6CA</color>
+
+	<color name="light_green_dark">#689F38</color>
+	<color name="light_green">#8BC34A</color>
+	<color name="light_green_accent">#B2FF59</color>
+	<color name="light_green_secondary">#CCFF90</color>
+
+	<color name="lime_dark">#AFB42B</color>
+	<color name="lime">#CDDC39</color>
+	<color name="lime_accent">#EEFF41</color>
+	<color name="lime_secondary">#F4FF81</color>
+
+	<color name="yellow_dark">#FBC02D</color>
+	<color name="yellow">#FFEB3B</color>
+	<color name="yellow_accent">#FFFF00</color>
+	<color name="yellow_secondary">#FFFF8D</color>
+
+	<color name="amber_dark">#FFA000</color>
+	<color name="amber">#FFC107</color>
+	<color name="amber_accent">#FFD740</color>
+	<color name="amber_secondary">#FFE57F</color>
+
+	<color name="orange_dark">#F57C00</color>
+	<color name="orange">#FF9800</color>
+	<color name="orange_accent">#FFAB40</color>
+	<color name="orange_secondary">#FFD180</color>
+
+	<color name="deep_orange_dark">#E64A19</color>
+	<color name="deep_orange">#FF5722</color>
+	<color name="deep_orange_accent">#FF6E40</color>
+	<color name="deep_orange_secondary">#FF9E80</color>
+
+	<color name="brown_dark">#5D4037</color>
+	<color name="brown">#795548</color>
+	<color name="brown_secondary">#8D6E63</color>
+
+	<color name="dark_grey_dark">#000000</color>
+	<color name="dark_grey">#212121</color>
+	<color name="dark_grey_secondary">#424242</color>
+
+	<color name="grey_dark">#616161</color>
+	<color name="grey">#9E9E9E</color>
+	<color name="grey_secondary">#BDBDBD</color>
+
+	<color name="blue_grey_dark">#455A64</color>
+	<color name="blue_grey">#607D8B</color>
+	<color name="blue_grey_secondary">#78909C</color>
+
+	<color name="white_dark">#9B9B9B</color>
+	<color name="white">#FAFAFA</color>
+
+</resources>

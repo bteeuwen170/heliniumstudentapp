@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+	Helinium Leerlingenweb
+
+	Copyright (C) 2015 Bastiaan Teeuwen <bastiaan.teeuwen170@gmail.com>
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+	USA.
+
+-->
+
+<resources>
+
+	<string name="app_name">Helinium Studentapp</string>
+	<string name="app_name_short">Studentapp</string>
+
+	<string name="username">Username</string>
+	<string name="password">Password</string>
+
+	<string name="term">Term</string>
+	<string name="year">Year</string>
+
+	<string name="about">About</string>
+	<string name="absence">Absence</string>
+	<string name="authenticating">Authenticating</string>
+	<string name="automatically">Automatically</string>
+	<string name="average">Average:</string>
+	<string name="cancel">Cancel</string>
+	<string name="database_no">No database found</string>
+	<string name="database_version_0">Database version</string>
+	<string name="database_version_1">Database version next week</string>
+	<string name="database_version_homework">Database version homework</string>
+	<string name="fulough">Fulough</string>
+	<string name="github" translatable="false">Github</string>
+	<string name="go_to">Go to</string>
+	<string name="homework">Homework</string>
+	<string name="license">License</string>
+	<string name="late">Late</string>
+	<string name="login">Login</string>
+	<string name="logout">Logout</string>
+	<string name="logout_confirm">Are you sure you want to log out?</string>
+	<string name="medical">Medical</string>
+	<string name="retry">Retry</string>
+	<string name="truancy">Truancy</string>
+	<string name="update">Update</string>
+	<string name="update_checking">Checking for updates&#8230;</string>
+	<string name="updated_last">Last updated:</string>
+	<string name="update_no">No updates available</string>
+	<string name="while_grades">while retrieving grades.</string>
+	<string name="while_homework">while retrieving homework.</string>
+	<string name="while_login">while logging in.</string>
+	<string name="while_schedule">while retrieving schedule.</string>
+
+	<string name="error">An error has occurred</string>
+	<string name="error_class">Your class couldn\'t be resolved automatically, select manually in Settings?</string>
+	<string name="error_conn">Unable to establish a connection</string>
+	<string name="error_conn_no">No connection</string>
+	<string name="error_database">Database is outdated</string>
+	<string name="error_ok">Didn\'t get OK or redirect</string>
+	<string name="error_update">Unable to retrieve changelog, download latest apk anyways?</string>
+	<string name="error_userpass">Wrong username or password!</string>
+
+	<string name="ago">ago</string>
+	<string name="day">day</string>
+	<string name="days">days</string>
+	<string name="hour">hour</string>
+	<string name="hours">hours</string>
+	<string name="minute">minute</string>
+	<string name="minutes">minutes</string>
+
+	<string name="term_1">Term 1</string>
+	<string name="term_2">Term 2</string>
+	<string name="term_3">Term 3</string>
+	<string name="term_4">Term 4</string>
+
+	<string name="settings">Settings</string>
+	<string name="general">General</string>
+	<string name="general_advanced">Advanced mode</string>
+	<string name="general_class">Class</string>
+	<string name="general_language">Language</string>
+	<string name="customization">Customization</string>
+	<string name="customization_theme">Theme</string>
+	<string name="customization_color_primary">Primary color</string>
+	<string name="customization_color_accent">Accent color</string>
+	<string name="pref_customization_compact">Compact view</string>
+	<string name="schedule">Schedule</string>
+	<string name="schedule_init">Get data on startup</string>
+	<string name="schedule_next_week">Save next week</string>
+	<string name="grades">Grades</string>
+	<string name="grades_term">Default term</string>
+	<string name="updates">Updates</string>
+	<string name="updates_update_auto">Automatic updates</string>
+	<string name="updates_check">Check for updates&#8230;</string>
+	<string name="updates_check_summary">Version:</string>
+
+	<string name="theme_0" translatable="false">Light</string>
+	<string name="theme_1" translatable="false">Dark</string>
+
+	<string name="color_0">Red</string>
+	<string name="color_1">Pink</string>
+	<string name="color_2">Purple</string>
+	<string name="color_3">Deep Purple</string>
+	<string name="color_4">Indigo</string>
+	<string name="color_5">Blue</string>
+	<string name="color_6">Light Blue</string>
+	<string name="color_7">Cyan</string>
+	<string name="color_8">Teal</string>
+	<string name="color_9">Green</string>
+	<string name="color_10">Light Green</string>
+	<string name="color_11">Lime</string>
+	<string name="color_12">Yellow</string>
+	<string name="color_13">Amber</string>
+	<string name="color_14">Orange</string>
+	<string name="color_15">Deep Orange</string>
+	<string name="color_16">Brown</string>
+	<string name="color_17">Dark Grey</string>
+	<string name="color_18">Grey</string>
+	<string name="color_19">Blue Grey</string>
+	<string name="color_20">White</string>
+
+	<string name="add" translatable="false">+</string>
+	<string name="sub" translatable="false">-</string>
+
+</resources>

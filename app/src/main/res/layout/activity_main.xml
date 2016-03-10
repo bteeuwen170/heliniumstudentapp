@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+	Helinium Leerlingenweb
+
+	Copyright (C) 2015 Bastiaan Teeuwen <bastiaan.teeuwen170@gmail.com>
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+	USA.
+
+-->
+
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+
+	<android.support.v4.widget.DrawerLayout
+		android:id="@+id/dl_drawer_am"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:fitsSystemWindows="true"
+		android:orientation="horizontal">
+
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
+
+			<android.support.v7.widget.Toolbar
+				android:id="@+id/tb_toolbar_am"
+				android:layout_width="match_parent"
+				android:layout_height="?attr/actionBarSize"
+				android:elevation="@dimen/toolbar_elevation"
+				app:titleTextAppearance="@style/ToolbarTitle"/>
+
+			<FrameLayout
+				android:id="@+id/fl_container_am"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_below="@id/tb_toolbar_am"
+				android:layout_above="@+id/ll_container_am"/>
+
+			<RelativeLayout
+				android:id="@id/ll_container_am"
+				android:layout_width="fill_parent"
+				android:layout_height="@dimen/listitem_height"
+				android:layout_alignParentBottom="true"
+				android:paddingLeft="@dimen/horizontal_margin"
+				android:paddingRight="@dimen/horizontal_margin"
+				android:gravity="center"
+				android:orientation="vertical">
+
+				<LinearLayout
+					android:layout_width="wrap_content"
+					android:layout_height="fill_parent"
+					android:gravity="center"
+					android:orientation="vertical">
+
+					<TextView
+						android:id="@+id/tv_week_am"
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:textSize="@dimen/primary_textsize"/>
+
+					<TextView
+						android:id="@+id/tv_year_am"
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:textSize="@dimen/secondary_textsize"/>
+
+				</LinearLayout>
+
+				<ImageView
+					android:id="@+id/iv_prev_am"
+					android:layout_width="56dp"
+					android:layout_height="56dp"
+					android:layout_centerVertical="true"
+					android:layout_toStartOf="@+id/iv_select_am"
+					android:layout_toLeftOf="@id/iv_select_am"
+					android:layout_marginEnd="4dp"
+					android:layout_marginRight="4dp"
+					android:padding="@dimen/horizontal_margin"
+					android:contentDescription="@null"
+					android:background="@drawable/action_button"
+					android:src="@drawable/ic_navigate_back"/>
+
+				<ImageView
+					android:id="@id/iv_select_am"
+					android:layout_width="56dp"
+					android:layout_height="56dp"
+					android:layout_centerVertical="true"
+					android:layout_toStartOf="@+id/iv_next_am"
+					android:layout_toLeftOf="@id/iv_next_am"
+					android:layout_marginEnd="4dp"
+					android:layout_marginRight="4dp"
+					android:padding="@dimen/horizontal_margin"
+					android:elevation="6dp"
+					android:contentDescription="@null"
+					android:background="@drawable/action_button"
+					android:src="@drawable/ic_navigate_history"/>
+
+				<ImageView
+					android:id="@id/iv_next_am"
+					android:layout_width="56dp"
+					android:layout_height="56dp"
+					android:layout_centerVertical="true"
+					android:layout_alignParentEnd="true"
+					android:layout_alignParentRight="true"
+					android:padding="@dimen/horizontal_margin"
+					android:contentDescription="@null"
+					android:background="@drawable/action_button"
+					android:src="@drawable/ic_navigate_next"/>
+
+			</RelativeLayout>
+
+		</RelativeLayout>
+
+		<LinearLayout
+			android:id="@+id/ll_status_am"
+			android:layout_width="16dp"
+			android:layout_height="16dp"
+			android:gravity="center"
+			android:orientation="vertical"
+			android:alpha="0">
+
+			<ProgressBar
+				android:id="@+id/pb_progressbar_am"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:indeterminate="true"/>
+
+		</LinearLayout>
+
+		<android.support.design.widget.NavigationView
+			android:id="@+id/nv_drawer_am"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:layout_gravity="start"
+			app:headerLayout="@layout/header_drawer"
+			app:menu="@menu/menu_drawer"/>
+
+	</android.support.v4.widget.DrawerLayout>
+
+<android.support.design.widget.CoordinatorLayout
+	android:id="@+id/cl_snackbar_am"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:layout_alignParentBottom="true"
+	android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>

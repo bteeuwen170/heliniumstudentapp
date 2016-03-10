@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string msgid="4600421777120114993" name="abc_action_bar_home_description">"Navigeren naar startpositie"</string>
+    <string msgid="1397052879051804371" name="abc_action_bar_home_description_format">"%1$s, %2$s"</string>
+    <string msgid="6623331958280229229" name="abc_action_bar_home_subtitle_description_format">"%1$s, %2$s, %3$s"</string>
+    <string msgid="1594238315039666878" name="abc_action_bar_up_description">"Omhoog navigeren"</string>
+    <string msgid="3588849162933574182" name="abc_action_menu_overflow_description">"Meer opties"</string>
+    <string msgid="4076576682505996667" name="abc_action_mode_done">"Gereed"</string>
+    <string msgid="7468859129482906941" name="abc_activity_chooser_view_see_all">"Alles weergeven"</string>
+    <string msgid="2031811694353399454" name="abc_activitychooserview_choose_application">"Een app selecteren"</string>
+    <string msgid="7723749260725869598" name="abc_search_hint">"Zoeken…"</string>
+    <string msgid="3691816814315814921" name="abc_searchview_description_clear">"Zoekopdracht wissen"</string>
+    <string msgid="2550479030709304392" name="abc_searchview_description_query">"Zoekopdracht"</string>
+    <string msgid="8264924765203268293" name="abc_searchview_description_search">"Zoeken"</string>
+    <string msgid="8928215447528550784" name="abc_searchview_description_submit">"Zoekopdracht verzenden"</string>
+    <string msgid="893419373245838918" name="abc_searchview_description_voice">"Gesproken zoekopdracht"</string>
+    <string msgid="3421042268587513524" name="abc_shareactionprovider_share_with">"Delen met"</string>
+    <string msgid="7165123711973476752" name="abc_shareactionprovider_share_with_application">"Delen met %s"</string>
+    <string msgid="1603543279005712093" name="abc_toolbar_collapse_description">"Samenvouwen"</string>
+    <string name="about">Over</string>
+    <string name="absence">Absentie</string>
+    <string name="ago">geleden</string>
+    <string name="ak">Aardrijkskunde</string>
+    <string name="ang">Anglia</string>
+    <string name="app_name">Helinium Leerlingenapp</string>
+    <string name="app_name_short">Leerlingenapp</string>
+    <string name="authenticating">Authenticeren</string>
+    <string name="automatically">Automatisch</string>
+    <string name="average">Gemiddelde:</string>
+    <string name="bi">Biologie</string>
+    <string name="biol">Biologie</string>
+    <string name="bv">Beeldende Vorming</string>
+    <string name="cancel">Cancel</string>
+    <string name="ckv">Culturele en Kunstzinnige Vorming</string>
+    <string name="color_0">Rood</string>
+    <string name="color_1">Roze</string>
+    <string name="color_10">Licht Groen</string>
+    <string name="color_11">Limoengroen</string>
+    <string name="color_12">Geel</string>
+    <string name="color_13">Amber</string>
+    <string name="color_14">Oranje</string>
+    <string name="color_15">Diep Orange</string>
+    <string name="color_16">Bruin</string>
+    <string name="color_17">Donker Grijs</string>
+    <string name="color_18">Grijs</string>
+    <string name="color_19">Blauw Grijs</string>
+    <string name="color_2">Paars</string>
+    <string name="color_20">Wit</string>
+    <string name="color_3">Diep Paars</string>
+    <string name="color_4">Indigo</string>
+    <string name="color_5">Blauw</string>
+    <string name="color_6">Licht Blauw</string>
+    <string name="color_7">Cyaan</string>
+    <string name="color_8">Groenblauw</string>
+    <string name="color_9">Groen</string>
+    <string name="customization">Personalisatie</string>
+    <string name="customization_color_accent">Accentkleur</string>
+    <string name="customization_color_primary">Primaire kleur</string>
+    <string name="customization_theme">Thema</string>
+    <string name="da">Dans</string>
+    <string name="database_no">Geen database gevonden</string>
+    <string name="database_version_0">Database versie</string>
+    <string name="database_version_1">Database versie volgende week</string>
+    <string name="database_version_homework">Database versie huiswerk</string>
+    <string name="day">dag</string>
+    <string name="days">dagen</string>
+    <string name="dr">Drama</string>
+    <string name="du">Duits</string>
+    <string name="dutl">Duits</string>
+    <string name="ec">Economie</string>
+    <string name="econ">Economie</string>
+    <string name="en">Engels</string>
+    <string name="entl">Engels</string>
+    <string name="error">Er is een fout opgetreden</string>
+    <string name="error_class">Je klas kon helaas niet automatisch worden gedetecteerd, handmatig selecteren in Instellingen?</string>
+    <string name="error_conn">Kan geen verbinding tot stand te stellen</string>
+    <string name="error_conn_no">Geen verbinding</string>
+    <string name="error_database">Database is verouderd</string>
+    <string name="error_ok">Geen OK of redirect ontvangen</string>
+    <string name="error_update">Niet in staat changelog op te halen, toch apk bestand downloaden?</string>
+    <string name="error_userpass">Verkeerde gebruikersnaam of wachtwoord!</string>
+    <string name="fa">Frans</string>
+    <string name="fatl">Frans</string>
+    <string name="fulough">Verlof</string>
+    <string name="general">Algemeen</string>
+    <string name="general_advanced">Geavanceerde modus</string>
+    <string name="general_class">Klas</string>
+    <string name="general_language">Taal</string>
+    <string name="ges">Geschiedenis</string>
+    <string name="go_to">Ga naar</string>
+    <string name="gr">Grieks</string>
+    <string name="grades">Cijfers</string>
+    <string name="grades_term">Standaard periode</string>
+    <string name="gs">Geschiedenis</string>
+    <string name="homework">Huiswerk</string>
+    <string name="hour">uur</string>
+    <string name="hours">uur</string>
+    <string name="in">Informatica</string>
+    <string name="kua">Kunst Algemeen</string>
+    <string name="la">Latijn</string>
+    <string name="late">Te laat</string>
+    <string name="license">Licentie</string>
+    <string name="lo">Lichamelijke Opvoeding</string>
+    <string name="login">Inloggen</string>
+    <string name="logout">Uitloggen</string>
+    <string name="logout_confirm">Weet je zeker dat je wilt uitloggen?</string>
+    <string name="maat">Maatschappijleer</string>
+    <string name="medical">Medisch</string>
+    <string name="minute">minuut</string>
+    <string name="minutes">minuten</string>
+    <string name="ml">Mentorles</string>
+    <string name="mu">Muziek</string>
+    <string name="na">Natuurkunde</string>
+    <string name="nat">Natuurkunde</string>
+    <string name="ne">Nederlands</string>
+    <string name="netl">Nederlands</string>
+    <string name="password">Wachtwoord</string>
+    <string name="pk">Podium Kunsten</string>
+    <string name="po">Project Klas</string>
+    <string name="pref_customization_compact">Compacte weergave</string>
+    <string name="pws">Profielwerkstuk</string>
+    <string name="retry">Opnieuw Proberen</string>
+    <string name="rkt">Reken Toets</string>
+    <string name="rv">Rekenvaardigheid</string>
+    <string name="sc">Science</string>
+    <string name="schedule">Rooster</string>
+    <string name="schedule_init">Ververs bij opstarten</string>
+    <string name="schedule_next_week">Sla volgende week op</string>
+    <string name="schk">Scheikunde</string>
+    <string name="settings">Instellingen</string>
+    <string name="sk">Scheikunde</string>
+    <string name="spk">Sport Klas</string>
+    <string msgid="2869576371154716097" name="status_bar_notification_info_overflow">"999+"</string>
+    <string name="term">Periode</string>
+    <string name="term_1">Periode 1</string>
+    <string name="term_2">Periode 2</string>
+    <string name="term_3">Periode 3</string>
+    <string name="term_4">Periode 4</string>
+    <string name="thk">Techniek</string>
+    <string name="truancy">Spijbelen</string>
+    <string name="tv">Taalvaardigheid</string>
+    <string name="update">Update</string>
+    <string name="update_checking">Op updates aan het controleren…</string>
+    <string name="update_no">Geen updates beschikbaar</string>
+    <string name="updated_last">Laatst bijgewerkt:</string>
+    <string name="updates">Updates</string>
+    <string name="updates_check">Zoek naar updates…</string>
+    <string name="updates_check_summary">Versie:</string>
+    <string name="updates_update_auto">Automatisch bijwerken</string>
+    <string name="username">Gebruikersnaam</string>
+    <string name="while_grades">tijdens het ophalen van cijfers.</string>
+    <string name="while_homework">tijdens het ophalen van huiswerk.</string>
+    <string name="while_login">tijdens het inloggen.</string>
+    <string name="while_schedule">tijdens het ophalen van het rooster.</string>
+    <string name="wi">Wiskunde</string>
+    <string name="wisA">Wiskunde A</string>
+    <string name="wisB">Wiskunde B</string>
+    <string name="wisC">Wiskunde C</string>
+    <string name="wisD">Wiskunde D</string>
+    <string name="year">Jaar</string>
+</resources>

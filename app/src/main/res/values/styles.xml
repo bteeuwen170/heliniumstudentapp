@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+	Helinium Leerlingenweb
+
+	Copyright (C) 2015 Bastiaan Teeuwen <bastiaan.teeuwen170@gmail.com>
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+	USA.
+
+-->
+
+<resources>
+
+	<style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar"/>
+
+	<style name="ToolbarTitle" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
+		<item name="android:textSize">20sp</item>
+	</style>
+
+	<style name="lightDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+		<item name="android:textColorPrimary">@color/text_dark</item>
+		<item name="background">@color/theme_dialog_light</item>
+	</style>
+
+	<style name="darkDialog" parent="Theme.AppCompat.Dialog.Alert">
+		<item name="background">@color/theme_dialog_dark</item>
+	</style>
+
+	<style name="lightSettings" parent="AppTheme.Base">
+		<item name="background">@color/theme_dialog_light</item>
+		<item name="android:textColor">@color/text_dark</item>
+		<item name="android:textColorSecondary">@color/text_secondary_dark</item>
+	</style>
+
+	<style name="darkSettings" parent="Theme.AppCompat.Dialog.Alert">
+		<item name="background">@color/theme_dialog_dark</item>
+		<item name="android:textColor">@color/text_light</item>
+		<item name="android:textColorSecondary">@color/text_secondary_light</item>
+	</style>
+
+	<style name="textInputLayout" parent="@android:style/TextAppearance">
+		<item name="colorControlNormal">@color/text_light</item>
+		<item name="colorControlActivated">@color/text_light</item>
+		<item name="colorControlHighlight">@color/text_light</item>
+	</style>
+
+	<style name="AppTheme" parent="AppTheme.Base"/>
+	
+</resources>

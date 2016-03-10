@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+	Helinium Leerlingenweb
+
+	Copyright (C) 2015 Bastiaan Teeuwen <bastiaan.teeuwen170@gmail.com>
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+	USA.
+
+-->
+
+<resources>
+
+	<dimen name="toolbar_elevation">4dp</dimen>
+	<dimen name="divider_height">1dp</dimen>
+	<dimen name="footer_height">36dp</dimen>
+	
+	<dimen name="horizontal_margin">16dp</dimen>
+	<dimen name="vertical_margin">16dp</dimen>
+	<dimen name="listitem_height">72dp</dimen>
+	<dimen name="button_diameter">40dp</dimen>
+	<dimen name="header_textsize">18sp</dimen>
+	<dimen name="primary_textsize">16sp</dimen>
+	<dimen name="secondary_textsize">14sp</dimen>
+
+	<dimen name="compact_horizontal_margin">9dp</dimen>
+	<dimen name="compact_vertical_margin">2dp</dimen>
+	<dimen name="compact_listitem_height">42dp</dimen>
+	<dimen name="compact_button_diameter">26dp</dimen>
+	<dimen name="compact_header_textsize">16sp</dimen>
+	<dimen name="compact_primary_textsize">14sp</dimen>
+	<dimen name="compact_secondary_textsize">12sp</dimen>
+
+</resources>

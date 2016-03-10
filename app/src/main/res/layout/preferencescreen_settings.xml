@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+	Helinium Leerlingenweb
+
+	Copyright (C) 2015 Bastiaan Teeuwen <bastiaan.teeuwen170@gmail.com>
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+	USA.
+
+-->
+
+<!--suppress AndroidElementNotAllowed -->
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
+
+	<PreferenceCategory
+		android:key="pref_general">
+
+		<ListPreference
+			android:key="pref_general_class"
+			android:title="@string/general_class"
+			android:entries="@array/general_class_array"
+			android:entryValues="@array/general_values"
+			android:defaultValue="0"/>
+
+		<ListPreference
+			android:key="pref_general_language"
+			android:title="@string/general_language"
+			android:entries="@array/general_language_array"
+			android:entryValues="@array/general_values"
+			android:defaultValue="0"/>
+
+	</PreferenceCategory>
+
+	<PreferenceCategory
+		android:key="pref_customization">
+
+		<ListPreference
+			android:key="pref_customization_theme"
+			android:title="@string/customization_theme"
+			android:entries="@array/customization_theme_array"
+			android:entryValues="@array/customization_theme_values"
+			android:defaultValue="0"/>
+
+		<ListPreference
+			android:key="pref_customization_color_primary"
+			android:title="@string/customization_color_primary"
+			android:entries="@array/customization_color_primary_array"
+			android:entryValues="@array/customization_color_primary_values"
+			android:defaultValue="4"/>
+
+		<ListPreference
+			android:key="pref_customization_color_accent"
+			android:title="@string/customization_color_accent"
+			android:entries="@array/customization_color_accent_array"
+			android:entryValues="@array/customization_color_accent_values"
+			android:defaultValue="1"/>
+
+		<CheckBoxPreference
+			android:key="pref_customization_compact"
+			android:title="@string/pref_customization_compact"/>
+
+	</PreferenceCategory>
+
+	<PreferenceCategory
+		android:key="pref_schedule">
+
+		<Preference
+			android:key="pref_schedule_version_0"
+			android:title="@string/database_version_0"
+			android:selectable="false"/>
+
+		<Preference
+			android:key="pref_schedule_version_1"
+			android:title="@string/database_version_1"
+			android:selectable="false"/>
+
+		<CheckBoxPreference
+			android:key="pref_schedule_init"
+			android:title="@string/schedule_init"
+			android:defaultValue="true"/>
+
+		<CheckBoxPreference
+			android:key="pref_schedule_next_week"
+			android:title="@string/schedule_next_week"/>
+
+	</PreferenceCategory>
+
+	<PreferenceCategory
+		android:key="pref_grades">
+
+		<Preference
+			android:key="pref_grades_version"
+			android:title="@string/database_version_0"
+			android:selectable="false"/>
+
+		<ListPreference
+			android:key="pref_grades_term"
+			android:title="@string/grades_term"
+			android:entries="@array/grades_term_array"
+			android:entryValues="@array/grades_term_values"
+			android:defaultValue="1"/>
+
+		<CheckBoxPreference
+			android:key="pref_grades_init"
+			android:title="@string/schedule_init"
+			android:defaultValue="true"/>
+
+	</PreferenceCategory>
+
+	<PreferenceCategory
+		android:key="pref_updates">
+
+		<CheckBoxPreference
+			android:key="pref_updates_update_auto"
+			android:title="@string/updates_update_auto"
+			android:defaultValue="true"/>
+
+		<Preference
+			android:key="pref_updates_check"
+			android:title="@string/updates_check"
+			android:summary="@string/updates_check_summary"/>
+
+	</PreferenceCategory>
+
+</PreferenceScreen>

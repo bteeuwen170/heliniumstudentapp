@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+	Helinium Leerlingenweb
+
+	Copyright (C) 2015 Bastiaan Teeuwen <bastiaan.teeuwen170@gmail.com>
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+	USA.
+
+-->
+
+<resources>
+
+	<string name="ak">Geography</string>
+	<string name="ang">Anglia</string>
+	<string name="bi">Biology</string>
+	<string name="biol">Biology</string>
+	<string name="bv">Visual Arts</string>
+	<string name="ckv">Art and Design</string>
+	<string name="da">Dance</string>
+	<string name="dr">Drama</string>
+	<string name="du">German</string>
+	<string name="dutl">German</string>
+	<string name="ec">Economics</string>
+	<string name="econ">Economics</string>
+	<string name="en">English</string>
+	<string name="entl">English</string>
+	<string name="fa">French</string>
+	<string name="fatl">French</string>
+	<string name="gr">Greek</string>
+	<string name="gs">History</string>
+	<string name="ges">History</string>
+	<string name="in">Computer Science</string>
+	<string name="kua">Art</string> <!-- Better translation -->
+	<string name="la">Latin</string>
+	<string name="lo">Physical Education</string>
+	<string name="maat">Social Studies</string>
+	<string name="ml">Tutor Class</string>
+	<string name="mu">Music</string>
+	<string name="na">Physics</string>
+	<string name="nat">Physics</string>
+	<string name="ne">Dutch</string>
+	<string name="netl">Dutch</string>
+	<string name="pk">Performing Arts</string>
+	<string name="po">Project Class</string>
+	<string name="pws">Profile Paper</string>
+	<string name="rv">Numeracy</string>
+	<string name="rkt">Numeracy Test</string>
+	<string name="sc">Science</string>
+	<string name="schk">Chemistry</string>
+	<string name="sk">Chemistry</string>
+	<string name="spk">Sports Class</string>
+	<string name="thk">Science</string>
+	<string name="tv">Language</string>
+	<string name="wi">Mathematics</string>
+	<string name="wisA">Mathematics A</string>
+	<string name="wisB">Mathematics B</string>
+	<string name="wisC">Mathematics C</string>
+	<string name="wisD">Mathematics D</string>
+	
+</resources>

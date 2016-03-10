@@ -1,0 +1,908 @@
+/*
+ *
+ * Helinium Studentapp
+ *
+ * Copyright (C) 2015 Bastiaan Teeuwen <bastiaan.teeuwen170@gmail.com>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+ * USA.
+ *
+ */
+
+package com.bt.heliniumstudentapp;
+
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.RippleDrawable;
+import android.net.ConnectivityManager;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
+import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.internal.view.ContextThemeWrapper;
+import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.view.KeyEvent;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
+import java.net.HttpCookie;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Locale;
+
+public class MainActivity extends AppCompatActivity {
+	protected static AppCompatActivity mainContext; //TODO Make private again
+
+	protected static boolean displayingSnackbar;
+
+	protected static Toolbar toolbarTB;
+	private static ActionBarDrawerToggle drawerDLtoggle;
+	private static DrawerLayout drawerDL;
+	protected static NavigationView drawerNV;
+	protected static View containerFL, containerLL, statusLL;
+	protected static TextView weekTV, yearTV;
+	protected static ImageView prevIV, historyIV, nextIV;
+
+	protected static FragmentManager FM;
+
+	protected static CookieManager cookies;
+
+	protected static int
+			themeColor, themeDialog, themeSettings, themeDisabledTextColor, themeDividerColor, themePrimaryTextColor, themeSecondaryTextColor,
+			primaryColor, darkPrimaryColor,
+			secondaryColor,
+			primaryTextColor, secondaryTextColor,
+			accentPrimaryColor, accentSecondaryColor,
+			accentTextColor;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		mainContext = this;
+
+		MyApplication.setLocale(this);
+
+		if (!isOnline() && PreferenceManager.getDefaultSharedPreferences(this).getString("html_schedule_0", null) == null) { //TODO Keep app running and display empty ScheduleFragment with retry option
+			Toast.makeText(this, getResources().getString(R.string.error_conn_no) + ". " + getResources().getString(R.string.database_no) + ".", Toast.LENGTH_LONG).show();
+			finish();
+		} else if ((PreferenceManager.getDefaultSharedPreferences(this).getString("username", null) == null || PreferenceManager.getDefaultSharedPreferences(this).getString("password", null) == null) &&
+				PreferenceManager.getDefaultSharedPreferences(this).getString("html_schedule_0", null) == null) {
+			startActivity(new Intent(this, LoginActivity.class));
+			finish();
+		} else {
+			setContentView(R.layout.activity_main);
+
+			toolbarTB = (Toolbar) findViewById(R.id.tb_toolbar_am);
+			drawerDL = (DrawerLayout) findViewById(R.id.dl_drawer_am);
+			drawerNV = (NavigationView) findViewById(R.id.nv_drawer_am);
+			containerFL = findViewById(R.id.fl_container_am);
+			containerLL = findViewById(R.id.ll_container_am);
+			statusLL = findViewById(R.id.ll_status_am);
+			weekTV = (TextView) findViewById(R.id.tv_week_am);
+			yearTV = (TextView) findViewById(R.id.tv_year_am);
+			prevIV = (ImageView) findViewById(R.id.iv_prev_am);
+			historyIV = (ImageView) findViewById(R.id.iv_select_am);
+			nextIV = (ImageView) findViewById(R.id.iv_next_am);
+
+			setColors(Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString("pref_customization_theme", "0")),
+					Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString("pref_customization_color_primary", "4")),
+					Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString("pref_customization_color_accent", "14")));
+
+			setSupportActionBar(toolbarTB);
+			toolbarTB.setBackgroundColor(getResources().getColor(primaryColor));
+
+			drawerDLtoggle = new ActionBarDrawerToggle(this, drawerDL, toolbarTB, 0, 0);
+			drawerDLtoggle.setDrawerIndicatorEnabled(false);
+			Drawable navigationIcon = getResources().getDrawable(R.drawable.ic_menu);
+			navigationIcon.setColorFilter(getResources().getColor(primaryTextColor), PorterDuff.Mode.SRC_ATOP);
+			drawerDLtoggle.setHomeAsUpIndicator(navigationIcon);
+			drawerDLtoggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					drawerDL.openDrawer(drawerNV);
+				}
+			});
+			drawerDLtoggle.syncState();
+
+			((ProgressBar) findViewById(R.id.pb_progressbar_am)).getIndeterminateDrawable().setColorFilter(getResources().getColor(accentPrimaryColor), android.graphics.PorterDuff.Mode.MULTIPLY);
+
+			weekTV.setTextColor(getResources().getColor(primaryTextColor));
+			yearTV.setTextColor(getResources().getColor(secondaryTextColor));
+			prevIV.setColorFilter(getResources().getColor(primaryTextColor));
+			historyIV.setColorFilter(getResources().getColor(accentTextColor));
+			nextIV.setColorFilter(getResources().getColor(primaryTextColor));
+
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+				if (themeColor == R.color.theme_dark)
+					getWindow().setStatusBarColor(getResources().getColor(themeColor));
+				else
+					getWindow().setStatusBarColor(getResources().getColor(themeDisabledTextColor));
+
+				setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher),
+						getResources().getColor(themeColor)));
+
+				((GradientDrawable) ((RippleDrawable) prevIV.getBackground()).getDrawable(0)).setColor(getResources().getColor(primaryColor)); //FIXME Improve this ridiculous workaround
+				((GradientDrawable) ((RippleDrawable) historyIV.getBackground()).getDrawable(0)).setColor(getResources().getColor(accentPrimaryColor));
+				((GradientDrawable) ((RippleDrawable) nextIV.getBackground()).getDrawable(0)).setColor(getResources().getColor(primaryColor));
+			} else {
+				((GradientDrawable) prevIV.getBackground()).setColor(getResources().getColor(primaryColor));
+				((GradientDrawable) historyIV.getBackground()).setColor(getResources().getColor(accentPrimaryColor));
+				((GradientDrawable) nextIV.getBackground()).setColor(getResources().getColor(primaryColor));
+			}
+
+			final ColorStateList drawerItemColorStateList = new ColorStateList(
+					new int[][]{ new int[]{ android.R.attr.state_checked }, new int[]{} },
+					new int[] { getResources().getColor(accentSecondaryColor), getResources().getColor(themeSecondaryTextColor) }
+			);
+
+			FM = getSupportFragmentManager();
+			FM.beginTransaction().replace(R.id.fl_container_am, new ScheduleFragment(), "SCHEDULE").commit();
+
+			drawerDL.setBackgroundResource(themeColor);
+			drawerNV.setBackgroundResource(themeColor);
+			containerLL.setBackgroundResource(primaryColor);
+
+			drawerNV.setItemIconTintList(drawerItemColorStateList);
+			drawerNV.setItemTextColor(drawerItemColorStateList);
+			drawerNV.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+
+				@Override
+				public boolean onNavigationItemSelected(final MenuItem menuItem) {
+					drawerDL.closeDrawers();
+					menuItem.setChecked(true);
+					new Handler().postDelayed(new Runnable() {
+
+						@Override
+						public void run() {
+							switch (menuItem.getItemId()) {
+								case R.id.i_schedule_md:
+									if (!FM.findFragmentById(R.id.fl_container_am).getTag().equals("SCHEDULE")) {
+										weekTV.setText("");
+										yearTV.setText("");
+
+										prevIV.setOnClickListener(null);
+										historyIV.setOnClickListener(null);
+										nextIV.setOnClickListener(null);
+
+										FM.beginTransaction().replace(R.id.fl_container_am, new ScheduleFragment(), "SCHEDULE").commit();
+									}
+									break;
+								case R.id.i_grades_md:
+									if (!FM.findFragmentById(R.id.fl_container_am).getTag().equals("GRADES")) {
+										weekTV.setText("");
+										yearTV.setText("");
+
+										prevIV.setOnClickListener(null);
+										historyIV.setOnClickListener(null);
+										nextIV.setOnClickListener(null);
+
+										FM.beginTransaction().replace(R.id.fl_container_am, new GradesFragment(), "GRADES").commit();
+									}
+									break;
+								case R.id.i_settings_md:
+									startActivity(new Intent(mainContext, SettingsActivity.class));
+									break;
+								case R.id.i_logout_md:
+									if (isOnline()) {
+										final AlertDialog.Builder logoutDialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(mainContext, themeDialog));
+
+										logoutDialogBuilder.setTitle(R.string.logout);
+										logoutDialogBuilder.setMessage(R.string.logout_confirm);
+
+										logoutDialogBuilder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+											@Override
+											public void onClick(DialogInterface dialog, int which) {
+												ScheduleFragment.scheduleHtml = null;
+												ScheduleFragment.homeworkJson = null;
+												GradesFragment.gradesHtml = null;
+
+												PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("username", null).apply();
+												PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("password", null).apply();
+												PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("pref_general_class", "0").apply();
+
+												PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("html_schedule_0", null).apply();
+												PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("json_homework_0", null).apply();
+												PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("html_schedule_start_0", null).apply();
+												PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("pref_schedule_version_0", null).apply();
+
+												PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("html_schedule_1", null).apply();
+												PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("html_schedule_start_1", null).apply();
+												PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("pref_schedule_version_1", null).apply();
+
+												PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("html_grades", null).apply();
+												PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("pref_grades_version", null).apply();
+
+												new Handler().postDelayed(new Runnable() {
+
+													@Override
+													public void run() {
+														finish();
+														startActivity(new Intent(mainContext, MainActivity.class));
+													}
+												}, MyApplication.DELAY_RESTART);
+											}
+										});
+
+										logoutDialogBuilder.setNegativeButton(android.R.string.no, null);
+
+										final AlertDialog logoutDialog = logoutDialogBuilder.create();
+
+										logoutDialog.setCanceledOnTouchOutside(true);
+										logoutDialog.show();
+
+										logoutDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(accentSecondaryColor));
+										logoutDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(accentSecondaryColor));
+									} else {
+										Toast.makeText(mainContext, R.string.error_conn_no, Toast.LENGTH_SHORT).show();
+									}
+									break;
+								case R.id.i_about_md:
+									final AlertDialog.Builder aboutDialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(mainContext, themeDialog));
+
+									aboutDialogBuilder.setTitle(R.string.about);
+									aboutDialogBuilder.setMessage("Helinium Leerlingenweb\n\n" +
+													"Copyright (C) 2015 Bastiaan Teeuwen <bastiaan.teeuwen170@gmail.com>\n\n" +
+													"This program is free software; you can redistribute it and/or " +
+													"modify it under the terms of the GNU General Public License " +
+													"as published by the Free Software Foundation; version 2" +
+													"of the License, or (at your option) any later version.\n\n" +
+													"This program is distributed in the hope that it will be useful, " +
+													"but WITHOUT ANY WARRANTY; without even the implied warranty of " +
+													"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the " +
+													"GNU General Public License for more details.\n\n" +
+													"You should have received a copy of the GNU General Public License " +
+													"along with this program; if not, write to the Free Software " +
+													"Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA."
+									);
+
+									aboutDialogBuilder.setPositiveButton(R.string.github, new DialogInterface.OnClickListener() {
+
+										@Override
+										public void onClick(DialogInterface dialog, int which) {
+											Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(MyApplication.URL_GITHUB));
+											startActivity(browserIntent);
+										}
+									});
+
+									aboutDialogBuilder.setNegativeButton(android.R.string.cancel, null);
+
+									final AlertDialog aboutDialog = aboutDialogBuilder.create();
+
+									aboutDialog.setCanceledOnTouchOutside(true);
+									aboutDialog.show();
+
+									((TextView) aboutDialog.findViewById(android.R.id.message)).setTextSize(12);
+
+									aboutDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(getResources().getColor(accentSecondaryColor));
+									aboutDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(accentSecondaryColor));
+									aboutDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(accentSecondaryColor));
+
+									break;
+							}
+						}
+					}, MyApplication.DELAY_DRAWER);
+					return true;
+				}
+			});
+		}
+	}
+
+	protected static boolean isOnline() {
+		return ((ConnectivityManager) mainContext.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() != null
+				&& ((ConnectivityManager) mainContext.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo().isConnectedOrConnecting();
+	}
+
+	protected static void recoverError(final int view, final int error, final int direction, final int transition) {
+		String postfixError = "";
+		switch (view) {
+			case MyApplication.VIEW_LOGIN:
+				postfixError = mainContext.getResources().getString(R.string.while_login);
+				break;
+			case MyApplication.VIEW_SCHEDULE:
+				postfixError = mainContext.getResources().getString(R.string.while_schedule);
+				break;
+			case MyApplication.VIEW_SCHEDULE_HOMEWORK:
+				postfixError = mainContext.getResources().getString(R.string.while_homework);
+				break;
+			case MyApplication.VIEW_GRADES:
+				postfixError = mainContext.getResources().getString(R.string.while_grades);
+				break;
+		}
+
+		switch (error) {
+			case MyApplication.ERR_IO:
+				Toast.makeText(mainContext, mainContext.getResources().getString(R.string.error_conn) + " " + postfixError, Toast.LENGTH_SHORT).show();
+				break;
+			case MyApplication.ERR_OK:
+				Toast.makeText(mainContext, mainContext.getResources().getString(R.string.error_ok) + " " + postfixError, Toast.LENGTH_SHORT).show();
+				break;
+			case MyApplication.ERR_UNDEFINED:
+				Toast.makeText(mainContext, mainContext.getResources().getString(R.string.error) + " " + postfixError, Toast.LENGTH_SHORT).show();
+				break;
+			case MyApplication.ERR_USERPASS:
+				Toast.makeText(mainContext, mainContext.getResources().getString(R.string.error_userpass), Toast.LENGTH_SHORT).show();
+				break;
+		}
+
+		switch (view) {
+			case MyApplication.VIEW_LOGIN:
+				LoginActivity.authenticationProgressDialog.cancel();
+				if (error == MyApplication.ERR_USERPASS) PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("password", null).apply();
+				break;
+			case MyApplication.VIEW_SCHEDULE:
+				final int currentWeek = new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR);
+
+				switch (transition) {
+					case MyApplication.ACTION_INIT_OUT:
+					case MyApplication.ACTION_SHORT_OUT:
+						if (PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_0", null) == null) { //TODO Does this ever happen or is this handled by checkDatabase?
+							Toast.makeText(mainContext, mainContext.getResources().getString(R.string.database_no), Toast.LENGTH_SHORT).show();
+
+							mainContext.finish(); //FIXME Properly close, otherwise app will become really glitchy...
+						} else {
+							setStatusBar(mainContext);
+
+							ScheduleFragment.scheduleHtml = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_0", null);
+							ScheduleFragment.homeworkJson = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("json_homework_0", null);
+
+							ScheduleFragment.parseData(transition);
+						}
+						break;
+				}
+
+				switch (direction) {
+					case MyApplication.DIREC_BACK:
+						if (ScheduleFragment.scheduleFocus > currentWeek && PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_1", null) != null) {
+							ScheduleFragment.scheduleFocus = currentWeek + 1;
+							ScheduleFragment.scheduleHtml = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_1", null);
+							ScheduleFragment.homeworkJson = null;
+						} else {
+							ScheduleFragment.scheduleFocus = currentWeek;
+							ScheduleFragment.scheduleHtml = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_0", null);
+							ScheduleFragment.homeworkJson = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("json_homework_0", null);
+						}
+
+						ScheduleFragment.parseData(transition);
+						break;
+					case MyApplication.DIREC_CURRENT:
+						//setButtons(view, MyApplication.ACTION_ONLINE);
+						setUI(view, transition);
+						break;
+					case MyApplication.DIREC_NEXT:
+						if (ScheduleFragment.scheduleFocus > currentWeek && PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_1", null) != null) {
+							ScheduleFragment.scheduleFocus = currentWeek + 1;
+							ScheduleFragment.scheduleHtml = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_1", null);
+							ScheduleFragment.homeworkJson = null;
+						} else {
+							ScheduleFragment.scheduleFocus = currentWeek;
+							ScheduleFragment.scheduleHtml = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_0", null);
+							ScheduleFragment.homeworkJson = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("json_homework_0", null);
+						}
+
+						ScheduleFragment.parseData(transition);
+						break;
+					case MyApplication.DIREC_OTHER:
+						ScheduleFragment.scheduleFocus = new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR);
+						ScheduleFragment.scheduleHtml = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_0", null);
+						ScheduleFragment.homeworkJson = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("json_homework_0", null);
+
+						ScheduleFragment.parseData(transition);
+						break;
+				}
+				break;
+			case MyApplication.VIEW_SCHEDULE_HOMEWORK:
+				ScheduleFragment.homeworkJson = null;
+				ScheduleFragment.parseData(transition); //TODO Crappy solution
+				break;
+			case MyApplication.VIEW_GRADES:
+				if (direction >= MyApplication.FOCUS_YEAR) {
+					GradesFragment.yearFocus = direction - MyApplication.FOCUS_YEAR;
+				} else {
+					switch (direction) {
+						case MyApplication.DIREC_BACK:
+							GradesFragment.termFocus ++;
+							break;
+						case MyApplication.DIREC_NEXT:
+							GradesFragment.termFocus --;
+							break;
+					}
+				}
+
+				switch (transition) {
+					case MyApplication.ACTION_INIT_OUT:
+						if (PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_grades", null) == null) { //TODO Keep and display empty GradesFragment with retry option
+							Toast.makeText(mainContext, mainContext.getResources().getString(R.string.database_no), Toast.LENGTH_SHORT).show();
+
+							drawerNV.getMenu().findItem(R.id.i_schedule_md).setChecked(true);
+							FM.beginTransaction().replace(R.id.fl_container_am, new ScheduleFragment(), "SCHEDULE").commit();
+
+							setUI(view, transition);
+						} else {
+							GradesFragment.gradesHtml = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_grades", null); //TODO Move elsewhere like in ScheduleFragment
+
+							GradesFragment.parseData(transition);
+						}
+						break;
+					case MyApplication.ACTION_REFRESH_OUT:
+						setUI(view, transition);
+						break;
+				}
+				break;
+		}
+	}
+
+	protected static void setUI(final int view, final int action) {
+		if (action == MyApplication.ACTION_SHORT_IN || (action == MyApplication.ACTION_INIT_IN && view == MyApplication.VIEW_GRADES)) {
+			containerFL.setVisibility(View.GONE);
+			drawerDL.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+			drawerDLtoggle.setToolbarNavigationClickListener(null);
+			drawerDLtoggle.syncState();
+
+			weekTV.setText("");
+			yearTV.setText("");
+
+			prevIV.setAlpha(130);
+			historyIV.setAlpha(130);
+			nextIV.setAlpha(130);
+			containerFL.setAlpha(0);
+			statusLL.setAlpha(1);
+		} else if (action == MyApplication.ACTION_SHORT_OUT || (action == MyApplication.ACTION_INIT_OUT && view == MyApplication.VIEW_GRADES)) {
+			containerFL.setVisibility(View.VISIBLE);
+			drawerDL.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+			drawerDLtoggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					drawerDL.openDrawer(drawerNV);
+				}
+			});
+			drawerDLtoggle.syncState();
+
+			historyIV.setAlpha(255);
+
+			switch (GradesFragment.termFocus) {
+				case 1:
+					prevIV.setAlpha(130);
+					nextIV.setAlpha(255);
+					break;
+				case 4:
+					prevIV.setAlpha(255);
+					nextIV.setAlpha(130);
+					break;
+				default:
+					prevIV.setAlpha(255);
+					nextIV.setAlpha(255);
+					break;
+			}
+
+			final int shortAnimationDuration = mainContext.getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+			statusLL.animate().alpha(0).setDuration(shortAnimationDuration).setListener(null);
+			containerFL.animate().alpha(1).setDuration(shortAnimationDuration).setListener(null);
+		} else if (action == MyApplication.ACTION_INIT_IN) {
+			toolbarTB.setVisibility(View.GONE);
+			containerFL.setVisibility(View.GONE);
+			containerLL.setVisibility(View.GONE);
+			drawerDL.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
+			toolbarTB.setAlpha(0);
+			containerFL.setAlpha(0);
+			containerLL.setAlpha(0);
+			statusLL.setAlpha(1);
+		} else if (action == MyApplication.ACTION_INIT_OUT) {
+			toolbarTB.setVisibility(View.VISIBLE);
+			containerFL.setVisibility(View.VISIBLE);
+			containerLL.setVisibility(View.VISIBLE);
+			drawerDL.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+
+			setStatusBar(mainContext);
+
+			final int shortAnimationDuration = mainContext.getResources().getInteger(android.R.integer.config_shortAnimTime);
+			final int longAnimationDuration = mainContext.getResources().getInteger(android.R.integer.config_longAnimTime);
+
+			toolbarTB.animate().alpha(1).setDuration(longAnimationDuration).setListener(null);
+			containerLL.animate().alpha(1).setDuration(longAnimationDuration).setListener(new AnimatorListenerAdapter() {
+
+				@Override
+				public void onAnimationEnd(Animator animation) {
+					super.onAnimationEnd(animation);
+
+					statusLL.animate().alpha(0).setDuration(shortAnimationDuration).setListener(null);
+					containerFL.animate().alpha(1).setDuration(shortAnimationDuration).setListener(null);
+				}
+			});
+		} else {
+			switch (view) {
+				case MyApplication.VIEW_SCHEDULE:
+					switch (action) {
+						case MyApplication.ACTION_ONLINE:
+						case MyApplication.ACTION_ONLINE_1:
+							prevIV.setAlpha(255);
+							historyIV.setAlpha(255);
+							nextIV.setAlpha(255);
+							break;
+						case MyApplication.ACTION_OFFLINE:
+						case MyApplication.ACTION_OFFLINE_1:
+							if (PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_1", null) == null) {
+								prevIV.setAlpha(130);
+								historyIV.setAlpha(130);
+								nextIV.setAlpha(130);
+							} else {
+								if (ScheduleFragment.scheduleFocus == new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR) + 1) {
+									prevIV.setAlpha(255);
+									historyIV.setAlpha(255);
+									nextIV.setAlpha(130);
+								} else {
+									prevIV.setAlpha(130);
+									historyIV.setAlpha(130);
+									nextIV.setAlpha(255);
+								}
+							}
+							break;
+						case MyApplication.ACTION_REFRESH_IN:
+							drawerDL.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+							drawerDLtoggle.setToolbarNavigationClickListener(null);
+							drawerDLtoggle.syncState();
+
+							prevIV.setAlpha(130);
+							historyIV.setAlpha(130);
+							nextIV.setAlpha(130);
+
+							((SwipeRefreshLayout) ScheduleFragment.scheduleLayout).setRefreshing(true);
+							break;
+						case MyApplication.ACTION_REFRESH_OUT:
+							drawerDL.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+							drawerDLtoggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+
+								@Override
+								public void onClick(View v) {
+									drawerDL.openDrawer(drawerNV);
+								}
+							});
+							drawerDLtoggle.syncState();
+
+							prevIV.setAlpha(255);
+							historyIV.setAlpha(255);
+							nextIV.setAlpha(255);
+
+							((SwipeRefreshLayout) ScheduleFragment.scheduleLayout).setRefreshing(false);
+							break;
+						case MyApplication.ERR_UNDEFINED:
+						case MyApplication.ERR_OK:
+							//FIXME HANDLE!!!
+							break;
+					}
+					break;
+				case MyApplication.VIEW_GRADES:
+					switch (action) {
+						case MyApplication.ACTION_ONLINE:
+						case MyApplication.ACTION_ONLINE_1:
+							historyIV.setAlpha(255);
+
+							switch (GradesFragment.termFocus) {
+								case 1:
+									prevIV.setAlpha(130);
+									nextIV.setAlpha(255);
+									break;
+								case 4:
+									prevIV.setAlpha(255);
+									nextIV.setAlpha(130);
+									break;
+								default:
+									prevIV.setAlpha(255);
+									nextIV.setAlpha(255);
+									break;
+							}
+							break;
+						case MyApplication.ACTION_OFFLINE:
+						case MyApplication.ACTION_OFFLINE_1:
+							final int databaseFocus = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(mainContext).getString("pref_grades_term", "1"));
+
+							prevIV.setAlpha(130);
+							historyIV.setAlpha(130);
+							nextIV.setAlpha(130);
+
+							if (PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_grades", null) != null) {
+								if (GradesFragment.yearFocus == 0 && GradesFragment.termFocus > databaseFocus) prevIV.setAlpha(255);
+								if (GradesFragment.yearFocus != 0 || GradesFragment.termFocus != databaseFocus) historyIV.setAlpha(255);
+								if (GradesFragment.yearFocus == 0 && GradesFragment.termFocus < databaseFocus) nextIV.setAlpha(255);
+							}
+							break;
+						case MyApplication.ACTION_REFRESH_IN:
+							drawerDL.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+							drawerDLtoggle.setToolbarNavigationClickListener(null);
+							drawerDLtoggle.syncState();
+
+							prevIV.setAlpha(130);
+							historyIV.setAlpha(130);
+							nextIV.setAlpha(130);
+
+							((SwipeRefreshLayout) GradesFragment.gradesLayout).setRefreshing(true);
+							break;
+						case MyApplication.ACTION_REFRESH_OUT:
+							drawerDL.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+							drawerDLtoggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+
+								@Override
+								public void onClick(View v) {
+									drawerDL.openDrawer(drawerNV);
+								}
+							});
+							drawerDLtoggle.syncState();
+
+							historyIV.setAlpha(255);
+
+							switch (GradesFragment.termFocus) {
+								case 1:
+									prevIV.setAlpha(130);
+									nextIV.setAlpha(255);
+									break;
+								case 4:
+									prevIV.setAlpha(255);
+									nextIV.setAlpha(130);
+									break;
+								default:
+									prevIV.setAlpha(255);
+									nextIV.setAlpha(255);
+									break;
+							}
+
+							((SwipeRefreshLayout) GradesFragment.gradesLayout).setRefreshing(false);
+							break;
+						case MyApplication.ERR_UNDEFINED:
+						case MyApplication.ERR_OK:
+							//FIXME HANDLE!!!
+							break;
+					}
+					break;
+			}
+		}
+	}
+
+	protected static void setColors(int theme, int colorPrimary, int colorAccent) {
+		final String[] colors = new String[] { "red", "pink", "purple", "deep_purple", "indigo", "blue", "light_blue", "cyan", "teal", "green", "light_green", "lime", "yellow", "amber", "orange",
+				"deep_orange", "brown", "dark_grey", "grey", "blue_grey", "white" };
+
+		if (theme != MyApplication.ACTION_NULL)
+			if (theme == 0) {
+				themeColor = R.color.theme_light;
+				themeDialog = R.style.lightDialog;
+				themeSettings = R.style.lightSettings;
+				themeDisabledTextColor = R.color.text_disabled_dark;
+				themeDividerColor = R.color.divider_dark;
+				themePrimaryTextColor = R.color.text_dark;
+				themeSecondaryTextColor = R.color.text_secondary_dark;
+			} else {
+				themeColor = R.color.theme_dark;
+				themeDialog = R.style.darkDialog;
+				themeSettings = R.style.darkSettings;
+				themeDisabledTextColor = R.color.text_disabled_light;
+				themeDividerColor = R.color.divider_light;
+				themePrimaryTextColor = R.color.text_light;
+				themeSecondaryTextColor = R.color.text_secondary_light;
+			}
+
+		if (colorPrimary != MyApplication.ACTION_NULL) {
+			darkPrimaryColor = mainContext.getResources().getIdentifier(colors[colorPrimary] + "_dark", "color", mainContext.getPackageName());
+			primaryColor = mainContext.getResources().getIdentifier(colors[colorPrimary], "color", mainContext.getPackageName());
+			secondaryColor = mainContext.getResources().getIdentifier(colors[colorPrimary] + "_secondary", "color", mainContext.getPackageName());
+
+			if (colorPrimary == 6 || colorPrimary == 7 || (colorPrimary > 8 && colorPrimary < 15) || colorPrimary == 18 || colorPrimary == 20) {
+				primaryTextColor = R.color.text_dark;
+				secondaryTextColor = R.color.text_secondary_dark;
+			} else {
+				primaryTextColor = R.color.text_light;
+				secondaryTextColor = R.color.text_secondary_light;
+			}
+		}
+
+		if (colorAccent != MyApplication.ACTION_NULL) {
+			accentPrimaryColor = mainContext.getResources().getIdentifier(colors[colorAccent] + "_accent", "color", mainContext.getPackageName());
+			accentSecondaryColor = mainContext.getResources().getIdentifier(colors[colorAccent], "color", mainContext.getPackageName());
+
+			if (colorAccent > 5)
+				accentTextColor = R.color.text_dark;
+			else
+				accentTextColor = R.color.text_light;
+		}
+	}
+
+	protected static void setStatusBar(Activity context) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			context.getWindow().setStatusBarColor(Color.TRANSPARENT);
+
+			if (context == mainContext)
+				drawerDL.setStatusBarBackgroundColor(context.getResources().getColor(darkPrimaryColor));
+			else
+				context.getWindow().setStatusBarColor(context.getResources().getColor(darkPrimaryColor));
+
+			context.setTaskDescription(new ActivityManager.TaskDescription(context.getResources().getString(R.string.app_name), BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher), context.getResources().getColor(primaryColor)));
+
+		}
+	}
+
+	protected static void setToolbarTitle(AppCompatActivity context, String title, String subtitle) {
+		final Spannable toolbarTitle = new SpannableString(title);
+		toolbarTitle.setSpan(new ForegroundColorSpan(context.getResources().getColor(primaryTextColor)), 0, toolbarTitle.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		context.getSupportActionBar().setTitle(toolbarTitle);
+
+		if (subtitle != null) {
+			final Spannable toolbarSubtitle = new SpannableString(subtitle);
+			toolbarSubtitle.setSpan(new ForegroundColorSpan(context.getResources().getColor(secondaryTextColor)), 0, toolbarSubtitle.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			context.getSupportActionBar().setSubtitle(toolbarSubtitle);
+		}
+	}
+
+	protected static class GetLoginCookie extends AsyncTask<Object, Void, Integer> {
+		private int view;
+		private String url;
+		private int focus;
+		private int direction;
+		private int transition;
+		private boolean display;
+
+		@Override
+		protected Integer doInBackground(Object... params) {
+			view = (int) params[0];
+			if (view == MyApplication.VIEW_GRADES) {
+				url = (String) params[1];
+				direction = (int) params[2];
+				transition = (int) params[3];
+			} else if (view != MyApplication.VIEW_LOGIN) {
+				url = (String) params[1];
+				focus = (int) params[2];
+				direction = (int) params[3];
+				transition = (int) params[4];
+				if (view == MyApplication.VIEW_SCHEDULE) display = (boolean) params[5]; //TODO That's always the case right?
+			}
+
+			OutputStream output = null;
+
+			cookies = new CookieManager(null, CookiePolicy.ACCEPT_ALL);
+			CookieHandler.setDefault(cookies);
+
+			try {
+				final URLConnection connection = new URL(MyApplication.URL_LOGIN).openConnection();
+
+				connection.setConnectTimeout(MyApplication.TIMEOUT_CONNECT);
+				connection.setReadTimeout(MyApplication.TIMEOUT_READ);
+
+				connection.setDoOutput(true);
+				((HttpURLConnection) connection).setInstanceFollowRedirects(false);
+				connection.setRequestProperty("Accept-Charset", MyApplication.CHARSET);
+				connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + MyApplication.CHARSET);
+
+				output = connection.getOutputStream();
+				output.write(String.format(
+						"wu_loginname=%s&wu_password=%s",
+						URLEncoder.encode(PreferenceManager.getDefaultSharedPreferences(mainContext).getString("username", ""), MyApplication.CHARSET),
+						URLEncoder.encode(PreferenceManager.getDefaultSharedPreferences(mainContext).getString("password", ""), MyApplication.CHARSET) +
+								"&Login=Inloggen&path=%2F%3F").getBytes(MyApplication.CHARSET));
+
+				final List<String> setCookie = connection.getHeaderFields().get("Set-Cookie");
+
+				if (setCookie != null) for (String cookie : setCookie) cookies.getCookieStore().add(null, HttpCookie.parse(cookie).get(0));
+
+				((HttpURLConnection) connection).disconnect();
+
+				switch (((HttpURLConnection) connection).getResponseCode()) {
+					case 302:
+						return MyApplication.OK;
+					case 200: //TODO Other error messages that the website can give besides wrong user/pass (that don't cause a redirect)?
+						return MyApplication.ERR_USERPASS;
+					default:
+						return MyApplication.ERR_OK;
+				}
+			} catch (IOException e) {
+				return MyApplication.ERR_IO;
+			} finally {
+				if (output != null) {
+					try {
+						output.close();
+					} catch (IOException ignored) {}
+				}
+			}
+		}
+
+		@Override
+		protected void onPostExecute(Integer returnCode) {
+			if (returnCode == MyApplication.OK) {
+				switch (view) {
+					case MyApplication.VIEW_LOGIN:
+						LoginActivity.authenticationProgressDialog.cancel();
+
+						mainContext.startActivity(new Intent(LoginActivity.loginContext, MainActivity.class));
+						LoginActivity.loginContext.finish();
+						break;
+					case MyApplication.VIEW_SCHEDULE:
+						if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
+							new ScheduleFragment.GetScheduleData().execute(url, focus, direction, transition, display);
+						else
+							new ScheduleFragment.GetScheduleData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url, focus, direction, transition, display);
+						break;
+					case MyApplication.VIEW_GRADES:
+						if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
+							new GradesFragment.GetGradesData().execute(url, direction, transition);
+						else
+							new GradesFragment.GetGradesData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url, direction, transition);
+						break;
+				}
+			} else {
+				recoverError(view, returnCode, direction, transition);
+			}
+		}
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_MENU) {
+			if (drawerDL.isDrawerOpen(drawerNV))
+				drawerDL.closeDrawers();
+			else
+				drawerDL.openDrawer(drawerNV);
+			return true;
+		}
+
+		return super.onKeyDown(keyCode, event);
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (drawerDL.isDrawerOpen(drawerNV))
+			drawerDL.closeDrawers();
+		else
+			moveTaskToBack(true);
+	}
+}

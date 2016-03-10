@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+	Helinium Leerlingenweb
+
+	Copyright (C) 2015 Bastiaan Teeuwen <bastiaan.teeuwen170@gmail.com>
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+	USA.
+
+-->
+
+<menu
+	xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<group
+		android:id="@+id/g_top_md"
+		android:checkableBehavior="single">
+
+		<item
+			android:id="@+id/i_schedule_md"
+			android:icon="@drawable/ic_menu_schedule"
+			android:title="@string/schedule"
+			android:checked="true" />
+
+		<item
+			android:id="@+id/i_grades_md"
+			android:icon="@drawable/ic_menu_grades"
+			android:title="@string/grades" />
+
+	</group>
+
+	<group
+		android:id="@+id/g_bottom_md">
+
+		<item
+			android:id="@+id/i_settings_md"
+			android:icon="@drawable/ic_menu_settings"
+			android:title="@string/settings" />
+
+		<item
+			android:id="@+id/i_logout_md"
+			android:icon="@drawable/ic_menu_logout"
+			android:title="@string/logout" />
+
+		<item
+			android:id="@+id/i_about_md"
+			android:icon="@drawable/ic_menu_about"
+			android:title="@string/about" />
+
+	</group>
+</menu>

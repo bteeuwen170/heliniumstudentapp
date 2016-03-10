@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+	Helinium Leerlingenweb
+
+	Copyright (C) 2015 Bastiaan Teeuwen <bastiaan.teeuwen170@gmail.com>
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+	USA.
+
+-->
+
+<resources>
+
+	<string name="Adri" translatable="false">Stefan Adriaansen</string>
+	<string name="Akke" translatable="false">Patricia B.M.M. van den Akker</string>
+	<string name="Aptr" translatable="false">R&#233;ne Aptroot</string>
+	<string name="Bakk" translatable="false">W. Bakker</string>
+	<string name="Bakr" translatable="false">Katinka Bakker</string>
+	<string name="Beij" translatable="false">H.J.C. Beijersbergen</string>
+	<string name="Berg" translatable="false">A.N. Berghegen</string>
+	<string name="Bijd" translatable="false">Dick Bijdevaate</string>
+	<string name="Bilk" translatable="false">M.Y. Bilkerdijk</string>
+	<string name="BloN" translatable="false">S.M. Blok-de Kieviet</string>
+	<string name="Blom" translatable="false">D.A.F. Blom</string> <!-- Niek? -->
+	<string name="Boes" translatable="false">Frank Boesenach</string>
+	<string name="Boga" translatable="false">Susanne C.J. van den Bogaard</string>
+	<string name="Boge" translatable="false">P.M. B&#246;ger</string>
+	<string name="Bomm" translatable="false">Wouter van Bommel</string>
+	<string name="BonF" translatable="false">Francisca Bontebal</string>
+	<string name="Bont" translatable="false">Ellen M. de Bont-Groot</string>
+	<string name="Bout" translatable="false">Dineke Boutkan</string> <!-- A.H. -->
+	<string name="Bove" translatable="false">Andre J.C.M. Bov&#233;e</string>
+	<string name="Bree" translatable="false">Simone H.M. van Bree</string>
+	<string name="Bred" translatable="false">Cees Breederland</string> <!-- Cees or Kees -->
+	<string name="Breu" translatable="false">Marjolijn A. Breuring</string>
+	<string name="Bria" translatable="false">Dante G.G. Briarava</string>
+	<string name="BroH" translatable="false">Henri Broekhuizen</string>
+	<string name="BroW" translatable="false">W. Broekhuizen</string>
+	<string name="Brok" translatable="false">Marjolein C.H. Br&#246;kling</string>
+	<string name="Brui" translatable="false">Anne de Bruin</string>
+	<string name="Buij" translatable="false">Jan A.A. Buijs</string>
+	<string name="BuiG" translatable="false">Charissa G. Buijs-Gundermann</string> <!-- BuiG or Gund -->
+	<string name="Camp" translatable="false">Jacqueline W.A. van Campen</string>
+	<string name="Dale" translatable="false">Sebastian van Dalen</string>
+	<string name="Delf" translatable="false">Esther van Delft</string>
+	<string name="Doel" translatable="false">H.L.M.J. van der Doelen-van Lent</string>
+	<string name="Dokk" translatable="false">Ronald F.M. van Dokkum</string>
+	<string name="DooN" translatable="false">Nadine Doorduin</string>
+	<string name="Door" translatable="false">R.A. van Doorneveld</string>
+	<string name="Drie" translatable="false">Arnold N. Driessen</string>
+	<string name="Drog" translatable="false">Eelco Dr&#246;ge</string>
+	<string name="File" translatable="false">J. Fil&#233;</string>
+	<string name="Flin" translatable="false">Frouke E.A. Flinterman-Wortmann</string>
+	<string name="Fran" translatable="false">I.J. Frank</string>
+	<string name="Fris" translatable="false">Joaney M. Fris</string>
+	<string name="Gaag" translatable="false">Geraldine van der Gaag</string>
+	<string name="Gelo" translatable="false">Mandy D.G. van \&#39;t Geloof</string>
+	<string name="Gess" translatable="false">Hendrik Jan van Gessel</string>
+	<string name="G&#246;nd" translatable="false">S. G&#246;nder</string>
+	<string name="Goed" translatable="false">Ronald de Goede</string>
+	<string name="Gond" translatable="false">G&#246;nder S&#252;meyye</string>
+	<string name="Goud" translatable="false">C. Goud</string>
+	<string name="Gron" translatable="false">Monique H. de Groen</string>
+	<string name="Groe" translatable="false">Roland Groenendijk</string>
+	<string name="Groo" translatable="false">Richard A.M. Grooten</string>
+	<string name="GroS" translatable="false">S. de Grood-Maagdenberg</string>
+	<string name="Grot" translatable="false">Ellen de Groot</string>
+	<string name="Grow" translatable="false">Ursula I. Groenewoudt</string>
+	<string name="GroY" translatable="false">Y.M. Groenendijk-de Boer</string>
+	<string name="Gund" translatable="false">Charissa G. Buijs-Gundermann</string> <!-- BuiG or Gund -->
+	<string name="Haan" translatable="false">G. de Haan</string>
+	<string name="Hama" translatable="false">S. Hamann-Streefland</string>
+	<string name="HanH" translatable="false">H.M. Handstede</string>
+	<string name="Hart" translatable="false">Y. Hartensveld-Isra&#235;l</string>
+	<string name="Harv" translatable="false">Q.X. Harteveld</string>
+	<string name="Heem" translatable="false">J.A. Heemskerk</string>
+	<string name="Held" translatable="false">Alexander van Helden</string>
+	<string name="Hend" translatable="false">Ben Henderson</string>
+	<string name="HesK" translatable="false">Sylvia R. Hessel-Krijgsman</string>
+	<string name="Heus" translatable="false">I. Heus</string>
+	<string name="Hipp" translatable="false">Bart P. Hippe</string>
+	<string name="Hock" translatable="false">Saskia Hocks</string>
+	<string name="HoeS" translatable="false">Sjoerd Hoekstra</string>
+	<string name="Hoen" translatable="false">Fieneke M.F. Hoens</string>
+	<string name="HofP" translatable="false">P.P. Hoff</string>
+	<string name="HofT" translatable="false">T.E. Hoff-Poelmann</string>
+	<string name="Hoog" translatable="false">D. Hoogwater</string>
+	<string name="Hop" translatable="false">Joop P.G. Hop</string>
+	<string name="Hors" translatable="false">Fred J.H. Horstink</string>
+	<string name="Hove" translatable="false">Marinus K. Hovenkamp</string>
+	<string name="Howa" translatable="false">Danielle Hoogwater</string>
+	<string name="JanA" translatable="false">Andre W. Janse</string>
+	<string name="Jans" translatable="false">Hermie A.L. Jansen</string> <!-- A.H.L. -->
+	<string name="Joel" translatable="false">Willem A.A. Joele</string>
+	<string name="Jong" translatable="false">Jorriena D. de Jongh</string>
+	<string name="JonL" translatable="false">Lennart X. de Jonge</string>
+	<string name="Jons" translatable="false">H.P. Jongens-Borsje</string>
+	<string name="KieL" translatable="false">Leneke Kieviet</string>
+	<string name="KleS" translatable="false">Silvia Klein</string>
+	<string name="Klif" translatable="false">S. Klifman</string>
+	<string name="KloI" translatable="false">Ies B. Klok</string>
+	<string name="Klom" translatable="false">R. Klompmaker</string>
+	<string name="KonD" translatable="false">Debbie Kn&#246;ps</string>
+	<string name="Knop" translatable="false">W.L. Knop</string>
+	<string name="Kost" translatable="false">Kenneth Koster</string>
+	<string name="Kuip" translatable="false">Marcel P. Kuipers</string>
+	<string name="Kust" translatable="false">Robert-Jan Kustermans</string>
+	<string name="Laan" translatable="false">J. van der Laan</string>
+	<string name="Labo" translatable="false">Marion F. Labouchere-Brouwer</string>
+	<string name="LanE" translatable="false">E.A. Landwehr-Luyendijk</string>
+	<string name="KnoD" translatable="false">D. Dn&#246;ps</string>
+	<string name="Lank" translatable="false">Gidius Lankhorst</string>
+	<string name="Lind" translatable="false">Janine van de Linde</string>
+	<string name="LooJ" translatable="false">Joke A. de Looij-Tuijl</string>
+	<string name="Lotz" translatable="false">Anke K. Lotz</string>
+	<string name="Luca" translatable="false">Janine M. Lucas</string>
+	<string name="Mann" translatable="false">Robin \&#39;t Mannetje</string>
+	<string name="Mart" translatable="false">Wouter R. Martens</string>
+	<string name="Midd" translatable="false">Marjolein van Middelkoop-Maagdenberg</string>
+	<string name="Mol" translatable="false">Ruud Mol</string>
+	<string name="Mool" translatable="false">Edith Moolekamp</string>
+	<string name="Mos" translatable="false">Anne Marie Mos</string>
+	<string name="Most" translatable="false">J. van der Most</string>
+	<string name="Muil" translatable="false">Arie B.W. Muilenberg</string>
+	<string name="MulW" translatable="false">W. Mulder</string>
+	<string name="Nage" translatable="false">Reinier A. Nagelhout</string>
+	<string name="Neng" translatable="false">Marinke J.P. Nengerman</string>
+	<string name="Nieb" translatable="false">Patricia W. Nieboer</string>
+	<string name="Nied" translatable="false">R.A.M. van den Nieuwendijk</string> <!-- Nied or Nieu -->
+	<string name="Nies" translatable="false">Joke Niessink</string>
+	<string name="Nieu" translatable="false">R.A.M. van den Nieuwendijk</string> <!-- Nied or Nieu -->
+	<string name="Noot" translatable="false">Olivier N.P. van Nooten</string>
+	<string name="Oeve" translatable="false">Louise F. van den Oever</string>
+	<string name="Oliv" translatable="false">Edith Oliver</string>
+	<string name="OosE" translatable="false">Elize Oosterberg</string> <!-- B.M. -->
+	<string name="Osma" translatable="false">Salim Osmani</string>
+	<string name="Oude" translatable="false">N. van den Ouden</string>
+	<string name="Pals" translatable="false">Frank Palstra</string>
+	<string name="Papi" translatable="false">Ralph W.P. Papiermole</string>
+	<string name="Pher" translatable="false">Joyce Phernambucq</string>
+	<string name="Plun" translatable="false">A.N. Plune-van den Berg</string>
+	<string name="Pold" translatable="false">Cor H. van de Polder</string>
+	<string name="Polv" translatable="false">A.W. Poldervaart</string>
+	<string name="Posi" translatable="false">Inez Postema</string>
+	<string name="Posl" translatable="false">R.E.M. Postema-Hollenberg</string>
+	<string name="PosP" translatable="false">Piet J.J. Postema</string>
+	<string name="Post" translatable="false">Ed A. Postma</string>
+	<string name="Punt" translatable="false">Wim P. Punt</string>
+	<string name="Rikk" translatable="false">S.J.M. Rikkert</string>
+	<string name="Roel" translatable="false">Cees I. Roelofs</string>
+	<string name="RogF" translatable="false">Fleur R. Roggeveen</string>
+	<string name="Rond" translatable="false">A.M. Ronden</string>
+	<string name="Roos" translatable="false">J. Roos-Westdijk</string>
+	<string name="RooH" translatable="false">J.W. Roostee</string>
+	<string name="Saak" translatable="false">Frank D. Saakes</string> <!-- F.A. or F.D. -->
+	<string name="Sars" translatable="false">A.J.G. Sars</string>
+	<string name="Scha" translatable="false">N. van der Schans</string>
+	<string name="Schi" translatable="false">Kim Schippers</string>
+	<string name="Schk" translatable="false">Andr&#233; van Schaik</string>
+	<string name="Schr" translatable="false">Jan A. de Schipper</string>
+	<string name="Scho" translatable="false">Paulien H. van der Schoor</string>
+	<string name="Schu" translatable="false">Ramona Schultz</string>
+	<string name="Sim" translatable="false">Marieke Simonis</string>
+	<string name="Siv" translatable="false">Elise Sivertsen</string>
+	<string name="Spra" translatable="false">Thijmen J. Sprakel</string>
+	<string name="Staats" translatable="false">Roger Staats</string>
+	<string name="Stoe" translatable="false">Charlien van der Stoep</string>
+	<string name="Stol" translatable="false">Amanda Stolk</string>
+	<string name="Stop" translatable="false">Marco J.J. Stoppelenburg</string>
+	<string name="Stra" translatable="false">Sjors J.W. van Straten</string>
+	<string name="Ting" translatable="false">S.C. Tingen-Roosen</string>
+	<string name="Veen" translatable="false">C. Veen-Zweers</string>
+	<string name="Vell" translatable="false">S. Vellinga</string>
+	<string name="Veni" translatable="false">Marcel M. Venis</string>
+	<string name="Verk" translatable="false">Nina M. Verkerk</string>
+	<string name="VisJ" translatable="false">Joeri Visser</string>
+	<string name="Viss" translatable="false">Sabine Vissers</string>
+	<string name="Vlie" translatable="false">D. Vliegenthart-Schuurbiers</string>
+	<string name="Voor" translatable="false">Hans van der Vooren</string>
+	<string name="Vos" translatable="false">W. Vos</string> <!-- VosW or Vos -->
+	<string name="VosW" translatable="false">W. Vos</string> <!-- VosW or Vos -->
+	<string name="Vree" translatable="false">Eldert J. Vreeling</string>
+	<string name="Vrol" translatable="false">G.C. Vrolijk</string>
+	<string name="WaaP" translatable="false">Peter J. van der Waal</string>
+	<string name="Waar" translatable="false">Johan van Waarde</string> <!-- Peter?! -->
+	<string name="Wall" translatable="false">Wim J.J. Wallerbos</string>
+	<string name="Wand" translatable="false">R.J. Wanders</string>
+	<string name="Warb" translatable="false">Patrick Warbout</string>
+	<string name="Weij" translatable="false">Isabella H.J.M. Weijgand</string>
+	<string name="Welz" translatable="false">Eva van Welzenis</string>
+	<string name="Wolf" translatable="false">Mirjam van der Wolf</string>
+	<string name="Wess" translatable="false">Anja Wessels</string>
+	<string name="Zijl" translatable="false">Rinus Zijlstra</string> <!-- M. -->
+	<string name="Zuid" translatable="false">A. Zuidhoorn</string>
+
+</resources>

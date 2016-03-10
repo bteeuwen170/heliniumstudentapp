@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+	Helinium Leerlingenweb
+
+	Copyright (C) 2015 Bastiaan Teeuwen <bastiaan.teeuwen170@gmail.com>
+
+	This program is free software; you can redistribute it and/or
+	modify it under the terms of the GNU General Public License
+	as published by the Free Software Foundation; either version 2
+	of the License, or (at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program; if not, write to the Free Software
+	Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301,
+	USA.
+
+-->
+
+<resources>
+
+	<string name="ak">Aardrijkskunde</string>
+	<string name="ang">Anglia</string>
+	<string name="bi">Biologie</string>
+	<string name="biol">Biologie</string>
+	<string name="bv">Beeldende Vorming</string>
+	<string name="ckv">Culturele en Kunstzinnige Vorming</string>
+	<string name="da">Dans</string>
+	<string name="dr">Drama</string>
+	<string name="du">Duits</string>
+	<string name="dutl">Duits</string>
+	<string name="ec">Economie</string>
+	<string name="econ">Economie</string>
+	<string name="en">Engels</string>
+	<string name="entl">Engels</string>
+	<string name="fa">Frans</string>
+	<string name="fatl">Frans</string>
+	<string name="gr">Grieks</string>
+	<string name="gs">Geschiedenis</string>
+	<string name="ges">Geschiedenis</string>
+	<string name="in">Informatica</string>
+	<string name="kua">Kunst Algemeen</string>
+	<string name="la">Latijn</string>
+	<string name="lo">Lichamelijke Opvoeding</string>
+	<string name="maat">Maatschappijleer</string>
+	<string name="ml">Mentorles</string>
+	<string name="mu">Muziek</string>
+	<string name="na">Natuurkunde</string>
+	<string name="nat">Natuurkunde</string>
+	<string name="ne">Nederlands</string>
+	<string name="netl">Nederlands</string>
+	<string name="pk">Podium Kunsten</string>
+	<string name="po">Project Klas</string>
+	<string name="pws">Profielwerkstuk</string>
+	<string name="rv">Rekenvaardigheid</string>
+	<string name="rkt">Reken Toets</string>
+	<string name="sc">Science</string>
+	<string name="schk">Scheikunde</string>
+	<string name="sk">Scheikunde</string>
+	<string name="spk">Sport Klas</string>
+	<string name="thk">Techniek</string>
+	<string name="tv">Taalvaardigheid</string>
+	<string name="wi">Wiskunde</string>
+	<string name="wisA">Wiskunde A</string>
+	<string name="wisB">Wiskunde B</string>
+	<string name="wisC">Wiskunde C</string>
+	<string name="wisD">Wiskunde D</string>
+
+</resources>
