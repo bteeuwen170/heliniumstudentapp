@@ -3,4 +3,5 @@
 app/build/
 build/
 gradle/
+heliniumstudentapp.iml
 local.properties
