@@ -45,6 +45,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -293,8 +294,8 @@ public class MainActivity extends AppCompatActivity {
 									final AlertDialog.Builder aboutDialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(mainContext, themeDialog));
 
 									aboutDialogBuilder.setTitle(R.string.about);
-									aboutDialogBuilder.setMessage("Helinium Leerlingenweb\n\n" +
-													"Copyright (C) 2015 Bastiaan Teeuwen <bastiaan.teeuwen170@gmail.com>\n\n" +
+									aboutDialogBuilder.setMessage(getResources().getString(R.string.app_name) +
+													"\n\nCopyright (C) 2016 Bastiaan Teeuwen <bastiaan.teeuwen170@gmail.com>\n\n" +
 													"This program is free software; you can redistribute it and/or " +
 													"modify it under the terms of the GNU General Public License " +
 													"as published by the Free Software Foundation; version 2" +
@@ -305,15 +306,27 @@ public class MainActivity extends AppCompatActivity {
 													"GNU General Public License for more details.\n\n" +
 													"You should have received a copy of the GNU General Public License " +
 													"along with this program; if not, write to the Free Software " +
-													"Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA."
-									);
+													"Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.");
+
+									aboutDialogBuilder.setNeutralButton(R.string.email, new DialogInterface.OnClickListener() {
+
+										@Override
+										public void onClick(DialogInterface dialog, int which) {
+											Intent email = new Intent(Intent.ACTION_SENDTO);
+											email.setType("text/plain");
+											email.setData(Uri.parse("mailto:" + HeliniumStudentApp.URL_EMAIL));
+											email.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.app_name));
+											email.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+											startActivity(email);
+										}
+									});
 
 									aboutDialogBuilder.setPositiveButton(R.string.github, new DialogInterface.OnClickListener() {
 
 										@Override
 										public void onClick(DialogInterface dialog, int which) {
-											Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HeliniumStudentApp.URL_GITHUB));
-											startActivity(browserIntent);
+											Intent github = new Intent(Intent.ACTION_VIEW, Uri.parse(HeliniumStudentApp.URL_GITHUB));
+											startActivity(github);
 										}
 									});
 
@@ -418,7 +431,6 @@ public class MainActivity extends AppCompatActivity {
 						ScheduleFragment.parseData(transition);
 						break;
 					case HeliniumStudentApp.DIREC_CURRENT:
-						//setButtons(view, HeliniumStudentApp.ACTION_ONLINE);
 						setUI(view, transition);
 						break;
 					case HeliniumStudentApp.DIREC_NEXT:
@@ -887,7 +899,7 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	@Override
-	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+	public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
 		if (requestCode == 1 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) UpdateClass.downloadAPK();
 	}
 

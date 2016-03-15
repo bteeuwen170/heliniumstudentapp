@@ -2768,6 +2768,7 @@ containing a value of this type.
         public static final int dutl=0x7f050043;
         public static final int ec=0x7f050044;
         public static final int econ=0x7f050045;
+        public static final int email=0x7f050155;
         public static final int en=0x7f050046;
         public static final int entl=0x7f050047;
         public static final int error=0x7f050048;
@@ -2786,7 +2787,7 @@ containing a value of this type.
         public static final int general_class=0x7f050055;
         public static final int general_language=0x7f050056;
         public static final int ges=0x7f050057;
-        public static final int github=0x7f050155;
+        public static final int github=0x7f050156;
         public static final int go_to=0x7f050058;
         public static final int gr=0x7f050059;
         public static final int grades=0x7f05005a;
@@ -2831,14 +2832,14 @@ containing a value of this type.
         public static final int sk=0x7f050081;
         public static final int spk=0x7f050082;
         public static final int status_bar_notification_info_overflow=0x7f050011;
-        public static final int sub=0x7f050156;
+        public static final int sub=0x7f050157;
         public static final int term=0x7f050083;
         public static final int term_1=0x7f050084;
         public static final int term_2=0x7f050085;
         public static final int term_3=0x7f050086;
         public static final int term_4=0x7f050087;
-        public static final int theme_0=0x7f050157;
-        public static final int theme_1=0x7f050158;
+        public static final int theme_0=0x7f050158;
+        public static final int theme_1=0x7f050159;
         public static final int thk=0x7f050088;
         public static final int truancy=0x7f050089;
         public static final int tv=0x7f05008a;

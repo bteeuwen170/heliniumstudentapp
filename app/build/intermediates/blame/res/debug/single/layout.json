@@ -124,12 +124,12 @@
         "source": "/home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/res/layout/listitem_grades_expanded.xml"
     },
     {
-        "merged": "/home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/build/intermediates/res/merged/debug/layout/select_dialog_singlechoice_material.xml",
-        "source": "/home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/layout/select_dialog_singlechoice_material.xml"
-    },
-    {
         "merged": "/home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/build/intermediates/res/merged/debug/layout/abc_action_menu_layout.xml",
         "source": "/home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/layout/abc_action_menu_layout.xml"
+    },
+    {
+        "merged": "/home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/build/intermediates/res/merged/debug/layout/select_dialog_singlechoice_material.xml",
+        "source": "/home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/res/layout/select_dialog_singlechoice_material.xml"
     },
     {
         "merged": "/home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/build/intermediates/res/merged/debug/layout/abc_screen_simple.xml",

@@ -42,8 +42,9 @@
 	<string name="database_version_0">Database version</string>
 	<string name="database_version_1">Database version next week</string>
 	<string name="database_version_homework">Database version homework</string>
+	<string name="email" translatable="false">E-mail</string>
 	<string name="fulough">Fulough</string>
-	<string name="github" translatable="false">Github</string>
+	<string name="github" translatable="false">GitHub</string>
 	<string name="go_to">Go to</string>
 	<string name="homework">Homework</string>
 	<string name="license">License</string>

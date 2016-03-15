@@ -45,16 +45,24 @@
             android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-                <category android:name="android.intent.category.DEFAULT" /> <!-- For when I publish this in the play store -->
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="leerlingen.helinium.nl"
-                    android:scheme="https" />
             </intent-filter>
+
+            <!-- For when I publish this in the play store -->
+            <!--
+            <intent-filter>
+				<action android:name="android.intent.action.VIEW"/>
+
+				<category android:name="android.intent.category.DEFAULT"/>
+				<category android:name="android.intent.category.BROWSABLE"/>
+
+				<data
+					android:host="leerlingen.helinium.nl"
+					android:scheme="https"/>
+			</intent-filter>
+            -->
+
         </activity>
         <activity
             android:name="com.bt.heliniumstudentapp.LoginActivity"

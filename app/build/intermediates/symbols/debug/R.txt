@@ -1181,6 +1181,7 @@ int string du 0x7f050042
 int string dutl 0x7f050043
 int string ec 0x7f050044
 int string econ 0x7f050045
+int string email 0x7f050155
 int string en 0x7f050046
 int string entl 0x7f050047
 int string error 0x7f050048
@@ -1199,7 +1200,7 @@ int string general_advanced 0x7f050054
 int string general_class 0x7f050055
 int string general_language 0x7f050056
 int string ges 0x7f050057
-int string github 0x7f050155
+int string github 0x7f050156
 int string go_to 0x7f050058
 int string gr 0x7f050059
 int string grades 0x7f05005a
@@ -1244,14 +1245,14 @@ int string settings 0x7f050080
 int string sk 0x7f050081
 int string spk 0x7f050082
 int string status_bar_notification_info_overflow 0x7f050011
-int string sub 0x7f050156
+int string sub 0x7f050157
 int string term 0x7f050083
 int string term_1 0x7f050084
 int string term_2 0x7f050085
 int string term_3 0x7f050086
 int string term_4 0x7f050087
-int string theme_0 0x7f050157
-int string theme_1 0x7f050158
+int string theme_0 0x7f050158
+int string theme_1 0x7f050159
 int string thk 0x7f050088
 int string truancy 0x7f050089
 int string tv 0x7f05008a

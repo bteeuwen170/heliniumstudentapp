@@ -723,6 +723,7 @@
     <string name="dutl">German</string>
     <string name="ec">Economics</string>
     <string name="econ">Economics</string>
+    <string name="email" translatable="false">E-mail</string>
     <string name="en">English</string>
     <string name="entl">English</string>
     <string name="error">An error has occurred</string>
@@ -741,7 +742,7 @@
     <string name="general_class">Class</string>
     <string name="general_language">Language</string>
     <string name="ges">History</string>
-    <string name="github" translatable="false">Github</string>
+    <string name="github" translatable="false">GitHub</string>
     <string name="go_to">Go to</string>
     <string name="gr">Greek</string>
     <string name="grades">Grades</string>
