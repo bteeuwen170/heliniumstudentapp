@@ -23,7 +23,9 @@
 
 package com.bt.heliniumstudentapp;
 
+import android.Manifest;
 import android.app.Activity;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
@@ -60,10 +62,9 @@ public class UpdateClass extends AsyncTask<Void, Integer, String> {
 
 	private static AlertDialog updateDialog;
 
-	private static boolean beta;
-	private static int versionCode;
+	protected static String versionName;
 
-	protected UpdateClass(Activity context, boolean settings) {
+	protected UpdateClass(final Activity context, boolean settings) {
 		UpdateClass.context = context;
 		this.settings = settings;
 
@@ -76,7 +77,8 @@ public class UpdateClass extends AsyncTask<Void, Integer, String> {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) { //FIXME Come on, don't do this up here
-				downloadAPK(String.valueOf(versionCode), beta);
+				ActivityCompat.requestPermissions(context, new String[]{ Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE }, 1);
+				//FIXME Great, now everything is protected...
 			}
 		});
 
@@ -99,13 +101,13 @@ public class UpdateClass extends AsyncTask<Void, Integer, String> {
 	@Override
 	protected String doInBackground(Void... Void) {
 		try {
-			URLConnection connection = new URL(MyApplication.URL_UPDATE_CHANGELOG).openConnection();
+			URLConnection connection = new URL(HeliniumStudentApp.URL_UPDATE_CHANGELOG).openConnection();
 
-			connection.setConnectTimeout(MyApplication.TIMEOUT_CONNECT);
-			connection.setReadTimeout(MyApplication.TIMEOUT_READ);
+			connection.setConnectTimeout(HeliniumStudentApp.TIMEOUT_CONNECT);
+			connection.setReadTimeout(HeliniumStudentApp.TIMEOUT_READ);
 
-			connection.setRequestProperty("Accept-Charset", MyApplication.CHARSET);
-			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + MyApplication.CHARSET);
+			connection.setRequestProperty("Accept-Charset", HeliniumStudentApp.CHARSET);
+			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + HeliniumStudentApp.CHARSET);
 
 			connection.connect();
 
@@ -129,18 +131,13 @@ public class UpdateClass extends AsyncTask<Void, Integer, String> {
 			try {
 				final JSONObject json = (JSONObject) new JSONTokener(html).nextValue();
 
-				final String versionName = json.optString("version_name");
-				versionCode = json.optInt("version_code");
+				versionName = json.optString("version_name");
+				final int versionCode = json.optInt("version_code");
 
 				try {
-					//final String currentVersionName = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
 					final int currentVersionCode = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
 
-					//final boolean betas = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("pref_general_advanced", false);
-
-					if (versionCode > currentVersionCode/* && !versionName.contains("-beta")) || (betas && currentVersionName.contains("-beta") &&
-							!versionName.endsWith(String.valueOf(currentVersionName.substring(currentVersionName.indexOf("-beta")))))*/) {
-						//if (betas && !versionName.endsWith(String.valueOf(currentVersionName.substring(currentVersionName.indexOf("-beta"))))) beta = true;
+					if (versionCode > currentVersionCode) {
 						if (!settings) updateDialog.show();
 
 						updateDialog.setTitle(context.getString(R.string.update) + ' ' + versionName);
@@ -202,7 +199,7 @@ public class UpdateClass extends AsyncTask<Void, Integer, String> {
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					downloadAPK("unknown", false);
+					downloadAPK();
 				}
 			});
 
@@ -218,45 +215,35 @@ public class UpdateClass extends AsyncTask<Void, Integer, String> {
 		}
 	}
 
-	private static void downloadAPK(final String version, final boolean beta) {
-		if (new File(Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DOWNLOADS + "/heliniumleerlingenweb_" + version + ".apk").exists()) {
-			final Intent install = new Intent(Intent.ACTION_VIEW);
-			install.setDataAndType(Uri.fromFile(
-					new File(Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DOWNLOADS + "/heliniumleerlingenweb_" + version + ".apk")), "application/vnd.android.package-archive");
-			context.startActivity(install);
-		} else {
-			if (MainActivity.isOnline()) {
-				DownloadManager.Request request;
+	protected static void downloadAPK() {
+		File oldUpdate = new File(Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DOWNLOADS + "/heliniumstudentapp.apk");
+		if (oldUpdate.exists()) //noinspection ResultOfMethodCallIgnored
+			oldUpdate.delete();
 
-				if (beta)
-					request = new DownloadManager.Request(Uri.parse(MyApplication.URL_UPDATE_BETA));
-				else
-					request = new DownloadManager.Request(Uri.parse(MyApplication.URL_UPDATE_RELEASE));
+		if (MainActivity.isOnline()) {
+			DownloadManager.Request request;
 
-				request.setTitle("Helinium Leerlingenweb " + version);
-				request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "/heliniumleerlingenweb_" + version + ".apk");
+			request = new DownloadManager.Request(Uri.parse(HeliniumStudentApp.URL_UPDATE_RELEASE));
 
-				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-					request.allowScanningByMediaScanner(); //TODO Necessary?
-					request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+			request.setTitle(context.getResources().getString(R.string.app_name) + " " + versionName);
+			request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "/heliniumstudentapp.apk");
+
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+
+			((DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE)).enqueue(request);
+
+			context.registerReceiver(new BroadcastReceiver() {
+
+				@Override
+				public void onReceive(Context context, Intent intent) {
+					final Intent install = new Intent(Intent.ACTION_VIEW);
+					install.setDataAndType(Uri.fromFile(new File(Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DOWNLOADS + "/heliniumstudentapp.apk")),
+							"application/vnd.android.package-archive");
+					context.startActivity(install);
 				}
-
-				((DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE)).enqueue(request);
-
-				context.registerReceiver(new BroadcastReceiver() {
-
-					@Override
-					public void onReceive(Context context, Intent intent) {
-						final Intent install = new Intent(Intent.ACTION_VIEW);
-						install.setDataAndType(Uri.fromFile(
-								new File(Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_DOWNLOADS + "/heliniumleerlingenweb_" + version + ".apk")
-						), "application/vnd.android.package-archive");
-						context.startActivity(install);
-					}
-				}, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
-			} else {
-				Toast.makeText(context, R.string.error_conn_no, Toast.LENGTH_SHORT).show();
-			}
+			}, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+		} else {
+			Toast.makeText(context, R.string.error_conn_no, Toast.LENGTH_SHORT).show();
 		}
 	}
 }

@@ -97,9 +97,9 @@ public class ScheduleFragment extends Fragment {
 			homeworkJson = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("json_homework_0", null);
 
 			if (MainActivity.isOnline())
-				parseData(MyApplication.ACTION_ONLINE);
+				parseData(HeliniumStudentApp.ACTION_ONLINE);
 			else
-				parseData(MyApplication.ACTION_OFFLINE);
+				parseData(HeliniumStudentApp.ACTION_OFFLINE);
 		} else if (scheduleHtml == null) {
 			final boolean online = MainActivity.isOnline();
 
@@ -113,17 +113,17 @@ public class ScheduleFragment extends Fragment {
 
 			if (online && (PreferenceManager.getDefaultSharedPreferences(mainContext).getBoolean("pref_schedule_init", true) ||
 					PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_0", null) == null)) {
-				getSchedule(MyApplication.DIREC_CURRENT, MyApplication.ACTION_INIT_IN);
-			} else if (checkDatabase() != MyApplication.DB_REFRESHING) {
+				getSchedule(HeliniumStudentApp.DIREC_CURRENT, HeliniumStudentApp.ACTION_INIT_IN);
+			} else if (checkDatabase() != HeliniumStudentApp.DB_REFRESHING) {
 				MainActivity.setStatusBar(mainContext);
 
 				scheduleHtml = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_0", null);
 				homeworkJson = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("json_homework_0", null);
 
 				if (online)
-					parseData(MyApplication.ACTION_ONLINE);
+					parseData(HeliniumStudentApp.ACTION_ONLINE);
 				else
-					parseData(MyApplication.ACTION_OFFLINE);
+					parseData(HeliniumStudentApp.ACTION_OFFLINE);
 			}
 		}
 
@@ -140,11 +140,11 @@ public class ScheduleFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-				if (checkDatabase() != MyApplication.DB_REFRESHING) {
+				if (checkDatabase() != HeliniumStudentApp.DB_REFRESHING) {
 					if (MainActivity.isOnline()) {
 						scheduleFocus --;
 
-						getSchedule(MyApplication.DIREC_BACK, MyApplication.ACTION_REFRESH_IN);
+						getSchedule(HeliniumStudentApp.DIREC_BACK, HeliniumStudentApp.ACTION_REFRESH_IN);
 					} else {
 						final int currentWeek = new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR);
 
@@ -158,7 +158,7 @@ public class ScheduleFragment extends Fragment {
 							homeworkJson = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("json_homework_0", null);
 						}
 
-						parseData(MyApplication.ACTION_OFFLINE);
+						parseData(HeliniumStudentApp.ACTION_OFFLINE);
 					}
 				}
 			}
@@ -171,9 +171,9 @@ public class ScheduleFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-				if (checkDatabase() != MyApplication.DB_REFRESHING) {
+				if (checkDatabase() != HeliniumStudentApp.DB_REFRESHING) {
 					if (MainActivity.isOnline()) {
-						MainActivity.setUI(MyApplication.VIEW_SCHEDULE, MyApplication.ACTION_ONLINE);
+						MainActivity.setUI(HeliniumStudentApp.VIEW_SCHEDULE, HeliniumStudentApp.ACTION_ONLINE);
 
 						final AlertDialog.Builder weekpickerDialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(mainContext, MainActivity.themeDialog));
 
@@ -203,7 +203,7 @@ public class ScheduleFragment extends Fragment {
 
 								scheduleFocus = (today.get(Calendar.WEEK_OF_YEAR)) - ((int) ((today.getTimeInMillis() / (1000 * 60 * 60 * 24 * 7)) - (date.getTimeInMillis() / (1000 * 60 * 60 * 24 * 7))));
 
-								getSchedule(MyApplication.DIREC_OTHER, MyApplication.ACTION_REFRESH_IN);
+								getSchedule(HeliniumStudentApp.DIREC_OTHER, HeliniumStudentApp.ACTION_REFRESH_IN);
 							}
 						});
 
@@ -249,7 +249,7 @@ public class ScheduleFragment extends Fragment {
 						scheduleHtml = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_0", null);
 						homeworkJson = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("json_homework_0", null);
 
-						parseData(MyApplication.ACTION_OFFLINE);
+						parseData(HeliniumStudentApp.ACTION_OFFLINE);
 					}
 				}
 			}
@@ -259,11 +259,11 @@ public class ScheduleFragment extends Fragment {
 
 			@Override
 			public void onClick(View v) {
-				if (checkDatabase() != MyApplication.DB_REFRESHING) {
+				if (checkDatabase() != HeliniumStudentApp.DB_REFRESHING) {
 					if (MainActivity.isOnline()) {
 						scheduleFocus ++;
 
-						getSchedule(MyApplication.DIREC_NEXT, MyApplication.ACTION_REFRESH_IN);
+						getSchedule(HeliniumStudentApp.DIREC_NEXT, HeliniumStudentApp.ACTION_REFRESH_IN);
 					} else {
 						final int currentWeek = new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR);
 
@@ -277,7 +277,7 @@ public class ScheduleFragment extends Fragment {
 							homeworkJson = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("json_homework_0", null);
 						}
 
-						parseData(MyApplication.ACTION_OFFLINE);
+						parseData(HeliniumStudentApp.ACTION_OFFLINE);
 					}
 				}
 			}
@@ -292,10 +292,10 @@ public class ScheduleFragment extends Fragment {
 
 		if (init)
 			if (MainActivity.isOnline()) {
-				if (scheduleHtml != null && PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_0", null) != null && checkDatabase() != MyApplication.DB_REFRESHING)
-					parseData(MyApplication.ACTION_ONLINE);
+				if (scheduleHtml != null && PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_0", null) != null && checkDatabase() != HeliniumStudentApp.DB_REFRESHING)
+					parseData(HeliniumStudentApp.ACTION_ONLINE);
 			} else {
-				if (checkDatabase() != MyApplication.DB_REFRESHING) {
+				if (checkDatabase() != HeliniumStudentApp.DB_REFRESHING) {
 					final int currentWeek = new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR);
 
 					if (scheduleFocus != currentWeek && scheduleFocus != currentWeek + 1) {
@@ -304,7 +304,7 @@ public class ScheduleFragment extends Fragment {
 						homeworkJson = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("json_homework_0", null);
 					}
 
-					parseData(MyApplication.ACTION_OFFLINE);
+					parseData(HeliniumStudentApp.ACTION_OFFLINE);
 				}
 			}
 		else
@@ -312,11 +312,11 @@ public class ScheduleFragment extends Fragment {
 	}
 
 	private void refresh() {
-		if (checkDatabase() != MyApplication.DB_REFRESHING)
+		if (checkDatabase() != HeliniumStudentApp.DB_REFRESHING)
 			if (MainActivity.isOnline()) {
-				getSchedule(MyApplication.DIREC_CURRENT, MyApplication.ACTION_REFRESH_IN);
+				getSchedule(HeliniumStudentApp.DIREC_CURRENT, HeliniumStudentApp.ACTION_REFRESH_IN);
 			} else {
-				MainActivity.setUI(MyApplication.VIEW_SCHEDULE, MyApplication.ACTION_REFRESH_OUT);
+				MainActivity.setUI(HeliniumStudentApp.VIEW_SCHEDULE, HeliniumStudentApp.ACTION_REFRESH_OUT);
 
 				if (!MainActivity.displayingSnackbar) {
 					final Snackbar noConnectionSB = Snackbar.make(mainContext.findViewById(R.id.cl_snackbar_am), R.string.error_conn_no, Snackbar.LENGTH_LONG).setAction(R.string.retry, new OnClickListener() {
@@ -343,18 +343,18 @@ public class ScheduleFragment extends Fragment {
 					noConnectionSB.show();
 				}
 
-				MainActivity.setUI(MyApplication.VIEW_SCHEDULE, MyApplication.ACTION_OFFLINE);
+				MainActivity.setUI(HeliniumStudentApp.VIEW_SCHEDULE, HeliniumStudentApp.ACTION_OFFLINE);
 			}
 	}
 
 	private static void getSchedule(final int direction, final int transition) {
-		MainActivity.setUI(MyApplication.VIEW_SCHEDULE, transition);
+		MainActivity.setUI(HeliniumStudentApp.VIEW_SCHEDULE, transition);
 
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-			new GetScheduleData().execute(MyApplication.URL_SCHEDULE + getDateFormatted(), scheduleFocus, direction, transition + 1, true);
+			new GetScheduleData().execute(HeliniumStudentApp.URL_SCHEDULE + getDateFormatted(), scheduleFocus, direction, transition + 1, true);
 		else
 			new GetScheduleData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-					MyApplication.URL_SCHEDULE + getDateFormatted(), scheduleFocus, direction, transition + 1, true);
+					HeliniumStudentApp.URL_SCHEDULE + getDateFormatted(), scheduleFocus, direction, transition + 1, true);
 	}
 
 	protected static class GetScheduleData extends AsyncTask<Object, Void, Integer> {
@@ -375,17 +375,17 @@ public class ScheduleFragment extends Fragment {
 			display = (boolean) params[4];
 
 			if (MainActivity.cookies == null) {
-				return MyApplication.ERR_LOGIN;
+				return HeliniumStudentApp.ERR_LOGIN;
 			} else {
 				try {
 					final URLConnection connection = new URL(url).openConnection();
 
-					connection.setConnectTimeout(MyApplication.TIMEOUT_CONNECT);
-					connection.setReadTimeout(MyApplication.TIMEOUT_READ);
+					connection.setConnectTimeout(HeliniumStudentApp.TIMEOUT_CONNECT);
+					connection.setReadTimeout(HeliniumStudentApp.TIMEOUT_READ);
 
 					((HttpURLConnection) connection).setInstanceFollowRedirects(false);
-					connection.setRequestProperty("Accept-Charset", MyApplication.CHARSET);
-					connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + MyApplication.CHARSET);
+					connection.setRequestProperty("Accept-Charset", HeliniumStudentApp.CHARSET);
+					connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + HeliniumStudentApp.CHARSET);
 					connection.addRequestProperty("Cookie", TextUtils.join(",", MainActivity.cookies.getCookieStore().getCookies()));
 
 					connection.connect();
@@ -397,15 +397,15 @@ public class ScheduleFragment extends Fragment {
 
 					if (((HttpURLConnection) connection).getResponseCode() == 200)
 						if (html.contains("ajax-loader.gif"))
-							return MyApplication.ERR_RETRY;
+							return HeliniumStudentApp.ERR_RETRY;
 						else if (html.contains("<h2>Er is een fout opgetreden</h2>") || html.contains("Leerlingnummer onbekend") || !html.contains("Week")) //TODO Also html.contains("cross.png")?
-							return MyApplication.ERR_UNDEFINED;
+							return HeliniumStudentApp.ERR_UNDEFINED;
 						else
-							return MyApplication.OK;
+							return HeliniumStudentApp.OK;
 					else
-						return MyApplication.ERR_OK;
+						return HeliniumStudentApp.ERR_OK;
 				} catch (IOException e) {
-					return MyApplication.ERR_LOGIN;
+					return HeliniumStudentApp.ERR_LOGIN;
 				}
 			}
 		}
@@ -413,32 +413,32 @@ public class ScheduleFragment extends Fragment {
 		@Override
 		protected void onPostExecute(Integer returnCode) {
 			switch (returnCode) {
-				case MyApplication.ERR_LOGIN:
+				case HeliniumStudentApp.ERR_LOGIN:
 					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-						new MainActivity.GetLoginCookie().execute(MyApplication.VIEW_SCHEDULE, url, focus, direction, transition, display);
+						new MainActivity.GetLoginCookie().execute(HeliniumStudentApp.VIEW_SCHEDULE, url, focus, direction, transition, display);
 					else
-						new MainActivity.GetLoginCookie().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, MyApplication.VIEW_SCHEDULE, url, focus, direction, transition, display);
+						new MainActivity.GetLoginCookie().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, HeliniumStudentApp.VIEW_SCHEDULE, url, focus, direction, transition, display);
 					break;
-				case MyApplication.ERR_RETRY:
+				case HeliniumStudentApp.ERR_RETRY:
 					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
 						new GetScheduleData().execute(url, focus, direction, transition, display);
 					else
 						new GetScheduleData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url, focus, direction, transition, display);
 					break;
-				case MyApplication.ERR_OK:
-				case MyApplication.ERR_UNDEFINED:
-					MainActivity.recoverError(MyApplication.VIEW_SCHEDULE, returnCode, direction, transition);
+				case HeliniumStudentApp.ERR_OK:
+				case HeliniumStudentApp.ERR_UNDEFINED:
+					MainActivity.recoverError(HeliniumStudentApp.VIEW_SCHEDULE, returnCode, direction, transition);
 					break;
-				case MyApplication.OK:
+				case HeliniumStudentApp.OK:
 					if (display) {
 						scheduleHtml = html;
 						try {
 							if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
 								new GetHomeworkData().execute(
-										MyApplication.URL_HOMEWORK + String.valueOf(new SimpleDateFormat("dd-MM-yyyy z").parse(url.substring(85) + " GMT").getTime()), focus, direction, transition, scheduleFocus);
+										HeliniumStudentApp.URL_HOMEWORK + String.valueOf(new SimpleDateFormat("dd-MM-yyyy z").parse(url.substring(85) + " GMT").getTime()), focus, direction, transition, scheduleFocus);
 							else
 								new GetHomeworkData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-										MyApplication.URL_HOMEWORK + String.valueOf(new SimpleDateFormat("dd-MM-yyyy z").parse(url.substring(85) + " GMT").getTime()), focus, direction, transition, scheduleFocus);
+										HeliniumStudentApp.URL_HOMEWORK + String.valueOf(new SimpleDateFormat("dd-MM-yyyy z").parse(url.substring(85) + " GMT").getTime()), focus, direction, transition, scheduleFocus);
 						} catch (ParseException e) {
 							//FIXME Handle immediately (and fix)
 						}
@@ -450,11 +450,11 @@ public class ScheduleFragment extends Fragment {
 
 						PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("html_schedule_start_0", getDateFormatted()).apply();
 
-						if (PreferenceManager.getDefaultSharedPreferences(mainContext).getBoolean("pref_schedule_next_week", false) && direction == MyApplication.DIREC_CURRENT) {
+						if (PreferenceManager.getDefaultSharedPreferences(mainContext).getBoolean("pref_schedule_next_week", false) && direction == HeliniumStudentApp.DIREC_CURRENT) {
 							if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-								new GetScheduleData().execute(MyApplication.URL_SCHEDULE + getDateFormatted(), focus + 1, 0, transition, false);
+								new GetScheduleData().execute(HeliniumStudentApp.URL_SCHEDULE + getDateFormatted(), focus + 1, 0, transition, false);
 							else
-								new GetScheduleData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, MyApplication.URL_SCHEDULE + getDateFormatted(), focus + 1, 0, transition, false);
+								new GetScheduleData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, HeliniumStudentApp.URL_SCHEDULE + getDateFormatted(), focus + 1, 0, transition, false);
 						}
 					} else if (focus == new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR) + 1 &&
 							PreferenceManager.getDefaultSharedPreferences(mainContext).getBoolean("pref_schedule_next_week", false)) {
@@ -484,17 +484,17 @@ public class ScheduleFragment extends Fragment {
 			transition = (int) params[3];
 
 			if (MainActivity.cookies == null) {
-				return MyApplication.ERR_LOGIN;
+				return HeliniumStudentApp.ERR_LOGIN;
 			} else {
 				try {
 					final URLConnection connection = new URL(url).openConnection();
 
-					connection.setConnectTimeout(MyApplication.TIMEOUT_CONNECT);
-					connection.setReadTimeout(MyApplication.TIMEOUT_READ);
+					connection.setConnectTimeout(HeliniumStudentApp.TIMEOUT_CONNECT);
+					connection.setReadTimeout(HeliniumStudentApp.TIMEOUT_READ);
 
 					((HttpURLConnection) connection).setInstanceFollowRedirects(false);
-					connection.setRequestProperty("Accept-Charset", MyApplication.CHARSET);
-					connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + MyApplication.CHARSET);
+					connection.setRequestProperty("Accept-Charset", HeliniumStudentApp.CHARSET);
+					connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + HeliniumStudentApp.CHARSET);
 					connection.addRequestProperty("Cookie", TextUtils.join(",", MainActivity.cookies.getCookieStore().getCookies()));
 
 					connection.connect();
@@ -507,16 +507,16 @@ public class ScheduleFragment extends Fragment {
 					final int responseCode = ((HttpURLConnection) connection).getResponseCode();
 
 					if (responseCode == 201 || responseCode == 202) //TODO Do more research on this, performance can possibly be improved
-						return MyApplication.ERR_RETRY;
+						return HeliniumStudentApp.ERR_RETRY;
 					else if (responseCode == 200)
 						//if (json.contains("null")) //TODO Enter
-						//	return MyApplication.ERR_UNDEFINED;
+						//	return HeliniumStudentApp.ERR_UNDEFINED;
 						//else
-						return MyApplication.OK;
+						return HeliniumStudentApp.OK;
 					else
-						return MyApplication.ERR_OK;
+						return HeliniumStudentApp.ERR_OK;
 				} catch (IOException e) {
-					return MyApplication.ERR_LOGIN; //TODO WTF, extremely unlikely
+					return HeliniumStudentApp.ERR_LOGIN; //TODO WTF, extremely unlikely
 				}
 			}
 		}
@@ -524,18 +524,18 @@ public class ScheduleFragment extends Fragment {
 		@Override
 		protected void onPostExecute(Integer returnCode) {
 			switch (returnCode) {
-				case MyApplication.ERR_LOGIN:
-				case MyApplication.ERR_OK:
-				case MyApplication.ERR_UNDEFINED:
-					MainActivity.recoverError(MyApplication.VIEW_SCHEDULE_HOMEWORK, returnCode, direction, transition);
+				case HeliniumStudentApp.ERR_LOGIN:
+				case HeliniumStudentApp.ERR_OK:
+				case HeliniumStudentApp.ERR_UNDEFINED:
+					MainActivity.recoverError(HeliniumStudentApp.VIEW_SCHEDULE_HOMEWORK, returnCode, direction, transition);
 					break;
-				case MyApplication.ERR_RETRY:
+				case HeliniumStudentApp.ERR_RETRY:
 					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
 						new GetHomeworkData().execute(url, focus, direction, transition);
 					else
 						new GetHomeworkData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url, focus, direction, transition, focus);
 					break;
-				case MyApplication.OK:
+				case HeliniumStudentApp.OK:
 					homeworkJson = json;
 
 					if (focus == new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR)) PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("json_homework_0", json).apply();
@@ -555,12 +555,12 @@ public class ScheduleFragment extends Fragment {
 		final String scheduleStart = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_start_0", null);
 
 		if (scheduleStart == null) {
-			return MyApplication.DB_OK;
+			return HeliniumStudentApp.DB_OK;
 		} else {
 			try {
 				storedDate.setTime(new SimpleDateFormat("dd-MM-yyyy").parse(scheduleStart));
 			} catch (ParseException ignored) {
-				return MyApplication.DB_ERROR;
+				return HeliniumStudentApp.DB_ERROR;
 			}
 		}
 
@@ -575,7 +575,7 @@ public class ScheduleFragment extends Fragment {
 		}
 
 		if (updated) {
-			return MyApplication.DB_OK;
+			return HeliniumStudentApp.DB_OK;
 		} else {
 			scheduleFocus = currentDate.get(Calendar.WEEK_OF_YEAR);
 
@@ -590,14 +590,14 @@ public class ScheduleFragment extends Fragment {
 					PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("html_schedule_start_0", null).apply();
 					PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("html_schedule_start_1", null).apply();
 
-					ScheduleFragment.getSchedule(MyApplication.DIREC_CURRENT, MyApplication.ACTION_SHORT_IN);
+					ScheduleFragment.getSchedule(HeliniumStudentApp.DIREC_CURRENT, HeliniumStudentApp.ACTION_SHORT_IN);
 
-					return MyApplication.DB_REFRESHING; //TODO Handle by caller to avoid workarounds
+					return HeliniumStudentApp.DB_REFRESHING; //TODO Handle by caller to avoid workarounds
 				} else {
 					Toast.makeText(mainContext, mainContext.getString(R.string.error_database) + ". " + mainContext.getString(R.string.error_conn_no) + ".", Toast.LENGTH_SHORT).show();
 					mainContext.finish();
 
-					return MyApplication.DB_ERROR; //TODO Throw error / in finally
+					return HeliniumStudentApp.DB_ERROR; //TODO Throw error / in finally
 				}
 			} else try {
 				currentDate.setTime(new SimpleDateFormat("dd-MM-yyyy").parse(PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_start_0", "1")));
@@ -620,7 +620,7 @@ public class ScheduleFragment extends Fragment {
 					scheduleHtml = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_0", null);
 					homeworkJson = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("json_homework_0", null);
 
-					return MyApplication.DB_OK;
+					return HeliniumStudentApp.DB_OK;
 				} else {
 					if (MainActivity.isOnline()) {
 						MainActivity.setStatusBar(mainContext);
@@ -632,19 +632,19 @@ public class ScheduleFragment extends Fragment {
 						PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("html_schedule_start_0", null).apply();
 						PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("html_schedule_start_1", null).apply();
 
-						ScheduleFragment.getSchedule(MyApplication.DIREC_CURRENT, MyApplication.ACTION_SHORT_IN);
+						ScheduleFragment.getSchedule(HeliniumStudentApp.DIREC_CURRENT, HeliniumStudentApp.ACTION_SHORT_IN);
 
-						return MyApplication.DB_REFRESHING; //TODO Handle by caller to avoid workarounds
+						return HeliniumStudentApp.DB_REFRESHING; //TODO Handle by caller to avoid workarounds
 					} else {
 						Toast.makeText(mainContext, mainContext.getString(R.string.error_database) + ". " + mainContext.getString(R.string.error_conn_no) + ".", Toast.LENGTH_SHORT).show();
 						mainContext.finish();
 
-						return MyApplication.DB_ERROR; //TODO Throw error / in finally
+						return HeliniumStudentApp.DB_ERROR; //TODO Throw error / in finally
 					}
 				}
 			} catch (ParseException ignored) {}
 
-			return MyApplication.DB_ERROR; //TODO Throw error / in finally
+			return HeliniumStudentApp.DB_ERROR; //TODO Throw error / in finally
 		}
 	}
 
@@ -779,7 +779,7 @@ public class ScheduleFragment extends Fragment {
 				}
 			});
 
-			MainActivity.setUI(MyApplication.VIEW_SCHEDULE, transition);
+			MainActivity.setUI(HeliniumStudentApp.VIEW_SCHEDULE, transition);
 		}
 	}
 

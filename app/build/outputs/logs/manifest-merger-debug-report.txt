@@ -1,15 +1,15 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:25:1-81:12
+ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:25:1-88:12
 	package
-		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:26:2-37
+		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:27:2-37
 		INJECTED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml
 		INJECTED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml
 	android:versionName
 		INJECTED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml
 		INJECTED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml
 	xmlns:android
-		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:27:2-60
+		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:26:2-60
 	android:versionCode
 		INJECTED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml
 		INJECTED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml
@@ -25,12 +25,8 @@ uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
 ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:31:2-77
 	android:name
 		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:31:19-75
-uses-permission#android.permission.READ_EXTERNAL_STORAGE
-ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:32:2-76
-	android:name
-		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:32:19-74
 application
-ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:34:2-79:16
+ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:33:2-86:16
 MERGED from [com.android.support:appcompat-v7:23.0.1] /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:support-v4:23.0.1] /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:support-v4:23.0.1] /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/AndroidManifest.xml:22:5-20
@@ -39,61 +35,79 @@ MERGED from [com.android.support:support-v4:23.0.1] /home/bastiaan/Android Studi
 MERGED from [com.android.support:appcompat-v7:23.0.1] /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:support-v4:23.0.1] /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/AndroidManifest.xml:22:5-20
 	android:label
-		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:38:3-41
+		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:37:3-41
 	android:allowBackup
-		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:36:3-29
+		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:35:3-29
 	android:icon
-		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:37:3-39
+		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:36:3-39
 	android:theme
-		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:39:3-34
+		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:38:3-34
 	android:name
-		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:35:3-32
+		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:34:3-37
 activity#com.bt.heliniumstudentapp.MainActivity
-ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:41:3-51:14
+ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:40:3-58:14
 	android:launchMode
-		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:44:4-34
+		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:43:4-34
 	android:configChanges
-		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:43:4-65
+		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:42:4-65
 	android:name
-		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:42:4-32
-intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
-ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:46:4-49:20
+		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:41:4-32
+intent-filter#android.intent.action.MAIN+android.intent.action.VIEW+android.intent.category.BROWSABLE+android.intent.category.DEFAULT+android.intent.category.LAUNCHER
+ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:45:4-56:20
 action#android.intent.action.MAIN
+ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:46:5-56
+	android:name
+		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:46:13-54
+action#android.intent.action.VIEW
 ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:47:5-56
 	android:name
 		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:47:13-54
 category#android.intent.category.LAUNCHER
-ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:48:5-64
+ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:49:5-64
 	android:name
-		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:48:15-62
+		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:49:15-62
+category#android.intent.category.DEFAULT
+ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:50:5-63
+	android:name
+		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:50:15-61
+category#android.intent.category.BROWSABLE
+ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:51:5-65
+	android:name
+		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:51:15-63
+data
+ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:53:5-55:30
+	android:host
+		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:54:6-43
+	android:scheme
+		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:55:6-28
 activity#com.bt.heliniumstudentapp.LoginActivity
-ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:53:3-55:67
+ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:60:3-62:67
 	android:configChanges
-		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:55:4-65
+		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:62:4-65
 	android:name
-		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:54:4-33
+		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:61:4-33
 activity#com.bt.heliniumstudentapp.DayActivity
-ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:57:3-66:14
+ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:64:3-73:14
 	android:parentActivityName
-		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:60:4-46
+		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:67:4-46
 	android:configChanges
-		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:59:4-65
+		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:66:4-65
 	android:name
-		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:58:4-31
+		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:65:4-31
 meta-data#android.support.PARENT_ACTIVITY
-ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:62:4-64:36
+ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:69:4-71:36
 	android:value
-		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:64:5-34
+		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:71:5-34
 	android:name
-		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:63:5-51
+		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:70:5-51
 activity#com.bt.heliniumstudentapp.SettingsActivity
-ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:68:3-77:14
+ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:75:3-84:14
 	android:parentActivityName
-		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:71:4-46
+		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:78:4-46
 	android:configChanges
-		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:70:4-65
+		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:77:4-65
 	android:name
-		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:69:4-36
+		ADDED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml:76:4-36
 uses-sdk
 INJECTED from /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 MERGED from [com.android.support:appcompat-v7:23.0.1] /home/bastiaan/Android Studio Workspace/heliniumstudentapp/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/AndroidManifest.xml:20:5-43

@@ -84,12 +84,10 @@ public class DayActivity extends AppCompatActivity {
 
 	private static boolean compactView;
 
-	private static HashMap<Integer, HomeworkWrapper> homeworkArray; //TODO Not global!
+	private static HashMap<Integer, HomeworkWrapper> homeworkArray; //TODO Unglobalize
 
 	private static class HomeworkWrapper {
-		String homework;
-		String options;
-		String absence;
+		String homework, options, absence;
 
 		private HomeworkWrapper(final String homework, final String options, final String absence) {
 			this.homework = homework;
@@ -129,20 +127,10 @@ public class DayActivity extends AppCompatActivity {
 		if (ScheduleFragment.homeworkJson != null) { //TODO In function with return statement
 			homeworkArray = new HashMap<>();
 
-			JSONObject json = null;
+			JSONObject json;
 			try {
 				json = (JSONObject) new JSONTokener(ScheduleFragment.homeworkJson).nextValue();
-			} catch (JSONException e) {
-				//TODO Handle, neither floating nor normal homework?
-			}
 
-			/*try {
-				final JSONArray floatingHomework = json.getJSONArray("huiswerkEvents");
-			} catch (JSONException | NullPointerException e) {
-				//TODO <strike>No floating homework this week</strike> Probably never called, have a global JSON Exception handler...
-			}*/ //TODO Not yet
-
-			try {
 				final JSONArray homeworkJson = json.getJSONArray("events");
 
 				for (int event = 0; event < homeworkJson.length(); event++) {
@@ -154,12 +142,11 @@ public class DayActivity extends AppCompatActivity {
 					final int dayOfWeek = startDate.get(Calendar.DAY_OF_WEEK);
 					final int hourOfDay = Arrays.asList(homeworkMinutes).indexOf(startDate.get(Calendar.HOUR_OF_DAY) * 60 + startDate.get(Calendar.MINUTE)) + 1;
 
-					//final StringBuilder courseEntry = new StringBuilder();
-					String homework = null;
-					String absence = null;
+					String homework, absence;
+					homework = absence = null;
 					final StringBuilder options = new StringBuilder();
 
-					if (courseJson.has("huiswerk")) {
+					if (courseJson.has("huiswerk")) { //TODO This entire thing is pretty crappy
 						final JSONObject courseHomeworkJson = courseJson.getJSONObject("huiswerk");
 
 						homework = courseHomeworkJson.getString("omschrijving");
@@ -190,66 +177,23 @@ public class DayActivity extends AppCompatActivity {
 								case "Ongeoorloofd verzuim":
 									absence = "[truancy]" + getResources().getString(R.string.truancy);
 									break;
+								default:
+									absence = "[late]" + getResources().getString(R.string.late);
 							}
 					}
 
 					homeworkArray.put(dayOfWeek * 100 + hourOfDay, new HomeworkWrapper(homework, options.toString(), absence));
 				}
-
-				/*for (int event = 0; event < homework.length(); event++) {
-					final JSONObject courseJson = homework.getJSONObject(event).getJSONObject("afspraakObject");
-
-					final GregorianCalendar startDate = new GregorianCalendar(TimeZone.getTimeZone("Europe/Amsterdam"), Locale.GERMANY);
-					startDate.setTimeInMillis(homework.getJSONObject(event).getLong("start"));
-
-					final int dayOfWeek = startDate.get(Calendar.DAY_OF_WEEK);
-					final int hourOfDay = Arrays.asList(homeworkMinutes).indexOf(startDate.get(Calendar.HOUR_OF_DAY) * 60 + startDate.get(Calendar.MINUTE)) + 1;
-
-					final StringBuilder courseEntry = new StringBuilder();
-
-					if (courseJson.has("huiswerk")) {
-						final JSONObject courseHomeworkJson = courseJson.getJSONObject("huiswerk");
-
-						courseEntry.append("<hw>");
-						courseEntry.append(courseHomeworkJson.getString("omschrijving"));
-
-						if (courseHomeworkJson.has("gemaakt"))
-							if (courseHomeworkJson.getBoolean("gemaakt"))
-								courseEntry.append("<done>");
-							else
-								courseEntry.append("<late>");
-
-						if (courseHomeworkJson.has("toets") && courseHomeworkJson.getBoolean("toets")) courseEntry.append("<test>");
-					}
-
-					if (courseJson.has("absentie")) {
-						final JSONObject courseAbsenceJson = courseJson.getJSONObject("absentie");
-
-						courseEntry.append("[ab]");
-
-						if (courseAbsenceJson.has("reden"))
-							switch (courseAbsenceJson.getString("reden")) {
-								case "Ongeoorloofd verzuim":
-								case "te laat-T":
-									courseEntry.append("[late]");
-									break;
-								case "Ziek / medisch":
-									courseEntry.append("[medical]");
-									break;
-								case "Schoolverlof":
-									courseEntry.append("[fulough]");
-									break;
-
-							}
-
-						//final String courseAbsenceJson = Html.fromHtml(courseAbsenceJson.getString("reden")).toString(); //TODO Provide reason
-					}
-
-					homeworkArray.put(dayOfWeek * 100 + hourOfDay, courseEntry.toString());
-				}*/
-			} catch (JSONException | NullPointerException e) { //TODO NullPointerException needed?
-				//TODO No homework this week or error? Probably error
+			} catch (JSONException  | NullPointerException e) { //TODO NullPointerException needed?
+				//FIXME Handle, neither floating nor normal homework?
+				//FIXME No homework this week or error? Probably error
 			}
+
+			/*try {
+				final JSONArray floatingHomework = json.getJSONArray("huiswerkEvents");
+			} catch (JSONException | NullPointerException e) {
+				//TODO <strike>No floating homework this week</strike> Probably never called, have a global JSON Exception handler...
+			}*/
 		}
 
 		final String weekDay = new SimpleDateFormat("EEEE").format(chosenWeekDay.getTime());
@@ -402,12 +346,12 @@ public class DayActivity extends AppCompatActivity {
 				if (available) {
 					final ArrayList<HashMap<String, Object>> hoursLVarray = new ArrayList<>();
 
+					int hour, breakCount;
+					hour = breakCount = 0;
+
 					String hoursHtml = localRawHtml.substring(0, localRawHtml.indexOf("</div>")) + "<tr";
 
-					int hour = 0;
-					int breakCount = 0;
-
-					while (hour != 9) {
+					while (hour < 9) {
 						String hourHtml = hoursHtml.substring(hoursHtml.indexOf("<td class=\"hour\">") + 17);
 						hourHtml = hourHtml.substring(0, hourHtml.indexOf("<tr"));
 						hoursHtml = hoursHtml.replace("<td class=\"hour\">" + hourHtml, "");
@@ -691,13 +635,16 @@ public class DayActivity extends AppCompatActivity {
 
 								absenceIV.setColorFilter(getResources().getColor(MainActivity.themePrimaryTextColor), PorterDuff.Mode.SRC_ATOP);
 
-								if (homework.absence != null)
-									if (homework.absence.contains("[late]")) //TODO Any other possibilities?
+								if (homework.absence != null) {
+									if (homework.absence.contains("[late]"))
 										absenceIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_absent));
 									else if (homework.absence.contains("[medical]"))
 										absenceIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_absent_medical));
 									else if (homework.absence.contains("[fulough]"))
 										absenceIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_absent_fulough));
+									else
+										absenceIV.setImageDrawable(getResources().getDrawable(R.drawable.ic_absent));
+								}
 							}
 						} catch (NullPointerException ignored) {}
 					}

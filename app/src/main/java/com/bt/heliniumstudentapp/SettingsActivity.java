@@ -205,7 +205,7 @@ public class SettingsActivity extends PreferenceActivity {
 				if (!((ListPreference) preference).getValue().equals(newValue)) {
 					preference.setSummary(Arrays.asList(getResources().getStringArray(R.array.customization_theme_array)).get(Integer.parseInt(newValue.toString())));
 
-					//MainActivity.setColors(Integer.parseInt(newValue.toString()), MyApplication.ACTION_NULL, MyApplication.ACTION_NULL);
+					//MainActivity.setColors(Integer.parseInt(newValue.toString()), HeliniumStudentApp.ACTION_NULL, HeliniumStudentApp.ACTION_NULL);
 					//setTheme(MainActivity.themeSettings);
 
 					GradesFragment.gradesHtml = null;
@@ -224,7 +224,7 @@ public class SettingsActivity extends PreferenceActivity {
 				if (!((ListPreference) preference).getValue().equals(newValue)) {
 					preference.setSummary(Arrays.asList(getResources().getStringArray(R.array.customization_color_primary_array)).get(Integer.parseInt(newValue.toString())));
 
-					MainActivity.setColors(MyApplication.ACTION_NULL, Integer.parseInt(newValue.toString()), MyApplication.ACTION_NULL);
+					MainActivity.setColors(HeliniumStudentApp.ACTION_NULL, Integer.parseInt(newValue.toString()), HeliniumStudentApp.ACTION_NULL);
 					setToolbar();
 
 					GradesFragment.gradesHtml = null;
@@ -243,7 +243,7 @@ public class SettingsActivity extends PreferenceActivity {
 				if (!((ListPreference) preference).getValue().equals(newValue)) {
 					preference.setSummary(Arrays.asList(getResources().getStringArray(R.array.customization_color_accent_array)).get(Integer.parseInt(newValue.toString())));
 
-					MainActivity.setColors(MyApplication.ACTION_NULL, MyApplication.ACTION_NULL, Integer.parseInt(newValue.toString()));
+					MainActivity.setColors(HeliniumStudentApp.ACTION_NULL, HeliniumStudentApp.ACTION_NULL, Integer.parseInt(newValue.toString()));
 					setTitles();
 
 					GradesFragment.gradesHtml = null;
@@ -371,6 +371,11 @@ public class SettingsActivity extends PreferenceActivity {
 			findPreference("pref_grades_term").setEnabled(false);
 			findPreference("pref_updates_check").setEnabled(false);
 		}
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+		if (requestCode == 1 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) UpdateClass.downloadAPK();
 	}
 
 	@Override

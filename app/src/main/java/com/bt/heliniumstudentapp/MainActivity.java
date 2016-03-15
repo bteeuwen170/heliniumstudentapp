@@ -30,6 +30,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -110,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
 		mainContext = this;
 
-		MyApplication.setLocale(this);
+		HeliniumStudentApp.setLocale(this);
 
 		if (!isOnline() && PreferenceManager.getDefaultSharedPreferences(this).getString("html_schedule_0", null) == null) { //TODO Keep app running and display empty ScheduleFragment with retry option
 			Toast.makeText(this, getResources().getString(R.string.error_conn_no) + ". " + getResources().getString(R.string.database_no) + ".", Toast.LENGTH_LONG).show();
@@ -271,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
 														finish();
 														startActivity(new Intent(mainContext, MainActivity.class));
 													}
-												}, MyApplication.DELAY_RESTART);
+												}, HeliniumStudentApp.DELAY_RESTART);
 											}
 										});
 
@@ -311,7 +312,7 @@ public class MainActivity extends AppCompatActivity {
 
 										@Override
 										public void onClick(DialogInterface dialog, int which) {
-											Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(MyApplication.URL_GITHUB));
+											Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(HeliniumStudentApp.URL_GITHUB));
 											startActivity(browserIntent);
 										}
 									});
@@ -332,7 +333,7 @@ public class MainActivity extends AppCompatActivity {
 									break;
 							}
 						}
-					}, MyApplication.DELAY_DRAWER);
+					}, HeliniumStudentApp.DELAY_DRAWER);
 					return true;
 				}
 			});
@@ -347,46 +348,46 @@ public class MainActivity extends AppCompatActivity {
 	protected static void recoverError(final int view, final int error, final int direction, final int transition) {
 		String postfixError = "";
 		switch (view) {
-			case MyApplication.VIEW_LOGIN:
+			case HeliniumStudentApp.VIEW_LOGIN:
 				postfixError = mainContext.getResources().getString(R.string.while_login);
 				break;
-			case MyApplication.VIEW_SCHEDULE:
+			case HeliniumStudentApp.VIEW_SCHEDULE:
 				postfixError = mainContext.getResources().getString(R.string.while_schedule);
 				break;
-			case MyApplication.VIEW_SCHEDULE_HOMEWORK:
+			case HeliniumStudentApp.VIEW_SCHEDULE_HOMEWORK:
 				postfixError = mainContext.getResources().getString(R.string.while_homework);
 				break;
-			case MyApplication.VIEW_GRADES:
+			case HeliniumStudentApp.VIEW_GRADES:
 				postfixError = mainContext.getResources().getString(R.string.while_grades);
 				break;
 		}
 
 		switch (error) {
-			case MyApplication.ERR_IO:
+			case HeliniumStudentApp.ERR_IO:
 				Toast.makeText(mainContext, mainContext.getResources().getString(R.string.error_conn) + " " + postfixError, Toast.LENGTH_SHORT).show();
 				break;
-			case MyApplication.ERR_OK:
+			case HeliniumStudentApp.ERR_OK:
 				Toast.makeText(mainContext, mainContext.getResources().getString(R.string.error_ok) + " " + postfixError, Toast.LENGTH_SHORT).show();
 				break;
-			case MyApplication.ERR_UNDEFINED:
+			case HeliniumStudentApp.ERR_UNDEFINED:
 				Toast.makeText(mainContext, mainContext.getResources().getString(R.string.error) + " " + postfixError, Toast.LENGTH_SHORT).show();
 				break;
-			case MyApplication.ERR_USERPASS:
+			case HeliniumStudentApp.ERR_USERPASS:
 				Toast.makeText(mainContext, mainContext.getResources().getString(R.string.error_userpass), Toast.LENGTH_SHORT).show();
 				break;
 		}
 
 		switch (view) {
-			case MyApplication.VIEW_LOGIN:
+			case HeliniumStudentApp.VIEW_LOGIN:
 				LoginActivity.authenticationProgressDialog.cancel();
-				if (error == MyApplication.ERR_USERPASS) PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("password", null).apply();
+				if (error == HeliniumStudentApp.ERR_USERPASS) PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("password", null).apply();
 				break;
-			case MyApplication.VIEW_SCHEDULE:
+			case HeliniumStudentApp.VIEW_SCHEDULE:
 				final int currentWeek = new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR);
 
 				switch (transition) {
-					case MyApplication.ACTION_INIT_OUT:
-					case MyApplication.ACTION_SHORT_OUT:
+					case HeliniumStudentApp.ACTION_INIT_OUT:
+					case HeliniumStudentApp.ACTION_SHORT_OUT:
 						if (PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_0", null) == null) { //TODO Does this ever happen or is this handled by checkDatabase?
 							Toast.makeText(mainContext, mainContext.getResources().getString(R.string.database_no), Toast.LENGTH_SHORT).show();
 
@@ -403,7 +404,7 @@ public class MainActivity extends AppCompatActivity {
 				}
 
 				switch (direction) {
-					case MyApplication.DIREC_BACK:
+					case HeliniumStudentApp.DIREC_BACK:
 						if (ScheduleFragment.scheduleFocus > currentWeek && PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_1", null) != null) {
 							ScheduleFragment.scheduleFocus = currentWeek + 1;
 							ScheduleFragment.scheduleHtml = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_1", null);
@@ -416,11 +417,11 @@ public class MainActivity extends AppCompatActivity {
 
 						ScheduleFragment.parseData(transition);
 						break;
-					case MyApplication.DIREC_CURRENT:
-						//setButtons(view, MyApplication.ACTION_ONLINE);
+					case HeliniumStudentApp.DIREC_CURRENT:
+						//setButtons(view, HeliniumStudentApp.ACTION_ONLINE);
 						setUI(view, transition);
 						break;
-					case MyApplication.DIREC_NEXT:
+					case HeliniumStudentApp.DIREC_NEXT:
 						if (ScheduleFragment.scheduleFocus > currentWeek && PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_1", null) != null) {
 							ScheduleFragment.scheduleFocus = currentWeek + 1;
 							ScheduleFragment.scheduleHtml = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_1", null);
@@ -433,7 +434,7 @@ public class MainActivity extends AppCompatActivity {
 
 						ScheduleFragment.parseData(transition);
 						break;
-					case MyApplication.DIREC_OTHER:
+					case HeliniumStudentApp.DIREC_OTHER:
 						ScheduleFragment.scheduleFocus = new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR);
 						ScheduleFragment.scheduleHtml = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_0", null);
 						ScheduleFragment.homeworkJson = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("json_homework_0", null);
@@ -442,26 +443,26 @@ public class MainActivity extends AppCompatActivity {
 						break;
 				}
 				break;
-			case MyApplication.VIEW_SCHEDULE_HOMEWORK:
+			case HeliniumStudentApp.VIEW_SCHEDULE_HOMEWORK:
 				ScheduleFragment.homeworkJson = null;
 				ScheduleFragment.parseData(transition); //TODO Crappy solution
 				break;
-			case MyApplication.VIEW_GRADES:
-				if (direction >= MyApplication.FOCUS_YEAR) {
-					GradesFragment.yearFocus = direction - MyApplication.FOCUS_YEAR;
+			case HeliniumStudentApp.VIEW_GRADES:
+				if (direction >= HeliniumStudentApp.FOCUS_YEAR) {
+					GradesFragment.yearFocus = direction - HeliniumStudentApp.FOCUS_YEAR;
 				} else {
 					switch (direction) {
-						case MyApplication.DIREC_BACK:
+						case HeliniumStudentApp.DIREC_BACK:
 							GradesFragment.termFocus ++;
 							break;
-						case MyApplication.DIREC_NEXT:
+						case HeliniumStudentApp.DIREC_NEXT:
 							GradesFragment.termFocus --;
 							break;
 					}
 				}
 
 				switch (transition) {
-					case MyApplication.ACTION_INIT_OUT:
+					case HeliniumStudentApp.ACTION_INIT_OUT:
 						if (PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_grades", null) == null) { //TODO Keep and display empty GradesFragment with retry option
 							Toast.makeText(mainContext, mainContext.getResources().getString(R.string.database_no), Toast.LENGTH_SHORT).show();
 
@@ -475,7 +476,7 @@ public class MainActivity extends AppCompatActivity {
 							GradesFragment.parseData(transition);
 						}
 						break;
-					case MyApplication.ACTION_REFRESH_OUT:
+					case HeliniumStudentApp.ACTION_REFRESH_OUT:
 						setUI(view, transition);
 						break;
 				}
@@ -484,7 +485,7 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	protected static void setUI(final int view, final int action) {
-		if (action == MyApplication.ACTION_SHORT_IN || (action == MyApplication.ACTION_INIT_IN && view == MyApplication.VIEW_GRADES)) {
+		if (action == HeliniumStudentApp.ACTION_SHORT_IN || (action == HeliniumStudentApp.ACTION_INIT_IN && view == HeliniumStudentApp.VIEW_GRADES)) {
 			containerFL.setVisibility(View.GONE);
 			drawerDL.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 			drawerDLtoggle.setToolbarNavigationClickListener(null);
@@ -498,7 +499,7 @@ public class MainActivity extends AppCompatActivity {
 			nextIV.setAlpha(130);
 			containerFL.setAlpha(0);
 			statusLL.setAlpha(1);
-		} else if (action == MyApplication.ACTION_SHORT_OUT || (action == MyApplication.ACTION_INIT_OUT && view == MyApplication.VIEW_GRADES)) {
+		} else if (action == HeliniumStudentApp.ACTION_SHORT_OUT || (action == HeliniumStudentApp.ACTION_INIT_OUT && view == HeliniumStudentApp.VIEW_GRADES)) {
 			containerFL.setVisibility(View.VISIBLE);
 			drawerDL.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 			drawerDLtoggle.setToolbarNavigationClickListener(new View.OnClickListener() {
@@ -531,7 +532,7 @@ public class MainActivity extends AppCompatActivity {
 
 			statusLL.animate().alpha(0).setDuration(shortAnimationDuration).setListener(null);
 			containerFL.animate().alpha(1).setDuration(shortAnimationDuration).setListener(null);
-		} else if (action == MyApplication.ACTION_INIT_IN) {
+		} else if (action == HeliniumStudentApp.ACTION_INIT_IN) {
 			toolbarTB.setVisibility(View.GONE);
 			containerFL.setVisibility(View.GONE);
 			containerLL.setVisibility(View.GONE);
@@ -541,7 +542,7 @@ public class MainActivity extends AppCompatActivity {
 			containerFL.setAlpha(0);
 			containerLL.setAlpha(0);
 			statusLL.setAlpha(1);
-		} else if (action == MyApplication.ACTION_INIT_OUT) {
+		} else if (action == HeliniumStudentApp.ACTION_INIT_OUT) {
 			toolbarTB.setVisibility(View.VISIBLE);
 			containerFL.setVisibility(View.VISIBLE);
 			containerLL.setVisibility(View.VISIBLE);
@@ -565,16 +566,16 @@ public class MainActivity extends AppCompatActivity {
 			});
 		} else {
 			switch (view) {
-				case MyApplication.VIEW_SCHEDULE:
+				case HeliniumStudentApp.VIEW_SCHEDULE:
 					switch (action) {
-						case MyApplication.ACTION_ONLINE:
-						case MyApplication.ACTION_ONLINE_1:
+						case HeliniumStudentApp.ACTION_ONLINE:
+						case HeliniumStudentApp.ACTION_ONLINE_1:
 							prevIV.setAlpha(255);
 							historyIV.setAlpha(255);
 							nextIV.setAlpha(255);
 							break;
-						case MyApplication.ACTION_OFFLINE:
-						case MyApplication.ACTION_OFFLINE_1:
+						case HeliniumStudentApp.ACTION_OFFLINE:
+						case HeliniumStudentApp.ACTION_OFFLINE_1:
 							if (PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_1", null) == null) {
 								prevIV.setAlpha(130);
 								historyIV.setAlpha(130);
@@ -591,7 +592,7 @@ public class MainActivity extends AppCompatActivity {
 								}
 							}
 							break;
-						case MyApplication.ACTION_REFRESH_IN:
+						case HeliniumStudentApp.ACTION_REFRESH_IN:
 							drawerDL.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 							drawerDLtoggle.setToolbarNavigationClickListener(null);
 							drawerDLtoggle.syncState();
@@ -602,7 +603,7 @@ public class MainActivity extends AppCompatActivity {
 
 							((SwipeRefreshLayout) ScheduleFragment.scheduleLayout).setRefreshing(true);
 							break;
-						case MyApplication.ACTION_REFRESH_OUT:
+						case HeliniumStudentApp.ACTION_REFRESH_OUT:
 							drawerDL.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 							drawerDLtoggle.setToolbarNavigationClickListener(new View.OnClickListener() {
 
@@ -619,16 +620,16 @@ public class MainActivity extends AppCompatActivity {
 
 							((SwipeRefreshLayout) ScheduleFragment.scheduleLayout).setRefreshing(false);
 							break;
-						case MyApplication.ERR_UNDEFINED:
-						case MyApplication.ERR_OK:
+						case HeliniumStudentApp.ERR_UNDEFINED:
+						case HeliniumStudentApp.ERR_OK:
 							//FIXME HANDLE!!!
 							break;
 					}
 					break;
-				case MyApplication.VIEW_GRADES:
+				case HeliniumStudentApp.VIEW_GRADES:
 					switch (action) {
-						case MyApplication.ACTION_ONLINE:
-						case MyApplication.ACTION_ONLINE_1:
+						case HeliniumStudentApp.ACTION_ONLINE:
+						case HeliniumStudentApp.ACTION_ONLINE_1:
 							historyIV.setAlpha(255);
 
 							switch (GradesFragment.termFocus) {
@@ -646,8 +647,8 @@ public class MainActivity extends AppCompatActivity {
 									break;
 							}
 							break;
-						case MyApplication.ACTION_OFFLINE:
-						case MyApplication.ACTION_OFFLINE_1:
+						case HeliniumStudentApp.ACTION_OFFLINE:
+						case HeliniumStudentApp.ACTION_OFFLINE_1:
 							final int databaseFocus = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(mainContext).getString("pref_grades_term", "1"));
 
 							prevIV.setAlpha(130);
@@ -660,7 +661,7 @@ public class MainActivity extends AppCompatActivity {
 								if (GradesFragment.yearFocus == 0 && GradesFragment.termFocus < databaseFocus) nextIV.setAlpha(255);
 							}
 							break;
-						case MyApplication.ACTION_REFRESH_IN:
+						case HeliniumStudentApp.ACTION_REFRESH_IN:
 							drawerDL.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 							drawerDLtoggle.setToolbarNavigationClickListener(null);
 							drawerDLtoggle.syncState();
@@ -671,7 +672,7 @@ public class MainActivity extends AppCompatActivity {
 
 							((SwipeRefreshLayout) GradesFragment.gradesLayout).setRefreshing(true);
 							break;
-						case MyApplication.ACTION_REFRESH_OUT:
+						case HeliniumStudentApp.ACTION_REFRESH_OUT:
 							drawerDL.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 							drawerDLtoggle.setToolbarNavigationClickListener(new View.OnClickListener() {
 
@@ -701,8 +702,8 @@ public class MainActivity extends AppCompatActivity {
 
 							((SwipeRefreshLayout) GradesFragment.gradesLayout).setRefreshing(false);
 							break;
-						case MyApplication.ERR_UNDEFINED:
-						case MyApplication.ERR_OK:
+						case HeliniumStudentApp.ERR_UNDEFINED:
+						case HeliniumStudentApp.ERR_OK:
 							//FIXME HANDLE!!!
 							break;
 					}
@@ -715,7 +716,7 @@ public class MainActivity extends AppCompatActivity {
 		final String[] colors = new String[] { "red", "pink", "purple", "deep_purple", "indigo", "blue", "light_blue", "cyan", "teal", "green", "light_green", "lime", "yellow", "amber", "orange",
 				"deep_orange", "brown", "dark_grey", "grey", "blue_grey", "white" };
 
-		if (theme != MyApplication.ACTION_NULL)
+		if (theme != HeliniumStudentApp.ACTION_NULL)
 			if (theme == 0) {
 				themeColor = R.color.theme_light;
 				themeDialog = R.style.lightDialog;
@@ -734,7 +735,7 @@ public class MainActivity extends AppCompatActivity {
 				themeSecondaryTextColor = R.color.text_secondary_light;
 			}
 
-		if (colorPrimary != MyApplication.ACTION_NULL) {
+		if (colorPrimary != HeliniumStudentApp.ACTION_NULL) {
 			darkPrimaryColor = mainContext.getResources().getIdentifier(colors[colorPrimary] + "_dark", "color", mainContext.getPackageName());
 			primaryColor = mainContext.getResources().getIdentifier(colors[colorPrimary], "color", mainContext.getPackageName());
 			secondaryColor = mainContext.getResources().getIdentifier(colors[colorPrimary] + "_secondary", "color", mainContext.getPackageName());
@@ -748,7 +749,7 @@ public class MainActivity extends AppCompatActivity {
 			}
 		}
 
-		if (colorAccent != MyApplication.ACTION_NULL) {
+		if (colorAccent != HeliniumStudentApp.ACTION_NULL) {
 			accentPrimaryColor = mainContext.getResources().getIdentifier(colors[colorAccent] + "_accent", "color", mainContext.getPackageName());
 			accentSecondaryColor = mainContext.getResources().getIdentifier(colors[colorAccent], "color", mainContext.getPackageName());
 
@@ -796,16 +797,16 @@ public class MainActivity extends AppCompatActivity {
 		@Override
 		protected Integer doInBackground(Object... params) {
 			view = (int) params[0];
-			if (view == MyApplication.VIEW_GRADES) {
+			if (view == HeliniumStudentApp.VIEW_GRADES) {
 				url = (String) params[1];
 				direction = (int) params[2];
 				transition = (int) params[3];
-			} else if (view != MyApplication.VIEW_LOGIN) {
+			} else if (view != HeliniumStudentApp.VIEW_LOGIN) {
 				url = (String) params[1];
 				focus = (int) params[2];
 				direction = (int) params[3];
 				transition = (int) params[4];
-				if (view == MyApplication.VIEW_SCHEDULE) display = (boolean) params[5]; //TODO That's always the case right?
+				if (view == HeliniumStudentApp.VIEW_SCHEDULE) display = (boolean) params[5]; //TODO That's always the case right?
 			}
 
 			OutputStream output = null;
@@ -814,22 +815,22 @@ public class MainActivity extends AppCompatActivity {
 			CookieHandler.setDefault(cookies);
 
 			try {
-				final URLConnection connection = new URL(MyApplication.URL_LOGIN).openConnection();
+				final URLConnection connection = new URL(HeliniumStudentApp.URL_LOGIN).openConnection();
 
-				connection.setConnectTimeout(MyApplication.TIMEOUT_CONNECT);
-				connection.setReadTimeout(MyApplication.TIMEOUT_READ);
+				connection.setConnectTimeout(HeliniumStudentApp.TIMEOUT_CONNECT);
+				connection.setReadTimeout(HeliniumStudentApp.TIMEOUT_READ);
 
 				connection.setDoOutput(true);
 				((HttpURLConnection) connection).setInstanceFollowRedirects(false);
-				connection.setRequestProperty("Accept-Charset", MyApplication.CHARSET);
-				connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + MyApplication.CHARSET);
+				connection.setRequestProperty("Accept-Charset", HeliniumStudentApp.CHARSET);
+				connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + HeliniumStudentApp.CHARSET);
 
 				output = connection.getOutputStream();
 				output.write(String.format(
 						"wu_loginname=%s&wu_password=%s",
-						URLEncoder.encode(PreferenceManager.getDefaultSharedPreferences(mainContext).getString("username", ""), MyApplication.CHARSET),
-						URLEncoder.encode(PreferenceManager.getDefaultSharedPreferences(mainContext).getString("password", ""), MyApplication.CHARSET) +
-								"&Login=Inloggen&path=%2F%3F").getBytes(MyApplication.CHARSET));
+						URLEncoder.encode(PreferenceManager.getDefaultSharedPreferences(mainContext).getString("username", ""), HeliniumStudentApp.CHARSET),
+						URLEncoder.encode(PreferenceManager.getDefaultSharedPreferences(mainContext).getString("password", ""), HeliniumStudentApp.CHARSET) +
+								"&Login=Inloggen&path=%2F%3F").getBytes(HeliniumStudentApp.CHARSET));
 
 				final List<String> setCookie = connection.getHeaderFields().get("Set-Cookie");
 
@@ -839,14 +840,14 @@ public class MainActivity extends AppCompatActivity {
 
 				switch (((HttpURLConnection) connection).getResponseCode()) {
 					case 302:
-						return MyApplication.OK;
+						return HeliniumStudentApp.OK;
 					case 200: //TODO Other error messages that the website can give besides wrong user/pass (that don't cause a redirect)?
-						return MyApplication.ERR_USERPASS;
+						return HeliniumStudentApp.ERR_USERPASS;
 					default:
-						return MyApplication.ERR_OK;
+						return HeliniumStudentApp.ERR_OK;
 				}
 			} catch (IOException e) {
-				return MyApplication.ERR_IO;
+				return HeliniumStudentApp.ERR_IO;
 			} finally {
 				if (output != null) {
 					try {
@@ -858,21 +859,21 @@ public class MainActivity extends AppCompatActivity {
 
 		@Override
 		protected void onPostExecute(Integer returnCode) {
-			if (returnCode == MyApplication.OK) {
+			if (returnCode == HeliniumStudentApp.OK) {
 				switch (view) {
-					case MyApplication.VIEW_LOGIN:
+					case HeliniumStudentApp.VIEW_LOGIN:
 						LoginActivity.authenticationProgressDialog.cancel();
 
 						mainContext.startActivity(new Intent(LoginActivity.loginContext, MainActivity.class));
 						LoginActivity.loginContext.finish();
 						break;
-					case MyApplication.VIEW_SCHEDULE:
+					case HeliniumStudentApp.VIEW_SCHEDULE:
 						if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
 							new ScheduleFragment.GetScheduleData().execute(url, focus, direction, transition, display);
 						else
 							new ScheduleFragment.GetScheduleData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url, focus, direction, transition, display);
 						break;
-					case MyApplication.VIEW_GRADES:
+					case HeliniumStudentApp.VIEW_GRADES:
 						if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
 							new GradesFragment.GetGradesData().execute(url, direction, transition);
 						else
@@ -883,6 +884,11 @@ public class MainActivity extends AppCompatActivity {
 				recoverError(view, returnCode, direction, transition);
 			}
 		}
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+		if (requestCode == 1 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) UpdateClass.downloadAPK();
 	}
 
 	@Override

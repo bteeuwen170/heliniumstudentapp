@@ -31,22 +31,29 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:name="com.bt.heliniumstudentapp.MyApplication"
+        android:name="com.bt.heliniumstudentapp.HeliniumStudentApp"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name_short"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme" > <!-- XXX will this make a backup of everything? -->
+
         <activity
             android:name="com.bt.heliniumstudentapp.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" /> <!-- For when I publish this in the play store -->
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="leerlingen.helinium.nl"
+                    android:scheme="https" />
             </intent-filter>
         </activity>
         <activity

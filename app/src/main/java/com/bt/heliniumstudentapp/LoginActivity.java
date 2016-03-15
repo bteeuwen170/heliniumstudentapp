@@ -119,7 +119,7 @@ public class LoginActivity extends AppCompatActivity {
 				authenticationProgressDialog.setMessage(getResources().getString(R.string.authenticating));
 				authenticationProgressDialog.show();
 
-				new MainActivity.GetLoginCookie().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, MyApplication.VIEW_LOGIN);
+				new MainActivity.GetLoginCookie().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, HeliniumStudentApp.VIEW_LOGIN);
 			}
 		} else {
 			if (!MainActivity.displayingSnackbar) {

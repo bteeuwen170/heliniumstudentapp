@@ -135,7 +135,7 @@ public class GradesFragment extends Fragment {
 
 			if (PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_grades", null) == null) { //TODO Simpler
 				if (online) {
-					getGrades(termFocus, new SimpleDateFormat("dd-MM-yyyy").format(new Date()), MyApplication.DIREC_CURRENT, MyApplication.ACTION_INIT_IN);
+					getGrades(termFocus, new SimpleDateFormat("dd-MM-yyyy").format(new Date()), HeliniumStudentApp.DIREC_CURRENT, HeliniumStudentApp.ACTION_INIT_IN);
 				} else { //TODO Display empty GradesFragment with retry option
 					Toast.makeText(mainContext, getResources().getString(R.string.database_no), Toast.LENGTH_SHORT).show();
 
@@ -143,14 +143,14 @@ public class GradesFragment extends Fragment {
 					MainActivity.FM.beginTransaction().replace(R.id.fl_container_am, new ScheduleFragment(), "SCHEDULE").commit();
 				}
 			} else if (online && gradesHtml == null && PreferenceManager.getDefaultSharedPreferences(mainContext).getBoolean("pref_grades_init", true)) {
-				getGrades(termFocus, new SimpleDateFormat("dd-MM-yyyy").format(new Date()), MyApplication.DIREC_CURRENT, MyApplication.ACTION_INIT_IN);
+				getGrades(termFocus, new SimpleDateFormat("dd-MM-yyyy").format(new Date()), HeliniumStudentApp.DIREC_CURRENT, HeliniumStudentApp.ACTION_INIT_IN);
 			} else {
 				if (gradesHtml == null) gradesHtml = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_grades", null);
 
 				if (online)
-					parseData(MyApplication.ACTION_ONLINE);
+					parseData(HeliniumStudentApp.ACTION_ONLINE);
 				else
-					parseData(MyApplication.ACTION_OFFLINE);
+					parseData(HeliniumStudentApp.ACTION_OFFLINE);
 			}
 
 			((SwipeRefreshLayout) gradesLayout).setColorSchemeResources(MainActivity.accentSecondaryColor, MainActivity.accentPrimaryColor, MainActivity.primaryColor);
@@ -216,10 +216,10 @@ public class GradesFragment extends Fragment {
 							termFocus--;
 
 							Date date = new Date();
-							getGrades(termFocus, new SimpleDateFormat("dd-MM-").format(date) + (Integer.valueOf(new SimpleDateFormat("yyyy").format(date)) + yearFocus), MyApplication.DIREC_BACK,
-									MyApplication.ACTION_REFRESH_IN);
+							getGrades(termFocus, new SimpleDateFormat("dd-MM-").format(date) + (Integer.valueOf(new SimpleDateFormat("yyyy").format(date)) + yearFocus), HeliniumStudentApp.DIREC_BACK,
+									HeliniumStudentApp.ACTION_REFRESH_IN);
 						} else {
-							MainActivity.setUI(MyApplication.VIEW_GRADES, MyApplication.ACTION_ONLINE);
+							MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, HeliniumStudentApp.ACTION_ONLINE);
 						}
 					} else {
 						final int databaseFocus = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(mainContext).getString("pref_grades_term", "1"));
@@ -229,9 +229,9 @@ public class GradesFragment extends Fragment {
 							termFocus = databaseFocus;
 
 							gradesHtml = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_grades", null);
-							parseData(MyApplication.ACTION_OFFLINE);
+							parseData(HeliniumStudentApp.ACTION_OFFLINE);
 						} else {
-							MainActivity.setUI(MyApplication.VIEW_GRADES, MyApplication.ACTION_OFFLINE);
+							MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, HeliniumStudentApp.ACTION_OFFLINE);
 						}
 					}
 				}
@@ -243,7 +243,7 @@ public class GradesFragment extends Fragment {
 				public void onClick(View v) {
 					if (MainActivity.isOnline()) {
 						if (maxYear != 1) {
-							MainActivity.setUI(MyApplication.VIEW_GRADES, MyApplication.ACTION_ONLINE);
+							MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, HeliniumStudentApp.ACTION_ONLINE);
 
 							final AlertDialog.Builder gradesDialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(mainContext, MainActivity.themeDialog));
 							final View gradesLayout = LayoutInflater.from(mainContext).inflate(R.layout.dialog_grades, null);
@@ -264,8 +264,8 @@ public class GradesFragment extends Fragment {
 
 										yearFocus = yearNP.getValue() - maxYear;
 										getGrades(termFocus,
-												new SimpleDateFormat("dd-MM-").format(date) + (Integer.valueOf(new SimpleDateFormat("yyyy").format(date)) + yearFocus), oldValue + MyApplication.FOCUS_YEAR,
-												MyApplication.ACTION_REFRESH_IN);
+												new SimpleDateFormat("dd-MM-").format(date) + (Integer.valueOf(new SimpleDateFormat("yyyy").format(date)) + yearFocus), oldValue + HeliniumStudentApp.FOCUS_YEAR,
+												HeliniumStudentApp.ACTION_REFRESH_IN);
 									} else {
 										Toast.makeText(mainContext, getResources().getString(R.string.error_conn_no), Toast.LENGTH_SHORT).show();
 									}
@@ -321,9 +321,9 @@ public class GradesFragment extends Fragment {
 							termFocus = databaseFocus;
 
 							gradesHtml = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_grades", null);
-							parseData(MyApplication.ACTION_OFFLINE);
+							parseData(HeliniumStudentApp.ACTION_OFFLINE);
 						} else {
-							MainActivity.setUI(MyApplication.VIEW_GRADES, MyApplication.ACTION_OFFLINE);
+							MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, HeliniumStudentApp.ACTION_OFFLINE);
 						}
 					}
 				}
@@ -340,9 +340,9 @@ public class GradesFragment extends Fragment {
 							termFocus ++;
 
 							getGrades(termFocus,
-									new SimpleDateFormat("dd-MM-").format(date) + (Integer.valueOf(new SimpleDateFormat("yyyy").format(date)) + yearFocus), MyApplication.DIREC_NEXT, MyApplication.ACTION_REFRESH_IN);
+									new SimpleDateFormat("dd-MM-").format(date) + (Integer.valueOf(new SimpleDateFormat("yyyy").format(date)) + yearFocus), HeliniumStudentApp.DIREC_NEXT, HeliniumStudentApp.ACTION_REFRESH_IN);
 						} else {
-							MainActivity.setUI(MyApplication.VIEW_GRADES, MyApplication.ACTION_ONLINE);
+							MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, HeliniumStudentApp.ACTION_ONLINE);
 						}
 					} else {
 						final int databaseFocus = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(mainContext).getString("pref_grades_term", "1"));
@@ -352,9 +352,9 @@ public class GradesFragment extends Fragment {
 							termFocus = databaseFocus;
 
 							gradesHtml = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_grades", null);
-							parseData(MyApplication.ACTION_OFFLINE);
+							parseData(HeliniumStudentApp.ACTION_OFFLINE);
 						} else {
-							MainActivity.setUI(MyApplication.VIEW_GRADES, MyApplication.ACTION_OFFLINE);
+							MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, HeliniumStudentApp.ACTION_OFFLINE);
 						}
 					}
 				}
@@ -371,9 +371,9 @@ public class GradesFragment extends Fragment {
 		if (init)
 			if (gradesHtml != null)
 				if (MainActivity.isOnline())
-					MainActivity.setUI(MyApplication.VIEW_GRADES, MyApplication.ACTION_ONLINE);
+					MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, HeliniumStudentApp.ACTION_ONLINE);
 				else
-					MainActivity.setUI(MyApplication.VIEW_GRADES, MyApplication.ACTION_OFFLINE);
+					MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, HeliniumStudentApp.ACTION_OFFLINE);
 		else
 			init = true;
 	}
@@ -381,10 +381,10 @@ public class GradesFragment extends Fragment {
 	private void refresh() {
 		if (MainActivity.isOnline()) {
 			final Date date = new Date();
-			getGrades(termFocus, new SimpleDateFormat("dd-MM-").format(date) + (Integer.valueOf(new SimpleDateFormat("yyyy").format(date)) + yearFocus), yearFocus + MyApplication.FOCUS_YEAR,
-					MyApplication.ACTION_REFRESH_IN);
+			getGrades(termFocus, new SimpleDateFormat("dd-MM-").format(date) + (Integer.valueOf(new SimpleDateFormat("yyyy").format(date)) + yearFocus), yearFocus + HeliniumStudentApp.FOCUS_YEAR,
+					HeliniumStudentApp.ACTION_REFRESH_IN);
 		} else {
-			MainActivity.setUI(MyApplication.VIEW_GRADES, MyApplication.ACTION_REFRESH_OUT);
+			MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, HeliniumStudentApp.ACTION_REFRESH_OUT);
 
 			if (!MainActivity.displayingSnackbar) {
 				final Snackbar noConnectionSB = Snackbar.make(mainContext.findViewById(R.id.cl_snackbar_am), R.string.error_conn_no, Snackbar.LENGTH_LONG).setAction(R.string.retry, new OnClickListener() {
@@ -411,25 +411,24 @@ public class GradesFragment extends Fragment {
 				noConnectionSB.show();
 			}
 
-			MainActivity.setUI(MyApplication.VIEW_GRADES, MyApplication.ACTION_OFFLINE);
+			MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, HeliniumStudentApp.ACTION_OFFLINE);
 		}
 	}
 
 	protected static void getGrades(final int term, String date, final int direction, final int transition) {
-		MainActivity.setUI(MyApplication.VIEW_GRADES, transition);
+		MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, transition);
 
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-			new GetGradesData().execute(MyApplication.URL_GRADES + date + "&periode291=" + term, direction, transition + 1);
+			new GetGradesData().execute(HeliniumStudentApp.URL_GRADES + date + "&periode291=" + term, direction, transition + 1);
 		else
-			new GetGradesData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, MyApplication.URL_GRADES + date + "&periode291=" + term, direction, transition + 1);
+			new GetGradesData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, HeliniumStudentApp.URL_GRADES + date + "&periode291=" + term, direction, transition + 1);
 	}
 
 	protected static class GetGradesData extends AsyncTask<Object, Void, Integer> {
 		private String html;
 
 		private String url;
-		private int direction;
-		private int transition;
+		private int direction, transition;
 
 		@Override
 		protected Integer doInBackground(Object... params) {
@@ -438,17 +437,17 @@ public class GradesFragment extends Fragment {
 			transition = (int) params[2];
 
 			if (MainActivity.cookies == null) {
-				return MyApplication.ERR_LOGIN;
+				return HeliniumStudentApp.ERR_LOGIN;
 			} else {
 				try {
 					final URLConnection connection = new URL(url).openConnection();
 
-					connection.setConnectTimeout(MyApplication.TIMEOUT_CONNECT);
-					connection.setReadTimeout(MyApplication.TIMEOUT_READ);
+					connection.setConnectTimeout(HeliniumStudentApp.TIMEOUT_CONNECT);
+					connection.setReadTimeout(HeliniumStudentApp.TIMEOUT_READ);
 
 					((HttpURLConnection) connection).setInstanceFollowRedirects(false);
-					connection.setRequestProperty("Accept-Charset", MyApplication.CHARSET);
-					connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + MyApplication.CHARSET);
+					connection.setRequestProperty("Accept-Charset", HeliniumStudentApp.CHARSET);
+					connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + HeliniumStudentApp.CHARSET);
 					connection.addRequestProperty("Cookie", TextUtils.join(",", MainActivity.cookies.getCookieStore().getCookies()));
 
 					connection.connect();
@@ -461,15 +460,15 @@ public class GradesFragment extends Fragment {
 					if (((HttpURLConnection) connection).getResponseCode() == 200)
 						//if (!html.contains("<th class=\"wp3-rotate\" width=\"1%\" title=\"Rapportcijfer\" alt=\"Rapportcijfer\">") || html.contains("ajax-loader.gif"))
 						if (html.contains("ajax-loader.gif"))
-							return MyApplication.ERR_RETRY;
+							return HeliniumStudentApp.ERR_RETRY;
 						else if (html.contains("<h2>Er is een fout opgetreden</h2>") || html.contains("Leerlingnummer onbekend") || !html.contains("Periode") || html.contains("cross.png"))
-							return MyApplication.ERR_UNDEFINED;
+							return HeliniumStudentApp.ERR_UNDEFINED;
 						else
-							return MyApplication.OK;
+							return HeliniumStudentApp.OK;
 					else
-						return MyApplication.ERR_OK;
+						return HeliniumStudentApp.ERR_OK;
 				} catch (IOException e) {
-					return MyApplication.ERR_LOGIN;
+					return HeliniumStudentApp.ERR_LOGIN;
 				}
 			}
 		}
@@ -477,23 +476,23 @@ public class GradesFragment extends Fragment {
 		@Override
 		protected void onPostExecute(Integer returnCode) {
 			switch (returnCode) {
-				case MyApplication.ERR_LOGIN:
+				case HeliniumStudentApp.ERR_LOGIN:
 					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-						new MainActivity.GetLoginCookie().execute(MyApplication.VIEW_GRADES, url, direction, transition);
+						new MainActivity.GetLoginCookie().execute(HeliniumStudentApp.VIEW_GRADES, url, direction, transition);
 					else
-						new MainActivity.GetLoginCookie().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, MyApplication.VIEW_GRADES, url, direction, transition);
+						new MainActivity.GetLoginCookie().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, HeliniumStudentApp.VIEW_GRADES, url, direction, transition);
 					break;
-				case MyApplication.ERR_RETRY:
+				case HeliniumStudentApp.ERR_RETRY:
 					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
 						new GetGradesData().execute(url, direction, transition);
 					else
 						new GetGradesData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url, direction, transition);
 					break;
-				case MyApplication.ERR_OK:
-				case MyApplication.ERR_UNDEFINED:
-					MainActivity.recoverError(MyApplication.VIEW_GRADES, returnCode, direction, transition);
+				case HeliniumStudentApp.ERR_OK:
+				case HeliniumStudentApp.ERR_UNDEFINED:
+					MainActivity.recoverError(HeliniumStudentApp.VIEW_GRADES, returnCode, direction, transition);
 					break;
-				case MyApplication.OK:
+				case HeliniumStudentApp.OK:
 					gradesHtml = html;
 
 					if (termFocus == Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(mainContext).getString("pref_grades_term", "1")) && yearFocus == 0) {
@@ -515,10 +514,8 @@ public class GradesFragment extends Fragment {
 	}
 
 	private static class CourseWrapper {
-		String course;
+		String course, average, averageRound;
 		String[][] grades;
-		String average;
-		String averageRound;
 
 		private CourseWrapper(final String course, final String[][] grades, final String average, final String averageRound) {
 			this.course = course;
@@ -790,7 +787,7 @@ public class GradesFragment extends Fragment {
 			MainActivity.weekTV.setText(mainContext.getResources().getString(R.string.term) + ' ' + String.valueOf(termFocus));
 			MainActivity.yearTV.setText(mainContext.getResources().getString(R.string.year) + ' ' + String.valueOf(maxYear + yearFocus));
 
-			MainActivity.setUI(MyApplication.VIEW_GRADES, transition);
+			MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, transition);
 		}
 	}
 
