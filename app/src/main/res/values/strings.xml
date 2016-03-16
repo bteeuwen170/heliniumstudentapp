@@ -29,14 +29,14 @@
 	<string name="username">Username</string>
 	<string name="password">Password</string>
 
-	<string name="term">Term</string>
-	<string name="year">Year</string>
+	<string name="term">Term %1$d</string>
+	<string name="year">Year %1$d</string>
 
 	<string name="about">About</string>
 	<string name="absence">Absence</string>
 	<string name="authenticating">Authenticating</string>
 	<string name="automatically">Automatically</string>
-	<string name="average">Average:</string>
+	<string name="average">Average: %1$s</string>
 	<string name="cancel">Cancel</string>
 	<string name="database_no">No database found</string>
 	<string name="database_version_0">Database version</string>

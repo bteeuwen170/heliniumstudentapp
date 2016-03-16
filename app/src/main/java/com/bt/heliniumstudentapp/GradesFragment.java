@@ -248,11 +248,13 @@ public class GradesFragment extends Fragment {
 							final AlertDialog.Builder gradesDialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(mainContext, MainActivity.themeDialog));
 							final View gradesLayout = LayoutInflater.from(mainContext).inflate(R.layout.dialog_grades, null);
 
-							gradesDialogBuilder.setTitle(R.string.year);
+							gradesDialogBuilder.setTitle(getResources().getString(R.string.year, maxYear));
 
 							final NumberPicker yearNP = (NumberPicker) gradesLayout.findViewById(R.id.np_year_dg);
 
 							gradesDialogBuilder.setView(gradesLayout);
+
+							//TODO Listen for year change.
 
 							gradesDialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 
@@ -675,6 +677,8 @@ public class GradesFragment extends Fragment {
 
 							if (bubbleGradeHTML.contains("S") || bubbleGradeHTML.contains("O") || (bubbleGrade < 5.5 && bubbleGrade != 0.0)) {
 								bubbleGrades.append("<br />&emsp;").append("<font color='#F44336'>").append(bubbleGradeHTML).append("</font>");
+							} else if (bubbleGrade == 10) {
+								bubbleGrades.append("<br />&emsp;").append("<font color='#00B200'>").append(bubbleGradeHTML).append("</font>");
 							} else {
 								bubbleGrades.append("<br />&emsp;").append(bubbleGradeHTML);
 							}
@@ -737,6 +741,8 @@ public class GradesFragment extends Fragment {
 
 							if ((wp3Grade < 5.5 && wp3Grade != 0.0) || wp3GradeHTML.contains("S") || wp3GradeHTML.contains("O")) {
 								courseArray[i][0] = "<font color='#F44336'>" + wp3GradeHTML + "</font>";
+							} else if (wp3Grade == 10) {
+								courseArray[i][0] = "<font color='#00B200'>" + wp3GradeHTML + "</font>";
 							} else {
 								courseArray[i][0] = wp3GradeHTML;
 							}
@@ -753,8 +759,11 @@ public class GradesFragment extends Fragment {
 
 				try { //TODO Messy
 					if (courseAverageRound.equals("S") || courseAverageRound.equals("O") || Integer.parseInt(courseAverageRound) < 6) {
-						gradesMap.add(new CourseWrapper(Html.fromHtml(course.substring(0, course.indexOf("</td>"))).toString().trim(),
-								courseArray, "<font color='#F44336'>" + String.valueOf(courseAverage), "<font color='#F44336'>" + courseAverageRound));
+						gradesMap.add(new CourseWrapper(Html.fromHtml(course.substring(0, course.indexOf("</td>"))).toString().trim(), courseArray, "<font color='#F44336'>" + String.valueOf(courseAverage),
+								"<font color='#F44336'>" + courseAverageRound));
+					} else if (Integer.parseInt(courseAverageRound) == 10) {
+						gradesMap.add(new CourseWrapper(Html.fromHtml(course.substring(0, course.indexOf("</td>"))).toString().trim(), courseArray, "<font color='#00B200'>" + String.valueOf(courseAverage),
+								"<font color='#00B200'>" + courseAverageRound));
 					} else {
 						gradesMap.add(new CourseWrapper(Html.fromHtml(course.substring(0, course.indexOf("</td>"))).toString().trim(),
 								courseArray, String.valueOf(courseAverage), courseAverageRound));
@@ -784,8 +793,8 @@ public class GradesFragment extends Fragment {
 			else
 				MainActivity.weekTV.setTypeface(null, Typeface.NORMAL);
 
-			MainActivity.weekTV.setText(mainContext.getResources().getString(R.string.term) + ' ' + String.valueOf(termFocus));
-			MainActivity.yearTV.setText(mainContext.getResources().getString(R.string.year) + ' ' + String.valueOf(maxYear + yearFocus));
+			MainActivity.weekTV.setText(mainContext.getResources().getString(R.string.term, termFocus));
+			MainActivity.yearTV.setText(mainContext.getResources().getString(R.string.year, maxYear + yearFocus));
 
 			MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, transition);
 		}
@@ -856,7 +865,7 @@ public class GradesFragment extends Fragment {
 				if (!average.equals("NaN")) {
 					averageTV.setTextColor(mainContext.getResources().getColor(MainActivity.themeSecondaryTextColor));
 
-					averageTV.setText(mainContext.getResources().getString(R.string.average) + ' ' + average);
+					averageTV.setText(mainContext.getResources().getString(R.string.average, average));
 				}
 
 				return convertView;

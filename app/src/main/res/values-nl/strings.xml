@@ -30,14 +30,14 @@
 	<string name="username">Gebruikersnaam</string>
 	<string name="password">Wachtwoord</string>
 
-	<string name="term">Periode</string>
-	<string name="year">Jaar</string>
+	<string name="term">Periode %1$d</string>
+	<string name="year">Jaar %1$d</string>
 
 	<string name="about">Over</string>
 	<string name="absence">Absentie</string>
 	<string name="authenticating">Authenticeren</string>
 	<string name="automatically">Automatisch</string>
-	<string name="average">Gemiddelde:</string>
+	<string name="average">Gemiddelde: %1$s</string>
 	<string name="cancel">Cancel</string>
 	<string name="database_no">Geen database gevonden</string>
 	<string name="database_version_0">Database versie</string>

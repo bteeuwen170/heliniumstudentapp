@@ -632,10 +632,10 @@ public class MainActivity extends AppCompatActivity {
 
 							((SwipeRefreshLayout) ScheduleFragment.scheduleLayout).setRefreshing(false);
 							break;
-						case HeliniumStudentApp.ERR_UNDEFINED:
+						/*case HeliniumStudentApp.ERR_UNDEFINED:
 						case HeliniumStudentApp.ERR_OK:
 							//FIXME HANDLE!!!
-							break;
+							break;*/
 					}
 					break;
 				case HeliniumStudentApp.VIEW_GRADES:
@@ -714,10 +714,10 @@ public class MainActivity extends AppCompatActivity {
 
 							((SwipeRefreshLayout) GradesFragment.gradesLayout).setRefreshing(false);
 							break;
-						case HeliniumStudentApp.ERR_UNDEFINED:
+						/*case HeliniumStudentApp.ERR_UNDEFINED:
 						case HeliniumStudentApp.ERR_OK:
 							//FIXME HANDLE!!!
-							break;
+							break;*/
 					}
 					break;
 			}
@@ -789,12 +789,17 @@ public class MainActivity extends AppCompatActivity {
 	protected static void setToolbarTitle(AppCompatActivity context, String title, String subtitle) {
 		final Spannable toolbarTitle = new SpannableString(title);
 		toolbarTitle.setSpan(new ForegroundColorSpan(context.getResources().getColor(primaryTextColor)), 0, toolbarTitle.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		context.getSupportActionBar().setTitle(toolbarTitle);
 
-		if (subtitle != null) {
-			final Spannable toolbarSubtitle = new SpannableString(subtitle);
-			toolbarSubtitle.setSpan(new ForegroundColorSpan(context.getResources().getColor(secondaryTextColor)), 0, toolbarSubtitle.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-			context.getSupportActionBar().setSubtitle(toolbarSubtitle);
+		try {
+			context.getSupportActionBar().setTitle(toolbarTitle);
+
+			if (subtitle != null) {
+				final Spannable toolbarSubtitle = new SpannableString(subtitle);
+				toolbarSubtitle.setSpan(new ForegroundColorSpan(context.getResources().getColor(secondaryTextColor)), 0, toolbarSubtitle.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				context.getSupportActionBar().setSubtitle(toolbarSubtitle);
+			}
+		} catch (NullPointerException e) {
+			//TODO Handle
 		}
 	}
 
