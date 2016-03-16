@@ -35,14 +35,14 @@
 			android:key="pref_general_class"
 			android:title="@string/general_class"
 			android:entries="@array/general_class_array"
-			android:entryValues="@array/general_values"
+			android:entryValues="@array/general_class_values"
 			android:defaultValue="0"/>
 
 		<ListPreference
 			android:key="pref_general_language"
 			android:title="@string/general_language"
 			android:entries="@array/general_language_array"
-			android:entryValues="@array/general_values"
+			android:entryValues="@array/general_language_values"
 			android:defaultValue="0"/>
 
 	</PreferenceCategory>

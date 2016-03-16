@@ -26,6 +26,7 @@ package com.bt.heliniumstudentapp;
 import android.Manifest;
 import android.app.Activity;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
@@ -93,8 +94,8 @@ public class UpdateClass extends AsyncTask<Void, Integer, String> {
 
 			updateDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
 
-			updateDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(context.getResources().getColor(MainActivity.accentPrimaryColor));
-			updateDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(context.getResources().getColor(MainActivity.accentSecondaryColor));
+			updateDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(context, MainActivity.accentPrimaryColor));
+			updateDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(context, MainActivity.accentSecondaryColor));
 		}
 	}
 
@@ -143,7 +144,7 @@ public class UpdateClass extends AsyncTask<Void, Integer, String> {
 						updateDialog.setTitle(context.getString(R.string.update) + ' ' + versionName);
 
 						final TextView contentTV = (TextView) updateDialog.findViewById(R.id.tv_content_du);
-						contentTV.setTextColor(context.getResources().getColor(MainActivity.themePrimaryTextColor));
+						contentTV.setTextColor(ContextCompat.getColor(context, MainActivity.themePrimaryTextColor));
 						contentTV.setText(Html.fromHtml(json.optString("content"), null, new Html.TagHandler() {
 
 							@Override
@@ -160,12 +161,12 @@ public class UpdateClass extends AsyncTask<Void, Integer, String> {
 
 						updateDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
 
-						updateDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(context.getResources().getColor(MainActivity.accentSecondaryColor));
+						updateDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(context, MainActivity.accentSecondaryColor));
 					} else if (settings) {
 						updateDialog.setTitle(context.getString(R.string.update_no));
 
 						final TextView contentTV = (TextView) updateDialog.findViewById(R.id.tv_content_du);
-						contentTV.setTextColor(context.getResources().getColor(MainActivity.themePrimaryTextColor));
+						contentTV.setTextColor(ContextCompat.getColor(context, MainActivity.themePrimaryTextColor));
 						contentTV.setText(Html.fromHtml(json.optString("content"), null, new Html.TagHandler() {
 
 							@Override
@@ -210,8 +211,8 @@ public class UpdateClass extends AsyncTask<Void, Integer, String> {
 			updateDialog.setCanceledOnTouchOutside(true);
 			updateDialog.show();
 
-			updateDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(context.getResources().getColor(MainActivity.accentSecondaryColor));
-			updateDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(context.getResources().getColor(MainActivity.accentSecondaryColor));
+			updateDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(context, MainActivity.accentSecondaryColor));
+			updateDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(context, MainActivity.accentSecondaryColor));
 		}
 	}
 
@@ -225,7 +226,7 @@ public class UpdateClass extends AsyncTask<Void, Integer, String> {
 
 			request = new DownloadManager.Request(Uri.parse(HeliniumStudentApp.URL_UPDATE_RELEASE));
 
-			request.setTitle(context.getResources().getString(R.string.app_name) + " " + versionName);
+			request.setTitle(context.getString(R.string.app_name) + " " + versionName);
 			request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "/heliniumstudentapp.apk");
 
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);

@@ -26,7 +26,9 @@ package com.bt.heliniumstudentapp;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -61,8 +63,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Scanner;
+
+import static android.support.v4.content.ContextCompat.getColor;
 
 public class ScheduleFragment extends Fragment {
 	private static AppCompatActivity mainContext;
@@ -91,7 +94,7 @@ public class ScheduleFragment extends Fragment {
 		if (restart) { //TODO Database check?
 			MainActivity.setStatusBar(mainContext);
 
-			scheduleFocus = new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR);
+			scheduleFocus = new GregorianCalendar(HeliniumStudentApp.LOCALE).get(Calendar.WEEK_OF_YEAR);
 
 			scheduleHtml = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_0", null);
 			homeworkJson = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("json_homework_0", null);
@@ -103,13 +106,22 @@ public class ScheduleFragment extends Fragment {
 		} else if (scheduleHtml == null) {
 			final boolean online = MainActivity.isOnline();
 
-			scheduleFocus = new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR);
+			scheduleFocus = new GregorianCalendar(HeliniumStudentApp.LOCALE).get(Calendar.WEEK_OF_YEAR);
 
-			if (online && PreferenceManager.getDefaultSharedPreferences(mainContext).getBoolean("pref_updates_auto_update", true))
+			if (online && PreferenceManager.getDefaultSharedPreferences(mainContext).getBoolean("pref_updates_auto_update", true)) {
 				if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
 					new UpdateClass(mainContext, false).execute();
 				else
 					new UpdateClass(mainContext, false).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+			}
+
+			//TEMP
+			try {
+				mainContext.getPackageManager().getPackageInfo("com.mangos.heliniumleerlingenweb", PackageManager.GET_ACTIVITIES);
+				Toast.makeText(mainContext, R.string.temp, Toast.LENGTH_LONG).show();
+				startActivity(new Intent(Intent.ACTION_DELETE, Uri.parse("package:com.mangos.heliniumleerlingenweb")));
+			} catch (PackageManager.NameNotFoundException ignored) {}
+			//ENDTEMP
 
 			if (online && (PreferenceManager.getDefaultSharedPreferences(mainContext).getBoolean("pref_schedule_init", true) ||
 					PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_0", null) == null)) {
@@ -146,7 +158,7 @@ public class ScheduleFragment extends Fragment {
 
 						getSchedule(HeliniumStudentApp.DIREC_BACK, HeliniumStudentApp.ACTION_REFRESH_IN);
 					} else {
-						final int currentWeek = new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR);
+						final int currentWeek = new GregorianCalendar(HeliniumStudentApp.LOCALE).get(Calendar.WEEK_OF_YEAR);
 
 						if (scheduleFocus > currentWeek + 1) {
 							scheduleFocus = currentWeek + 1;
@@ -177,23 +189,23 @@ public class ScheduleFragment extends Fragment {
 
 						final AlertDialog.Builder weekpickerDialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(mainContext, MainActivity.themeDialog));
 
-						final View view = LayoutInflater.from(mainContext).inflate(R.layout.dialog_schedule, null);
+						final View view = View.inflate(mainContext, R.layout.dialog_schedule, null);
 						weekpickerDialogBuilder.setView(view);
 
 						final DatePicker datePicker = (DatePicker) view.findViewById(R.id.np_weekpicker_dw);
 
-						year = new GregorianCalendar(Locale.GERMANY).get(Calendar.YEAR);
-						monthOfYear = new GregorianCalendar(Locale.GERMANY).get(Calendar.MONTH);
-						dayOfMonth = new GregorianCalendar(Locale.GERMANY).get(Calendar.DAY_OF_MONTH);
+						year = new GregorianCalendar(HeliniumStudentApp.LOCALE).get(Calendar.YEAR);
+						monthOfYear = new GregorianCalendar(HeliniumStudentApp.LOCALE).get(Calendar.MONTH);
+						dayOfMonth = new GregorianCalendar(HeliniumStudentApp.LOCALE).get(Calendar.DAY_OF_MONTH);
 
-						weekpickerDialogBuilder.setTitle(getResources().getString(R.string.go_to));
+						weekpickerDialogBuilder.setTitle(getString(R.string.go_to));
 
 						weekpickerDialogBuilder.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
 
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
-								final GregorianCalendar date = new GregorianCalendar(Locale.GERMANY);
-								final GregorianCalendar today = new GregorianCalendar(Locale.GERMANY);
+								final GregorianCalendar date = new GregorianCalendar(HeliniumStudentApp.LOCALE);
+								final GregorianCalendar today = new GregorianCalendar(HeliniumStudentApp.LOCALE);
 
 								date.set(Calendar.YEAR, year);
 								date.set(Calendar.MONTH, monthOfYear);
@@ -211,16 +223,16 @@ public class ScheduleFragment extends Fragment {
 
 						final AlertDialog weekPickerDialog = weekpickerDialogBuilder.create();
 
-						final GregorianCalendar minDate = new GregorianCalendar(Locale.GERMANY);
+						final GregorianCalendar minDate = new GregorianCalendar(HeliniumStudentApp.LOCALE);
 						minDate.set(Calendar.YEAR, 2000);
 						minDate.set(Calendar.WEEK_OF_YEAR, 1);
 
-						final GregorianCalendar maxDate = new GregorianCalendar(Locale.GERMANY);
+						final GregorianCalendar maxDate = new GregorianCalendar(HeliniumStudentApp.LOCALE);
 						maxDate.set(Calendar.YEAR, 2038);
 						maxDate.set(Calendar.WEEK_OF_YEAR, 1);
 
 						datePicker.init(year, monthOfYear, dayOfMonth, new DatePicker.OnDateChangedListener() {
-							final GregorianCalendar newDate = new GregorianCalendar(Locale.GERMANY);
+							final GregorianCalendar newDate = new GregorianCalendar(HeliniumStudentApp.LOCALE);
 
 							@Override
 							public void onDateChanged(DatePicker view, int dialogYear, int dialogMonthOfYear, int dialogDayOfMonth) {
@@ -242,10 +254,10 @@ public class ScheduleFragment extends Fragment {
 						weekPickerDialog.setCanceledOnTouchOutside(true);
 						weekPickerDialog.show();
 
-						weekPickerDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(MainActivity.accentSecondaryColor));
-						weekPickerDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(MainActivity.accentSecondaryColor));
+						weekPickerDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getColor(mainContext, MainActivity.accentSecondaryColor));
+						weekPickerDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getColor(mainContext, MainActivity.accentSecondaryColor));
 					} else {
-						scheduleFocus = new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR);
+						scheduleFocus = new GregorianCalendar(HeliniumStudentApp.LOCALE).get(Calendar.WEEK_OF_YEAR);
 						scheduleHtml = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_0", null);
 						homeworkJson = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("json_homework_0", null);
 
@@ -265,7 +277,7 @@ public class ScheduleFragment extends Fragment {
 
 						getSchedule(HeliniumStudentApp.DIREC_NEXT, HeliniumStudentApp.ACTION_REFRESH_IN);
 					} else {
-						final int currentWeek = new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR);
+						final int currentWeek = new GregorianCalendar(HeliniumStudentApp.LOCALE).get(Calendar.WEEK_OF_YEAR);
 
 						if (PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_1", null) != null && scheduleFocus >= currentWeek) {
 							scheduleFocus = currentWeek + 1;
@@ -296,7 +308,7 @@ public class ScheduleFragment extends Fragment {
 					parseData(HeliniumStudentApp.ACTION_ONLINE);
 			} else {
 				if (checkDatabase() != HeliniumStudentApp.DB_REFRESHING) {
-					final int currentWeek = new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR);
+					final int currentWeek = new GregorianCalendar(HeliniumStudentApp.LOCALE).get(Calendar.WEEK_OF_YEAR);
 
 					if (scheduleFocus != currentWeek && scheduleFocus != currentWeek + 1) {
 						scheduleFocus = currentWeek;
@@ -435,18 +447,20 @@ public class ScheduleFragment extends Fragment {
 						try {
 							if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
 								new GetHomeworkData().execute(
-										HeliniumStudentApp.URL_HOMEWORK + String.valueOf(new SimpleDateFormat("dd-MM-yyyy z").parse(url.substring(85) + " GMT").getTime()), focus, direction, transition, scheduleFocus);
+										HeliniumStudentApp.URL_HOMEWORK + String.valueOf(HeliniumStudentApp.df_homework().parse(url.substring(85) + " GMT").getTime()),
+										focus, direction, transition, scheduleFocus);
 							else
 								new GetHomeworkData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-										HeliniumStudentApp.URL_HOMEWORK + String.valueOf(new SimpleDateFormat("dd-MM-yyyy z").parse(url.substring(85) + " GMT").getTime()), focus, direction, transition, scheduleFocus);
+										HeliniumStudentApp.URL_HOMEWORK + String.valueOf(HeliniumStudentApp.df_homework().parse(url.substring(85) + " GMT").getTime()),
+										focus, direction, transition, scheduleFocus);
 						} catch (ParseException e) {
 							//FIXME Handle immediately (and fix)
 						}
 					}
 
-					if (focus == new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR)) {
+					if (focus == new GregorianCalendar(HeliniumStudentApp.LOCALE).get(Calendar.WEEK_OF_YEAR)) {
 						PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("html_schedule_0", html).apply();
-						PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("pref_schedule_version_0", new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date())).apply();
+						PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("pref_schedule_version_0", HeliniumStudentApp.df_save().format(new Date())).apply();
 
 						PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("html_schedule_start_0", getDateFormatted()).apply();
 
@@ -456,10 +470,10 @@ public class ScheduleFragment extends Fragment {
 							else
 								new GetScheduleData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, HeliniumStudentApp.URL_SCHEDULE + getDateFormatted(), focus + 1, 0, transition, false);
 						}
-					} else if (focus == new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR) + 1 &&
+					} else if (focus == new GregorianCalendar(HeliniumStudentApp.LOCALE).get(Calendar.WEEK_OF_YEAR) + 1 &&
 							PreferenceManager.getDefaultSharedPreferences(mainContext).getBoolean("pref_schedule_next_week", false)) {
 						PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("html_schedule_1", html).apply();
-						PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("pref_schedule_version_1", new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date())).apply();
+						PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("pref_schedule_version_1", HeliniumStudentApp.df_save().format(new Date())).apply();
 
 						PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("html_schedule_start_1", getDateFormatted()).apply();
 					}
@@ -538,7 +552,7 @@ public class ScheduleFragment extends Fragment {
 				case HeliniumStudentApp.OK:
 					homeworkJson = json;
 
-					if (focus == new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR)) PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("json_homework_0", json).apply();
+					if (focus == new GregorianCalendar(HeliniumStudentApp.LOCALE).get(Calendar.WEEK_OF_YEAR)) PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("json_homework_0", json).apply();
 
 					parseData(transition);
 					break;
@@ -549,8 +563,8 @@ public class ScheduleFragment extends Fragment {
 	private int checkDatabase() {
 		Boolean updated = false;
 
-		final GregorianCalendar currentDate = new GregorianCalendar(Locale.GERMANY);
-		final GregorianCalendar storedDate = new GregorianCalendar(Locale.GERMANY);
+		final GregorianCalendar currentDate = new GregorianCalendar(HeliniumStudentApp.LOCALE);
+		final GregorianCalendar storedDate = new GregorianCalendar(HeliniumStudentApp.LOCALE);
 
 		final String scheduleStart = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_start_0", null);
 
@@ -558,7 +572,7 @@ public class ScheduleFragment extends Fragment {
 			return HeliniumStudentApp.DB_OK;
 		} else {
 			try {
-				storedDate.setTime(new SimpleDateFormat("dd-MM-yyyy").parse(scheduleStart));
+				storedDate.setTime(HeliniumStudentApp.df_date().parse(scheduleStart));
 			} catch (ParseException ignored) {
 				return HeliniumStudentApp.DB_ERROR;
 			}
@@ -600,7 +614,7 @@ public class ScheduleFragment extends Fragment {
 					return HeliniumStudentApp.DB_ERROR; //TODO Throw error / in finally
 				}
 			} else try {
-				currentDate.setTime(new SimpleDateFormat("dd-MM-yyyy").parse(PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_start_0", "1")));
+				currentDate.setTime(HeliniumStudentApp.df_date().parse(PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_start_0", "1")));
 
 				if (currentDate.get(Calendar.WEEK_OF_YEAR) - currentDate.get(Calendar.WEEK_OF_YEAR) == 1) {
 					PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("html_schedule_0",
@@ -649,9 +663,9 @@ public class ScheduleFragment extends Fragment {
 	}
 
 	private static GregorianCalendar getDate() {
-		GregorianCalendar date = new GregorianCalendar(Locale.GERMANY);
+		GregorianCalendar date = new GregorianCalendar(HeliniumStudentApp.LOCALE);
 		date.clear();
-		date.set(Calendar.YEAR, new GregorianCalendar(Locale.GERMANY).get(Calendar.YEAR)); //FIXME BAD
+		date.set(Calendar.YEAR, new GregorianCalendar(HeliniumStudentApp.LOCALE).get(Calendar.YEAR)); //FIXME BAD
 		date.set(Calendar.WEEK_OF_YEAR, scheduleFocus);
 		date.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
 
@@ -659,7 +673,7 @@ public class ScheduleFragment extends Fragment {
 	}
 
 	private static String getDateFormatted() {
-		return new SimpleDateFormat("dd-MM-yyyy").format(getDate().getTime());
+		return HeliniumStudentApp.df_date().format(getDate().getTime());
 	}
 
 	protected static void parseData(final int transition) {
@@ -679,7 +693,7 @@ public class ScheduleFragment extends Fragment {
 			transition = (Integer) attrs[0];
 
 			final ArrayList<HashMap<String, String>> scheduleWrapper = new ArrayList<>();
-			final GregorianCalendar today = new GregorianCalendar(Locale.GERMANY);
+			final GregorianCalendar today = new GregorianCalendar(HeliniumStudentApp.LOCALE);
 
 			for (int day = 2; day < 7; day ++) {
 				final GregorianCalendar weekDays = getDate();
@@ -687,7 +701,7 @@ public class ScheduleFragment extends Fragment {
 
 				HashMap<String,String> item = new HashMap<>();
 
-				final String weekDay = new SimpleDateFormat("EEEE").format(weekDays.getTime());
+				final String weekDay = HeliniumStudentApp.df_weekday().format(weekDays.getTime());
 
 				item.put("weekDay", Character.toUpperCase(weekDay.charAt(0)) + weekDay.substring(1));
 				item.put("date", DateFormat.getDateFormat(mainContext).format(weekDays.getTime()));
@@ -707,7 +721,7 @@ public class ScheduleFragment extends Fragment {
 
 			if (scheduleFocus == today.get(Calendar.WEEK_OF_YEAR) || scheduleFocus == today.get(Calendar.WEEK_OF_YEAR) + 1) { //TODO Timer? What about leap years or daylight saving?
 				final HashMap<String,String> item = new HashMap<>();
-				final SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+				final SimpleDateFormat format = HeliniumStudentApp.df_save();
 				final char ws = ' ';
 
 				try {
@@ -753,23 +767,21 @@ public class ScheduleFragment extends Fragment {
 
 			scheduleLVadapter.notifyDataSetChanged();
 
-			if (scheduleFocus == new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR))
+			if (scheduleFocus == new GregorianCalendar(HeliniumStudentApp.LOCALE).get(Calendar.WEEK_OF_YEAR))
 				MainActivity.weekTV.setTypeface(null, Typeface.BOLD);
 			else
 				MainActivity.weekTV.setTypeface(null, Typeface.NORMAL);
 
 			final GregorianCalendar date = getDate();
-			MainActivity.weekTV.setText("Week " + String.valueOf(date.get(Calendar.WEEK_OF_YEAR)));
+			MainActivity.weekTV.setText(mainContext.getString(R.string.week, date.get(Calendar.WEEK_OF_YEAR)));
 			MainActivity.yearTV.setText(String.valueOf(date.get(Calendar.YEAR)));
-
-			String classExtra = "";
-			if (!PreferenceManager.getDefaultSharedPreferences(mainContext).getString("pref_general_class", "0").equals("0"))
-				classExtra = " (" + mainContext.getString(R.string.general_class) + ' ' + PreferenceManager.getDefaultSharedPreferences(mainContext).getString("pref_general_class", "") + ')';
 
 			String nameHtml = scheduleHtml; //TODO Implement differently
 			nameHtml = nameHtml.substring(nameHtml.indexOf("Rooster van "));
 			((TextView) mainContext.findViewById(R.id.tv_name_hd)).setText((nameHtml.substring(12, nameHtml.indexOf(" ("))));
-			((TextView) mainContext.findViewById(R.id.tv_class_hd)).setText((nameHtml.substring(nameHtml.indexOf("(") + 1, nameHtml.indexOf(")")) + classExtra));
+			((TextView) mainContext.findViewById(R.id.tv_class_hd)).setText((nameHtml.substring(nameHtml.indexOf("(") + 1, nameHtml.indexOf(")")) +
+					(PreferenceManager.getDefaultSharedPreferences(mainContext).getString("pref_general_class", "0").equals("0") ? "" :
+							" (" + mainContext.getString(R.string.general_class) + ' ' + PreferenceManager.getDefaultSharedPreferences(mainContext).getString("pref_general_class", "") + ')')));
 
 			weekDaysLV.setOnItemClickListener(new AdapterView.OnItemClickListener() { //TODO Move
 
@@ -814,7 +826,7 @@ public class ScheduleFragment extends Fragment {
 
 				final TextView averageTV = (TextView) convertView.findViewById(R.id.tv_footer_lf);
 
-				averageTV.setTextColor(mainContext.getResources().getColor(MainActivity.themeSecondaryTextColor));
+				averageTV.setTextColor(getColor(mainContext, MainActivity.themeSecondaryTextColor));
 
 				averageTV.setText(updated);
 			} else {
@@ -838,11 +850,11 @@ public class ScheduleFragment extends Fragment {
 					convertView.setEnabled(false);
 					convertView.setOnClickListener(null);
 
-					dayTV.setTextColor(mainContext.getResources().getColor(MainActivity.themeDisabledTextColor));
-					dateTV.setTextColor(mainContext.getResources().getColor(MainActivity.themeDisabledTextColor));
+					dayTV.setTextColor(getColor(mainContext, MainActivity.themeDisabledTextColor));
+					dateTV.setTextColor(getColor(mainContext, MainActivity.themeDisabledTextColor));
 				} else {
-					dayTV.setTextColor(mainContext.getResources().getColor(MainActivity.themePrimaryTextColor));
-					dateTV.setTextColor(mainContext.getResources().getColor(MainActivity.themeSecondaryTextColor));
+					dayTV.setTextColor(getColor(mainContext, MainActivity.themePrimaryTextColor));
+					dateTV.setTextColor(getColor(mainContext, MainActivity.themeSecondaryTextColor));
 				}
 
 				dayTV.setText(weekDays.get(position).get("weekDay"));

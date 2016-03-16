@@ -35,6 +35,8 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.support.v7.widget.AppCompatCheckedTextView;
@@ -54,7 +56,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends PreferenceActivity { //TODO PreferenceFragment
 	private static AppCompatActivity mainContext;
 
 	private static Toolbar toolbarTB;
@@ -108,7 +110,7 @@ public class SettingsActivity extends PreferenceActivity {
 
 		getListView().setBackgroundColor(Color.TRANSPARENT);
 		getListView().setCacheColorHint(Color.TRANSPARENT);
-		getListView().setBackgroundColor(getResources().getColor(MainActivity.themeColor));
+		getListView().setBackgroundColor(ContextCompat.getColor(this, MainActivity.themeColor));
 
 		setTheme(MainActivity.themeSettings);
 
@@ -138,7 +140,7 @@ public class SettingsActivity extends PreferenceActivity {
 				findPreference("pref_schedule_version_0").setSummary(getString(R.string.database_no));
 			else
 				findPreference("pref_schedule_version_0").setSummary(DateFormat.getDateFormat(getApplicationContext()).format(
-						new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(date)) + date.substring(date.indexOf(' ')));
+						HeliniumStudentApp.df_save().parse(date)) + date.substring(date.indexOf(' ')));
 		} catch (ParseException ignored) {}
 
 		try {
@@ -148,7 +150,7 @@ public class SettingsActivity extends PreferenceActivity {
 				findPreference("pref_schedule_version_1").setSummary(getString(R.string.database_no));
 			else
 				findPreference("pref_schedule_version_1").setSummary(DateFormat.getDateFormat(getApplicationContext()).format(
-						new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(date)) + date.substring(date.indexOf(' ')));
+						HeliniumStudentApp.df_save().parse(date)) + date.substring(date.indexOf(' ')));
 		} catch (ParseException ignored) {}
 
 		try {
@@ -158,7 +160,7 @@ public class SettingsActivity extends PreferenceActivity {
 				findPreference("pref_grades_version").setSummary(getString(R.string.database_no));
 			else
 				findPreference("pref_grades_version").setSummary(DateFormat.getDateFormat(getApplicationContext()).format(
-						new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(date)) + date.substring(date.indexOf(' ')));
+						HeliniumStudentApp.df_save().parse(date)) + date.substring(date.indexOf(' ')));
 		} catch (ParseException ignored) {}
 
 		findPreference("pref_grades_term").setSummary(Arrays.asList(getResources().getStringArray(R.array.grades_term_array)).get(Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString("pref_grades_term", "1")) - 1));
@@ -319,36 +321,36 @@ public class SettingsActivity extends PreferenceActivity {
 	}
 
 	private void setToolbar() {
-		toolbarTB.setBackgroundColor(getResources().getColor(MainActivity.primaryColor));
+		toolbarTB.setBackgroundColor(ContextCompat.getColor(this, MainActivity.primaryColor));
 
 		MainActivity.setStatusBar(this);
 
-		toolbarTB.getNavigationIcon().setColorFilter(getResources().getColor(MainActivity.primaryTextColor), PorterDuff.Mode.SRC_ATOP);
+		toolbarTB.getNavigationIcon().setColorFilter(ContextCompat.getColor(this, MainActivity.primaryTextColor), PorterDuff.Mode.SRC_ATOP);
 
-		Spannable toolbarTitle = new SpannableString(getResources().getString(R.string.settings));
-		toolbarTitle.setSpan(new ForegroundColorSpan(getResources().getColor(MainActivity.primaryTextColor)), 0, toolbarTitle.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		Spannable toolbarTitle = new SpannableString(getString(R.string.settings));
+		toolbarTitle.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, MainActivity.primaryTextColor)), 0, toolbarTitle.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		toolbarTB.setTitle(toolbarTitle);
 	}
 
 	private void setTitles() {
-		final Spannable prefGeneral =  new SpannableString(getResources().getString(R.string.general));
-		final Spannable prefCustomization =  new SpannableString(getResources().getString(R.string.customization));
-		final Spannable prefSchedule =  new SpannableString(getResources().getString(R.string.schedule));
-		final Spannable prefGrades =  new SpannableString(getResources().getString(R.string.grades));
-		final Spannable prefUpdate =  new SpannableString(getResources().getString(R.string.updates));
+		final Spannable prefGeneral =  new SpannableString(getString(R.string.general));
+		final Spannable prefCustomization =  new SpannableString(getString(R.string.customization));
+		final Spannable prefSchedule =  new SpannableString(getString(R.string.schedule));
+		final Spannable prefGrades =  new SpannableString(getString(R.string.grades));
+		final Spannable prefUpdate =  new SpannableString(getString(R.string.updates));
 
 		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
-			prefGeneral.setSpan(new ForegroundColorSpan(getResources().getColor(MainActivity.accentSecondaryColor)), 0, prefGeneral.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-			prefCustomization.setSpan(new ForegroundColorSpan(getResources().getColor(MainActivity.accentSecondaryColor)), 0, prefCustomization.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-			prefSchedule.setSpan(new ForegroundColorSpan(getResources().getColor(MainActivity.accentSecondaryColor)), 0, prefSchedule.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-			prefGrades.setSpan(new ForegroundColorSpan(getResources().getColor(MainActivity.accentSecondaryColor)), 0, prefGrades.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-			prefUpdate.setSpan(new ForegroundColorSpan(getResources().getColor(MainActivity.accentSecondaryColor)), 0, prefUpdate.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			prefGeneral.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, MainActivity.accentSecondaryColor)), 0, prefGeneral.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			prefCustomization.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, MainActivity.accentSecondaryColor)), 0, prefCustomization.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			prefSchedule.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, MainActivity.accentSecondaryColor)), 0, prefSchedule.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			prefGrades.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, MainActivity.accentSecondaryColor)), 0, prefGrades.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			prefUpdate.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, MainActivity.accentSecondaryColor)), 0, prefUpdate.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		} else {
-			prefGeneral.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.dark_grey_dark)), 0, prefGeneral.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-			prefCustomization.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.dark_grey_dark)), 0, prefCustomization.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-			prefSchedule.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.dark_grey_dark)), 0, prefSchedule.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-			prefGrades.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.dark_grey_dark)), 0, prefGrades.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-			prefUpdate.setSpan(new ForegroundColorSpan(getResources().getColor(R.color.dark_grey_dark)), 0, prefUpdate.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			prefGeneral.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.dark_grey_dark)), 0, prefGeneral.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			prefCustomization.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.dark_grey_dark)), 0, prefCustomization.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			prefSchedule.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.dark_grey_dark)), 0, prefSchedule.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			prefGrades.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.dark_grey_dark)), 0, prefGrades.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			prefUpdate.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.dark_grey_dark)), 0, prefUpdate.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		}
 
 		findPreference("pref_general").setTitle(prefGeneral);
@@ -374,7 +376,7 @@ public class SettingsActivity extends PreferenceActivity {
 	}
 
 	@Override
-	public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+	public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
 		if (requestCode == 1 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) UpdateClass.downloadAPK();
 	}
 

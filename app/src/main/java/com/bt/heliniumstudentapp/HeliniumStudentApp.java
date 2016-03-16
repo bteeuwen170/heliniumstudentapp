@@ -23,12 +23,24 @@
 
 package com.bt.heliniumstudentapp;
 
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.os.Build;
 import android.preference.PreferenceManager;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 public class HeliniumStudentApp extends Application {
@@ -75,6 +87,7 @@ public class HeliniumStudentApp extends Application {
 	protected static final int VIEW_GRADES = 3;
 
 	protected static final String CHARSET = "UTF-8";
+	protected static final Locale LOCALE = Locale.GERMANY;
 
 	protected static final String URL_LOGIN= "https://leerlingen.helinium.nl/login?passAction=login";
 	protected static final String URL_SCHEDULE = "https://leerlingen.helinium.nl/Portaal/Rooster?wis_ajax&ajax_object=293&startdate293=";
@@ -84,6 +97,35 @@ public class HeliniumStudentApp extends Application {
 	protected static final String URL_UPDATE_RELEASE = "https://dl.dropboxusercontent.com/u/9920547/BT/heliniumleerlingenweb/release/app-release.apk";
 	protected static final String URL_EMAIL = "bastiaan.teeuwen170@gmail.com";
 	protected static final String URL_GITHUB = "https://github.com/bteeuwen170/heliniumstudentapp";
+
+	protected static SimpleDateFormat df_homework() { //TODO Move single used or only in class used back
+		return new SimpleDateFormat("dd-MM-yyyy z", LOCALE);
+	}
+
+	protected static SimpleDateFormat df_save() {
+		return new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", LOCALE);
+	}
+
+	protected static SimpleDateFormat df_date() {
+		return new SimpleDateFormat("dd-MM-yyyy", LOCALE);
+	}
+
+	protected static SimpleDateFormat df_weekday() {
+		return new SimpleDateFormat("EEEE", MainActivity.mainContext.getResources().getConfiguration().locale);
+	}
+
+	protected static SimpleDateFormat df_hours() {
+		return new SimpleDateFormat("HH", LOCALE);
+	}
+
+	protected static SimpleDateFormat df_minutes() {
+		return new SimpleDateFormat("mm", LOCALE);
+	}
+
+	protected static String df_grades(final int yearFocus) {
+		final Date date = new Date();
+		return new SimpleDateFormat("dd-MM-", LOCALE).format(date) + (Integer.valueOf(new SimpleDateFormat("yyyy", LOCALE).format(date)) + yearFocus);
+	}
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {

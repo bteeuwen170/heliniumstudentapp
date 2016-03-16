@@ -31,6 +31,7 @@
 	<string name="password">Wachtwoord</string>
 
 	<string name="term">Periode %1$d</string>
+	<string name="week">Week %1$d</string>
 	<string name="year">Jaar %1$d</string>
 
 	<string name="about">Over</string>

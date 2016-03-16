@@ -48,6 +48,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -141,12 +142,12 @@ public class MainActivity extends AppCompatActivity {
 					Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString("pref_customization_color_accent", "14")));
 
 			setSupportActionBar(toolbarTB);
-			toolbarTB.setBackgroundColor(getResources().getColor(primaryColor));
+			toolbarTB.setBackgroundColor(ContextCompat.getColor(this, primaryColor));
 
 			drawerDLtoggle = new ActionBarDrawerToggle(this, drawerDL, toolbarTB, 0, 0);
 			drawerDLtoggle.setDrawerIndicatorEnabled(false);
 			Drawable navigationIcon = getResources().getDrawable(R.drawable.ic_menu);
-			navigationIcon.setColorFilter(getResources().getColor(primaryTextColor), PorterDuff.Mode.SRC_ATOP);
+			navigationIcon.setColorFilter(ContextCompat.getColor(this, primaryTextColor), PorterDuff.Mode.SRC_ATOP);
 			drawerDLtoggle.setHomeAsUpIndicator(navigationIcon);
 			drawerDLtoggle.setToolbarNavigationClickListener(new View.OnClickListener() {
 
@@ -157,35 +158,34 @@ public class MainActivity extends AppCompatActivity {
 			});
 			drawerDLtoggle.syncState();
 
-			((ProgressBar) findViewById(R.id.pb_progressbar_am)).getIndeterminateDrawable().setColorFilter(getResources().getColor(accentPrimaryColor), android.graphics.PorterDuff.Mode.MULTIPLY);
+			((ProgressBar) findViewById(R.id.pb_progressbar_am)).getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(this, accentPrimaryColor), android.graphics.PorterDuff.Mode.MULTIPLY);
 
-			weekTV.setTextColor(getResources().getColor(primaryTextColor));
-			yearTV.setTextColor(getResources().getColor(secondaryTextColor));
-			prevIV.setColorFilter(getResources().getColor(primaryTextColor));
-			historyIV.setColorFilter(getResources().getColor(accentTextColor));
-			nextIV.setColorFilter(getResources().getColor(primaryTextColor));
+			weekTV.setTextColor(ContextCompat.getColor(this, primaryTextColor));
+			yearTV.setTextColor(ContextCompat.getColor(this, secondaryTextColor));
+			prevIV.setColorFilter(ContextCompat.getColor(this, primaryTextColor));
+			historyIV.setColorFilter(ContextCompat.getColor(this, accentTextColor));
+			nextIV.setColorFilter(ContextCompat.getColor(this, primaryTextColor));
 
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 				if (themeColor == R.color.theme_dark)
-					getWindow().setStatusBarColor(getResources().getColor(themeColor));
+					getWindow().setStatusBarColor(ContextCompat.getColor(this, themeColor));
 				else
-					getWindow().setStatusBarColor(getResources().getColor(themeDisabledTextColor));
+					getWindow().setStatusBarColor(ContextCompat.getColor(this, themeDisabledTextColor));
 
-				setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher),
-						getResources().getColor(themeColor)));
+				setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher), ContextCompat.getColor(this, themeColor)));
 
-				((GradientDrawable) ((RippleDrawable) prevIV.getBackground()).getDrawable(0)).setColor(getResources().getColor(primaryColor)); //FIXME Improve this ridiculous workaround
-				((GradientDrawable) ((RippleDrawable) historyIV.getBackground()).getDrawable(0)).setColor(getResources().getColor(accentPrimaryColor));
-				((GradientDrawable) ((RippleDrawable) nextIV.getBackground()).getDrawable(0)).setColor(getResources().getColor(primaryColor));
+				((GradientDrawable) ((RippleDrawable) prevIV.getBackground()).getDrawable(0)).setColor(ContextCompat.getColor(this, primaryColor)); //FIXME Improve this ridiculous workaround
+				((GradientDrawable) ((RippleDrawable) historyIV.getBackground()).getDrawable(0)).setColor(ContextCompat.getColor(this, accentPrimaryColor));
+				((GradientDrawable) ((RippleDrawable) nextIV.getBackground()).getDrawable(0)).setColor(ContextCompat.getColor(this, primaryColor));
 			} else {
-				((GradientDrawable) prevIV.getBackground()).setColor(getResources().getColor(primaryColor));
-				((GradientDrawable) historyIV.getBackground()).setColor(getResources().getColor(accentPrimaryColor));
-				((GradientDrawable) nextIV.getBackground()).setColor(getResources().getColor(primaryColor));
+				((GradientDrawable) prevIV.getBackground()).setColor(ContextCompat.getColor(this, primaryColor));
+				((GradientDrawable) historyIV.getBackground()).setColor(ContextCompat.getColor(this, accentPrimaryColor));
+				((GradientDrawable) nextIV.getBackground()).setColor(ContextCompat.getColor(this, primaryColor));
 			}
 
 			final ColorStateList drawerItemColorStateList = new ColorStateList(
 					new int[][]{ new int[]{ android.R.attr.state_checked }, new int[]{} },
-					new int[] { getResources().getColor(accentSecondaryColor), getResources().getColor(themeSecondaryTextColor) }
+					new int[] { ContextCompat.getColor(this, accentSecondaryColor), ContextCompat.getColor(this, themeSecondaryTextColor) }
 			);
 
 			FM = getSupportFragmentManager();
@@ -284,8 +284,8 @@ public class MainActivity extends AppCompatActivity {
 										logoutDialog.setCanceledOnTouchOutside(true);
 										logoutDialog.show();
 
-										logoutDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(accentSecondaryColor));
-										logoutDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(accentSecondaryColor));
+										logoutDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(mainContext, accentSecondaryColor));
+										logoutDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(mainContext, accentSecondaryColor));
 									} else {
 										Toast.makeText(mainContext, R.string.error_conn_no, Toast.LENGTH_SHORT).show();
 									}
@@ -339,9 +339,9 @@ public class MainActivity extends AppCompatActivity {
 
 									((TextView) aboutDialog.findViewById(android.R.id.message)).setTextSize(12);
 
-									aboutDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(getResources().getColor(accentSecondaryColor));
-									aboutDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(accentSecondaryColor));
-									aboutDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(accentSecondaryColor));
+									aboutDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(ContextCompat.getColor(mainContext, accentSecondaryColor));
+									aboutDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(mainContext, accentSecondaryColor));
+									aboutDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(mainContext, accentSecondaryColor));
 
 									break;
 							}
@@ -396,7 +396,7 @@ public class MainActivity extends AppCompatActivity {
 				if (error == HeliniumStudentApp.ERR_USERPASS) PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("password", null).apply();
 				break;
 			case HeliniumStudentApp.VIEW_SCHEDULE:
-				final int currentWeek = new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR);
+				final int currentWeek = new GregorianCalendar(HeliniumStudentApp.LOCALE).get(Calendar.WEEK_OF_YEAR);
 
 				switch (transition) {
 					case HeliniumStudentApp.ACTION_INIT_OUT:
@@ -447,7 +447,7 @@ public class MainActivity extends AppCompatActivity {
 						ScheduleFragment.parseData(transition);
 						break;
 					case HeliniumStudentApp.DIREC_OTHER:
-						ScheduleFragment.scheduleFocus = new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR);
+						ScheduleFragment.scheduleFocus = new GregorianCalendar(HeliniumStudentApp.LOCALE).get(Calendar.WEEK_OF_YEAR);
 						ScheduleFragment.scheduleHtml = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_0", null);
 						ScheduleFragment.homeworkJson = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("json_homework_0", null);
 
@@ -496,6 +496,7 @@ public class MainActivity extends AppCompatActivity {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	protected static void setUI(final int view, final int action) {
 		if (action == HeliniumStudentApp.ACTION_SHORT_IN || (action == HeliniumStudentApp.ACTION_INIT_IN && view == HeliniumStudentApp.VIEW_GRADES)) {
 			containerFL.setVisibility(View.GONE);
@@ -593,7 +594,7 @@ public class MainActivity extends AppCompatActivity {
 								historyIV.setAlpha(130);
 								nextIV.setAlpha(130);
 							} else {
-								if (ScheduleFragment.scheduleFocus == new GregorianCalendar(Locale.GERMANY).get(Calendar.WEEK_OF_YEAR) + 1) {
+								if (ScheduleFragment.scheduleFocus == new GregorianCalendar(HeliniumStudentApp.LOCALE).get(Calendar.WEEK_OF_YEAR) + 1) {
 									prevIV.setAlpha(255);
 									historyIV.setAlpha(255);
 									nextIV.setAlpha(130);
@@ -777,25 +778,26 @@ public class MainActivity extends AppCompatActivity {
 			context.getWindow().setStatusBarColor(Color.TRANSPARENT);
 
 			if (context == mainContext)
-				drawerDL.setStatusBarBackgroundColor(context.getResources().getColor(darkPrimaryColor));
+				drawerDL.setStatusBarBackgroundColor(ContextCompat.getColor(context, darkPrimaryColor));
 			else
-				context.getWindow().setStatusBarColor(context.getResources().getColor(darkPrimaryColor));
+				context.getWindow().setStatusBarColor(ContextCompat.getColor(context, darkPrimaryColor));
 
-			context.setTaskDescription(new ActivityManager.TaskDescription(context.getResources().getString(R.string.app_name), BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher), context.getResources().getColor(primaryColor)));
+			context.setTaskDescription(new ActivityManager.TaskDescription(context.getString(R.string.app_name),
+					BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_launcher), ContextCompat.getColor(context, primaryColor)));
 
 		}
 	}
 
 	protected static void setToolbarTitle(AppCompatActivity context, String title, String subtitle) {
 		final Spannable toolbarTitle = new SpannableString(title);
-		toolbarTitle.setSpan(new ForegroundColorSpan(context.getResources().getColor(primaryTextColor)), 0, toolbarTitle.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		toolbarTitle.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, primaryTextColor)), 0, toolbarTitle.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
 		try {
 			context.getSupportActionBar().setTitle(toolbarTitle);
 
 			if (subtitle != null) {
 				final Spannable toolbarSubtitle = new SpannableString(subtitle);
-				toolbarSubtitle.setSpan(new ForegroundColorSpan(context.getResources().getColor(secondaryTextColor)), 0, toolbarSubtitle.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				toolbarSubtitle.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, secondaryTextColor)), 0, toolbarSubtitle.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 				context.getSupportActionBar().setSubtitle(toolbarSubtitle);
 			}
 		} catch (NullPointerException e) {

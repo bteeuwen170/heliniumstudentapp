@@ -37,12 +37,14 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.internal.view.ContextThemeWrapper;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -59,7 +61,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
@@ -118,8 +119,8 @@ public class GradesFragment extends Fragment {
 					classDialog.setCanceledOnTouchOutside(false);
 					classDialog.show();
 
-					classDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(MainActivity.accentSecondaryColor));
-					classDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(MainActivity.accentSecondaryColor));
+					classDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(mainContext, MainActivity.accentSecondaryColor));
+					classDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(mainContext, MainActivity.accentSecondaryColor));
 				}
 			} else {
 				maxYear = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(mainContext).getString("pref_general_class", "1"));
@@ -127,7 +128,7 @@ public class GradesFragment extends Fragment {
 		}
 
 		if (pass) {
-			MainActivity.setToolbarTitle(mainContext, getResources().getString(R.string.grades), null);
+			MainActivity.setToolbarTitle(mainContext, getString(R.string.grades), null);
 
 			gradesELV = (ExpandableListView) gradesLayout.findViewById(R.id.lv_course_fg);
 
@@ -135,15 +136,15 @@ public class GradesFragment extends Fragment {
 
 			if (PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_grades", null) == null) { //TODO Simpler
 				if (online) {
-					getGrades(termFocus, new SimpleDateFormat("dd-MM-yyyy").format(new Date()), HeliniumStudentApp.DIREC_CURRENT, HeliniumStudentApp.ACTION_INIT_IN);
+					getGrades(termFocus, HeliniumStudentApp.df_date().format(new Date()), HeliniumStudentApp.DIREC_CURRENT, HeliniumStudentApp.ACTION_INIT_IN);
 				} else { //TODO Display empty GradesFragment with retry option
-					Toast.makeText(mainContext, getResources().getString(R.string.database_no), Toast.LENGTH_SHORT).show();
+					Toast.makeText(mainContext, getString(R.string.database_no), Toast.LENGTH_SHORT).show();
 
 					MainActivity.drawerNV.getMenu().findItem(R.id.i_schedule_md).setChecked(true);
 					MainActivity.FM.beginTransaction().replace(R.id.fl_container_am, new ScheduleFragment(), "SCHEDULE").commit();
 				}
 			} else if (online && gradesHtml == null && PreferenceManager.getDefaultSharedPreferences(mainContext).getBoolean("pref_grades_init", true)) {
-				getGrades(termFocus, new SimpleDateFormat("dd-MM-yyyy").format(new Date()), HeliniumStudentApp.DIREC_CURRENT, HeliniumStudentApp.ACTION_INIT_IN);
+				getGrades(termFocus, HeliniumStudentApp.df_date().format(new Date()), HeliniumStudentApp.DIREC_CURRENT, HeliniumStudentApp.ACTION_INIT_IN);
 			} else {
 				if (gradesHtml == null) gradesHtml = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_grades", null);
 
@@ -215,9 +216,7 @@ public class GradesFragment extends Fragment {
 						if (termFocus != 1) {
 							termFocus--;
 
-							Date date = new Date();
-							getGrades(termFocus, new SimpleDateFormat("dd-MM-").format(date) + (Integer.valueOf(new SimpleDateFormat("yyyy").format(date)) + yearFocus), HeliniumStudentApp.DIREC_BACK,
-									HeliniumStudentApp.ACTION_REFRESH_IN);
+							getGrades(termFocus, HeliniumStudentApp.df_grades(yearFocus), HeliniumStudentApp.DIREC_BACK, HeliniumStudentApp.ACTION_REFRESH_IN);
 						} else {
 							MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, HeliniumStudentApp.ACTION_ONLINE);
 						}
@@ -246,9 +245,9 @@ public class GradesFragment extends Fragment {
 							MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, HeliniumStudentApp.ACTION_ONLINE);
 
 							final AlertDialog.Builder gradesDialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(mainContext, MainActivity.themeDialog));
-							final View gradesLayout = LayoutInflater.from(mainContext).inflate(R.layout.dialog_grades, null);
+							final View gradesLayout = View.inflate(mainContext, R.layout.dialog_grades, null);
 
-							gradesDialogBuilder.setTitle(getResources().getString(R.string.year, maxYear));
+							gradesDialogBuilder.setTitle(getString(R.string.year, maxYear));
 
 							final NumberPicker yearNP = (NumberPicker) gradesLayout.findViewById(R.id.np_year_dg);
 
@@ -261,15 +260,13 @@ public class GradesFragment extends Fragment {
 								@Override
 								public void onClick(DialogInterface dialog, int which) {
 									if (MainActivity.isOnline()) {
-										final Date date = new Date();
 										final int oldValue = yearFocus;
 
 										yearFocus = yearNP.getValue() - maxYear;
-										getGrades(termFocus,
-												new SimpleDateFormat("dd-MM-").format(date) + (Integer.valueOf(new SimpleDateFormat("yyyy").format(date)) + yearFocus), oldValue + HeliniumStudentApp.FOCUS_YEAR,
+										getGrades(termFocus, HeliniumStudentApp.df_grades(yearFocus), oldValue + HeliniumStudentApp.FOCUS_YEAR,
 												HeliniumStudentApp.ACTION_REFRESH_IN);
 									} else {
-										Toast.makeText(mainContext, getResources().getString(R.string.error_conn_no), Toast.LENGTH_SHORT).show();
+										Toast.makeText(mainContext, getString(R.string.error_conn_no), Toast.LENGTH_SHORT).show();
 									}
 								}
 							});
@@ -285,20 +282,20 @@ public class GradesFragment extends Fragment {
 									pf.setAccessible(true);
 
 									try {
-										pf.set(yearNP, new ColorDrawable(getResources().getColor(MainActivity.accentPrimaryColor)));
+										pf.set(yearNP, new ColorDrawable(ContextCompat.getColor(mainContext, MainActivity.accentPrimaryColor)));
 									} catch (IllegalArgumentException | IllegalAccessException ignored) {}
 									break;
 									/*} else if(pf.getName().equals("mSelectorWheelPaint")) {
 										pf.setAccessible(true);
 
 										try {
-											((Paint) pf.get(yearNP)).setColor(getResources().getColor(MainActivity.themePrimaryTextColor));
+											((Paint) pf.get(yearNP)).setColor(getColor(MainActivity.themePrimaryTextColor));
 										} catch (IllegalArgumentException | IllegalAccessException ignored) {}*///FIXME Doesn't work... yet
 								} else if (pf.getName().equals("mInputText")) {
 									pf.setAccessible(true);
 
 									try {
-										((EditText) pf.get(yearNP)).setTextColor(getResources().getColor(MainActivity.themePrimaryTextColor));
+										((EditText) pf.get(yearNP)).setTextColor(ContextCompat.getColor(mainContext, MainActivity.themePrimaryTextColor));
 									} catch (IllegalArgumentException | IllegalAccessException ignored) {}
 								}
 							}
@@ -312,8 +309,8 @@ public class GradesFragment extends Fragment {
 							gradesDialog.setCanceledOnTouchOutside(true);
 							gradesDialog.show();
 
-							gradesDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(MainActivity.accentSecondaryColor));
-							gradesDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(MainActivity.accentSecondaryColor));
+							gradesDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(mainContext, MainActivity.accentSecondaryColor));
+							gradesDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(mainContext, MainActivity.accentSecondaryColor));
 						}
 					} else {
 						final int databaseFocus = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(mainContext).getString("pref_grades_term", "1"));
@@ -337,12 +334,9 @@ public class GradesFragment extends Fragment {
 				public void onClick(View v) {
 					if (MainActivity.isOnline()) {
 						if (termFocus != 4) {
-							final Date date = new Date();
-
 							termFocus ++;
 
-							getGrades(termFocus,
-									new SimpleDateFormat("dd-MM-").format(date) + (Integer.valueOf(new SimpleDateFormat("yyyy").format(date)) + yearFocus), HeliniumStudentApp.DIREC_NEXT, HeliniumStudentApp.ACTION_REFRESH_IN);
+							getGrades(termFocus, HeliniumStudentApp.df_grades(yearFocus), HeliniumStudentApp.DIREC_NEXT, HeliniumStudentApp.ACTION_REFRESH_IN);
 						} else {
 							MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, HeliniumStudentApp.ACTION_ONLINE);
 						}
@@ -382,9 +376,7 @@ public class GradesFragment extends Fragment {
 
 	private void refresh() {
 		if (MainActivity.isOnline()) {
-			final Date date = new Date();
-			getGrades(termFocus, new SimpleDateFormat("dd-MM-").format(date) + (Integer.valueOf(new SimpleDateFormat("yyyy").format(date)) + yearFocus), yearFocus + HeliniumStudentApp.FOCUS_YEAR,
-					HeliniumStudentApp.ACTION_REFRESH_IN);
+			getGrades(termFocus, HeliniumStudentApp.df_grades(yearFocus), yearFocus + HeliniumStudentApp.FOCUS_YEAR, HeliniumStudentApp.ACTION_REFRESH_IN);
 		} else {
 			MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, HeliniumStudentApp.ACTION_REFRESH_OUT);
 
@@ -499,7 +491,7 @@ public class GradesFragment extends Fragment {
 
 					if (termFocus == Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(mainContext).getString("pref_grades_term", "1")) && yearFocus == 0) {
 						PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("html_grades", html).apply();
-						PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("pref_grades_version", new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date())).apply();
+						PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("pref_grades_version", HeliniumStudentApp.df_save().format(new Date())).apply();
 					}
 
 					parseData(transition);
@@ -572,7 +564,8 @@ public class GradesFragment extends Fragment {
 			int averageCount = 0;
 			double averageTotal = 0;
 
-			String localHTML = gradesHtml.substring(gradesHtml.indexOf("<th class=\"wp3-rotate\" width=\"1%\" title=\"Rapportcijfer\" alt=\"Rapportcijfer\">"), gradesHtml.indexOf("</wissearch:exclude>")); //FIXME May throw StringIndexOutOfBoundsException
+			String localHTML = gradesHtml.substring(gradesHtml.indexOf("<th class=\"wp3-rotate\" width=\"1%\" title=\"Rapportcijfer\" alt=\"Rapportcijfer\">"),
+					gradesHtml.indexOf("<div class=\"jTooltip-deelcijfers\"></div></div>"));
 
 			final Matcher courseMatcher = Pattern.compile("<span title").matcher(localHTML);
 			while (courseMatcher.find()) courseCount ++;
@@ -727,9 +720,9 @@ public class GradesFragment extends Fragment {
 
 							averageCount++;
 							averageTotal += courseAverage;
-						} else if (wp3GradeContainerHTML.contains("<tr><td>Toetssoort</u></td><td>:</td><td>Advies</td></tr>")) {
+						//} else if (wp3GradeContainerHTML.contains("<tr><td>Toetssoort</u></td><td>:</td><td>Advies</td></tr>")) {
 							//TODO Handle
-						} else if (wp3GradeContainerHTML.contains("<tr><td>Herkansing</u></td><td>:</td><td>")) {
+						} else if (!wp3GradeContainerHTML.contains("<tr><td>Toetssoort</u></td><td>:</td><td>Advies</td></tr>") && wp3GradeContainerHTML.contains("<tr><td>Herkansing</u></td><td>:</td><td>")) {
 							final String wp3WeightHTML = wp3GradeContainerHTML.substring(wp3GradeContainerHTML.indexOf("<tr><td>Weging</u></td><td>:</td><td>") + 37);
 							final String wp3CodeHTML = wp3GradeContainerHTML.substring(wp3GradeContainerHTML.indexOf("<tr><td>Toetscode</u></td><td>:</td><td>") + 40);
 							final String wp3DescHTML = wp3GradeContainerHTML.substring(wp3GradeContainerHTML.indexOf("<tr><td>Beschrijving</u></td><td>:</td><td>") + 43);
@@ -793,8 +786,8 @@ public class GradesFragment extends Fragment {
 			else
 				MainActivity.weekTV.setTypeface(null, Typeface.NORMAL);
 
-			MainActivity.weekTV.setText(mainContext.getResources().getString(R.string.term, termFocus));
-			MainActivity.yearTV.setText(mainContext.getResources().getString(R.string.year, maxYear + yearFocus));
+			MainActivity.weekTV.setText(mainContext.getString(R.string.term, termFocus));
+			MainActivity.yearTV.setText(mainContext.getString(R.string.year, maxYear + yearFocus));
 
 			MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, transition);
 		}
@@ -863,9 +856,9 @@ public class GradesFragment extends Fragment {
 				final TextView averageTV = (TextView) convertView.findViewById(R.id.tv_footer_lf);
 
 				if (!average.equals("NaN")) {
-					averageTV.setTextColor(mainContext.getResources().getColor(MainActivity.themeSecondaryTextColor));
+					averageTV.setTextColor(ContextCompat.getColor(mainContext, MainActivity.themeSecondaryTextColor));
 
-					averageTV.setText(mainContext.getResources().getString(R.string.average, average));
+					averageTV.setText(mainContext.getString(R.string.average, average));
 				}
 
 				return convertView;
@@ -888,10 +881,10 @@ public class GradesFragment extends Fragment {
 				else
 					convertView.setBackgroundResource(R.drawable.listselector_light);
 
-				courseTV.setTextColor(mainContext.getResources().getColor(MainActivity.themePrimaryTextColor));
-				gradesTV.setTextColor(mainContext.getResources().getColor(MainActivity.themePrimaryTextColor));
-				averageTV.setTextColor(mainContext.getResources().getColor(MainActivity.themePrimaryTextColor));
-				averageRoundTV.setTextColor(mainContext.getResources().getColor(MainActivity.themePrimaryTextColor));
+				courseTV.setTextColor(ContextCompat.getColor(mainContext, MainActivity.themePrimaryTextColor));
+				gradesTV.setTextColor(ContextCompat.getColor(mainContext, MainActivity.themePrimaryTextColor));
+				averageTV.setTextColor(ContextCompat.getColor(mainContext, MainActivity.themePrimaryTextColor));
+				averageRoundTV.setTextColor(ContextCompat.getColor(mainContext, MainActivity.themePrimaryTextColor));
 
 				try {
 					courseTV.setText(mainContext.getResources().getIdentifier(course, "string", mainContext.getPackageName()));
@@ -926,10 +919,10 @@ public class GradesFragment extends Fragment {
 			final TextView descTV = (TextView) convertView.findViewById(R.id.tv_desc_lge);
 			final TextView gradeTV = (TextView) convertView.findViewById(R.id.tv_grade_lge);
 
-			convertView.setBackgroundColor(mainContext.getResources().getColor(MainActivity.themeDividerColor));
+			convertView.setBackgroundColor(ContextCompat.getColor(mainContext, MainActivity.themeDividerColor));
 
-			descTV.setTextColor(mainContext.getResources().getColor(MainActivity.themePrimaryTextColor));
-			gradeTV.setTextColor(mainContext.getResources().getColor(MainActivity.themePrimaryTextColor));
+			descTV.setTextColor(ContextCompat.getColor(mainContext, MainActivity.themePrimaryTextColor));
+			gradeTV.setTextColor(ContextCompat.getColor(mainContext, MainActivity.themePrimaryTextColor));
 
 			descTV.setSelected(true);
 			descTV.setText(Html.fromHtml(gradesArray.get(groupPosition).grades[position][2]));

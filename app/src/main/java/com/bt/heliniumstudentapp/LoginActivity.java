@@ -30,13 +30,14 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.v7.internal.view.ContextThemeWrapper;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.support.v7.internal.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -60,9 +61,8 @@ public class LoginActivity extends AppCompatActivity {
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			getWindow().setStatusBarColor(Color.TRANSPARENT);
-			getWindow().setStatusBarColor(getResources().getColor(R.color.indigo));
-			setTaskDescription(new ActivityManager.TaskDescription(getResources().getString(R.string.app_name), BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher),
-					getResources().getColor(R.color.indigo)));
+			getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.indigo));
+			setTaskDescription(new ActivityManager.TaskDescription(getString(R.string.app_name), BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher), ContextCompat.getColor(this, R.color.indigo)));
 		}
 
 		usernameET = (EditText) findViewById(R.id.et_username_la);
@@ -116,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
 
 				authenticationProgressDialog = new ProgressDialog(new ContextThemeWrapper(LoginActivity.this, MainActivity.themeDialog));
 				authenticationProgressDialog.setCancelable(false);
-				authenticationProgressDialog.setMessage(getResources().getString(R.string.authenticating));
+				authenticationProgressDialog.setMessage(getString(R.string.authenticating));
 				authenticationProgressDialog.show();
 
 				new MainActivity.GetLoginCookie().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, HeliniumStudentApp.VIEW_LOGIN);
