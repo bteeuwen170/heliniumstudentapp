@@ -61,7 +61,6 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -83,8 +82,6 @@ public class DayActivity extends AppCompatActivity {
 	private static int currentTime;
 
 	private static boolean compactView;
-
-	private static HashMap<Integer, HomeworkWrapper> homeworkArray; //TODO Unglobalize
 
 	private static class HomeworkWrapper {
 		String homework, options, absence;
@@ -124,79 +121,7 @@ public class DayActivity extends AppCompatActivity {
 
 		compactView = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_customization_compact", false);
 
-		if (ScheduleFragment.homeworkJson != null) { //TODO In function with return statement
-			homeworkArray = new HashMap<>();
-
-			JSONObject json;
-			try {
-				json = (JSONObject) new JSONTokener(ScheduleFragment.homeworkJson).nextValue();
-
-				final JSONArray homeworkJson = json.getJSONArray("events");
-
-				for (int event = 0; event < homeworkJson.length(); event++) {
-					final JSONObject courseJson = homeworkJson.getJSONObject(event).getJSONObject("afspraakObject");
-
-					final GregorianCalendar startDate = new GregorianCalendar(TimeZone.getTimeZone("Europe/Amsterdam"), HeliniumStudentApp.LOCALE);
-					startDate.setTimeInMillis(homeworkJson.getJSONObject(event).getLong("start"));
-
-					final int dayOfWeek = startDate.get(Calendar.DAY_OF_WEEK);
-					final int hourOfDay = Arrays.asList(homeworkMinutes).indexOf(startDate.get(Calendar.HOUR_OF_DAY) * 60 + startDate.get(Calendar.MINUTE)) + 1;
-
-					String homework, absence;
-					homework = absence = null;
-					final StringBuilder options = new StringBuilder();
-
-					if (courseJson.has("huiswerk")) { //TODO This entire thing is pretty crappy
-						final JSONObject courseHomeworkJson = courseJson.getJSONObject("huiswerk");
-
-						homework = courseHomeworkJson.getString("omschrijving");
-
-						if (courseHomeworkJson.has("gemaakt"))
-							if (courseHomeworkJson.getBoolean("gemaakt"))
-								options.append("<done>");
-							else
-								options.append("<late>");
-
-						if (courseHomeworkJson.has("toets") && courseHomeworkJson.getBoolean("toets")) options.append("<test>");
-					}
-
-					if (courseJson.has("absentie")) {
-						final JSONObject courseAbsenceJson = courseJson.getJSONObject("absentie");
-
-						if (courseAbsenceJson.has("reden")) //TODO Does "reden" always have to be provided?
-							switch (courseAbsenceJson.getString("reden")) {
-								case "Schoolverlof":
-									absence = "[fulough]" + getString(R.string.fulough);
-									break;
-								case "te laat-T":
-									absence = "[late]" + getString(R.string.late);
-									break;
-								case "Ziek / medisch":
-									absence = "[medical]" + getString(R.string.medical);
-									break;
-								case "Ongeoorloofd verzuim":
-									absence = "[truancy]" + getString(R.string.truancy);
-									break;
-								default:
-									absence = "[late]" + getString(R.string.late);
-							}
-					}
-
-					homeworkArray.put(dayOfWeek * 100 + hourOfDay, new HomeworkWrapper(homework, options.toString(), absence));
-				}
-			} catch (JSONException  | NullPointerException e) { //TODO NullPointerException needed?
-				//FIXME Handle, neither floating nor normal homework?
-				//FIXME No homework this week or error? Probably error
-			}
-
-			/*try {
-				final JSONArray floatingHomework = json.getJSONArray("huiswerkEvents");
-			} catch (JSONException | NullPointerException e) {
-				//TODO <strike>No floating homework this week</strike> Probably never called, have a global JSON Exception handler...
-			}*/
-		}
-
-		final String weekDay = new SimpleDateFormat("EEEE").format(chosenWeekDay.getTime());
+		final String weekDay = HeliniumStudentApp.df_weekday().format(chosenWeekDay.getTime());
 		MainActivity.setToolbarTitle(this, Character.toUpperCase(weekDay.charAt(0)) + weekDay.substring(1), (String) getIntent().getExtras().get("chosen_date"));
 
 		daysVP.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -217,7 +142,7 @@ public class DayActivity extends AppCompatActivity {
 					}
 				} catch (ParseException ignored) {}
 
-				final String weekDay = new SimpleDateFormat("EEEE").format(chosenWeekDay.getTime());
+				final String weekDay = HeliniumStudentApp.df_weekday().format(chosenWeekDay.getTime());
 				MainActivity.setToolbarTitle(DayActivity.this, Character.toUpperCase(weekDay.charAt(0)) + weekDay.substring(1),
 						android.text.format.DateFormat.getDateFormat(getApplicationContext()).format(chosenWeekDate.getTime()));
 
@@ -230,6 +155,86 @@ public class DayActivity extends AppCompatActivity {
 			@Override
 			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 		});
+	}
+
+	private static HashMap<Integer, HomeworkWrapper> parseHomework(Context dayContext) {
+		if (ScheduleFragment.homeworkJson != null) {
+			final HashMap<Integer, HomeworkWrapper> homeworkArray = new HashMap<>();
+
+			JSONObject json;
+			try {
+				json = (JSONObject) new JSONTokener(ScheduleFragment.homeworkJson).nextValue();
+
+				final JSONArray homeworkJson = json.getJSONArray("events");
+
+				for (int event = 0; event < homeworkJson.length(); event++) {
+					final JSONObject courseJson = homeworkJson.getJSONObject(event).getJSONObject("afspraakObject");
+
+					final GregorianCalendar startDate = new GregorianCalendar(TimeZone.getTimeZone("Europe/Amsterdam"), HeliniumStudentApp.LOCALE);
+					startDate.setTimeInMillis(homeworkJson.getJSONObject(event).getLong("start"));
+
+					final int dayOfWeek = startDate.get(Calendar.DAY_OF_WEEK);
+					final int hourOfDay = Arrays.asList(homeworkMinutes).indexOf(startDate.get(Calendar.HOUR_OF_DAY) * 60 + startDate.get(Calendar.MINUTE)) + 1;
+
+					String homework, absence;
+					homework = absence = null;
+					final StringBuilder options = new StringBuilder();
+
+					if (courseJson.has("huiswerk")) {
+						final JSONObject courseHomeworkJson = courseJson.getJSONObject("huiswerk");
+
+						homework = courseHomeworkJson.getString("omschrijving");
+
+						if (courseHomeworkJson.has("gemaakt"))
+							if (courseHomeworkJson.getBoolean("gemaakt"))
+								options.append("<done>");
+							else
+								options.append("<late>");
+
+						if (courseHomeworkJson.has("toets") && courseHomeworkJson.getBoolean("toets")) options.append("<test>");
+					}
+
+					if (courseJson.has("absentie")) {
+						final JSONObject courseAbsenceJson = courseJson.getJSONObject("absentie");
+
+						if (courseAbsenceJson.has("reden")) //TODO Does "reden" always have to be provided?
+							switch (courseAbsenceJson.getString("reden")) {
+								case "Schoolverlof":
+									absence = "[fulough]" + dayContext.getString(R.string.fulough);
+									break;
+								case "te laat-T":
+									absence = "[late]" + dayContext.getString(R.string.late);
+									break;
+								case "Ziek / medisch":
+									absence = "[medical]" + dayContext.getString(R.string.medical);
+									break;
+								case "Ongeoorloofd verzuim":
+									absence = "[truancy]" + dayContext.getString(R.string.truancy);
+									break;
+								default:
+									absence = "[late]" + dayContext.getString(R.string.late);
+							}
+					}
+
+					homeworkArray.put(dayOfWeek * 100 + hourOfDay, new HomeworkWrapper(homework, options.toString(), absence));
+				}
+
+				return homeworkArray;
+			} catch (JSONException  | NullPointerException e) { //TODO NullPointerException needed?
+				//FIXME Handle, neither floating nor normal homework?
+				//FIXME No homework this week or error? Probably error
+
+				return null;
+			}
+
+		/*try {
+			final JSONArray floatingHomework = json.getJSONArray("huiswerkEvents");
+		} catch (JSONException | NullPointerException e) {
+			//TODO <strike>No floating homework this week</strike> Probably never called, have a global JSON Exception handler...
+		}*/
+		} else {
+			return null;
+		}
 	}
 
 	private static class DaysAdapter extends FragmentPagerAdapter {
@@ -290,7 +295,7 @@ public class DayActivity extends AppCompatActivity {
 			super.onResume();
 
 			final Date time = new Date();
-			currentTime = Integer.parseInt(HeliniumStudentApp.df_minutes().format(time)) * 60 + Integer.parseInt(HeliniumStudentApp.df_minutes().format(time));
+			currentTime = Integer.parseInt(HeliniumStudentApp.df_hours().format(time)) * 60 + Integer.parseInt(HeliniumStudentApp.df_minutes().format(time));
 
 			hoursLV.invalidateViews();
 		}
@@ -345,6 +350,7 @@ public class DayActivity extends AppCompatActivity {
 
 				if (available) {
 					final ArrayList<HashMap<String, Object>> hoursLVarray = new ArrayList<>();
+					final HashMap<Integer, HomeworkWrapper> homeworkArray = parseHomework(dayContext);
 
 					int hour, breakCount;
 					hour = breakCount = 0;
@@ -385,7 +391,7 @@ public class DayActivity extends AppCompatActivity {
 							final String group = hourHtml.substring(hourHtml.indexOf("<td class=\"group\">") + 18);
 							hourItem.put("group", group.substring(0, group.indexOf("</td>")).trim());
 
-							hourItem.put("homework", homeworkArray.get(day * 100 + hour));
+							if (homeworkArray != null) hourItem.put("homework", homeworkArray.get(day * 100 + hour));
 						}
 
 						hourItem.put("hour", String.valueOf(hour + breakCount));
@@ -418,7 +424,7 @@ public class DayActivity extends AppCompatActivity {
 							final String classroom = (String) hoursLVarray.get(position).get("classroom");
 							final String group = (String) hoursLVarray.get(position).get("group");
 							final String teacher = (String) hoursLVarray.get(position).get("teacher");
-							final HomeworkWrapper homework = (HomeworkWrapper) hoursLVarray.get(position).get("homework"); //TODO Make final
+							final HomeworkWrapper homework = (HomeworkWrapper) hoursLVarray.get(position).get("homework");
 
 							final AlertDialog.Builder dayDialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(dayContext, MainActivity.themeDialog));
 
@@ -469,7 +475,7 @@ public class DayActivity extends AppCompatActivity {
 
 							groupTV.setText(group);
 
-							try { //TODO Handle ASAP
+							try { //TODO Still needed?
 								if (homework != null) { //TODO Handle icons
 									if (homework.homework != null) {
 										dayLayout.findViewById(R.id.rl_hseperator3_dd).setVisibility(View.VISIBLE);
@@ -612,7 +618,7 @@ public class DayActivity extends AppCompatActivity {
 							ctTV.setText(ct);
 						}
 
-						try { //TODO Handle ASAP
+						try { //TODO Still needed?
 							if (homework != null) {
 								final ImageView homeworkIV = (ImageView) convertView.findViewById(R.id.iv_hw_ld);
 								ImageView absenceIV;

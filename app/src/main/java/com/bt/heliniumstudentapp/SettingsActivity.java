@@ -53,7 +53,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 public class SettingsActivity extends PreferenceActivity { //TODO PreferenceFragment

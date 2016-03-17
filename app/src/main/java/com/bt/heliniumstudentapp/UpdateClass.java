@@ -78,7 +78,7 @@ public class UpdateClass extends AsyncTask<Void, Integer, String> {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) { //FIXME Come on, don't do this up here
-				ActivityCompat.requestPermissions(context, new String[]{ Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE }, 1);
+				ActivityCompat.requestPermissions(context, new String[]{ Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE }, 1); //TODO See warning
 				//FIXME Great, now everything is protected...
 			}
 		});

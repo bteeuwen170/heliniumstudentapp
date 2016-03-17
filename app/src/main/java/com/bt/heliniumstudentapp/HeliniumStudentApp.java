@@ -23,21 +23,12 @@
 
 package com.bt.heliniumstudentapp;
 
-import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.os.Build;
+import android.content.res.TypedArray;
 import android.preference.PreferenceManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
+import android.widget.RelativeLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -131,17 +122,18 @@ public class HeliniumStudentApp extends Application {
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 
+		final TypedArray styledAttributes = getTheme().obtainStyledAttributes(new int[] { android.R.attr.actionBarSize }); //TODO This kind of works, but really doesn't
+		RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) MainActivity.toolbarTB.getLayoutParams();
+		layoutParams.height = (int) styledAttributes.getDimension(0, 0);
+		MainActivity.toolbarTB.setLayoutParams(layoutParams);
+
 		setLocale(this);
 	}
 
 	protected static void setLocale(Context context) {
-		Locale locale = null;
-		final Configuration config = new Configuration();
+		Locale locale = Locale.getDefault();
 
 		switch (Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString("pref_general_language", "0"))) {
-			case 0:
-				locale = Resources.getSystem().getConfiguration().locale; //TODO Or just Locale.getDefault()?
-				break;
 			case 1:
 				locale = new Locale("nl");
 				break;
@@ -150,8 +142,9 @@ public class HeliniumStudentApp extends Application {
 				break;
 		}
 
-		assert locale != null;
 		Locale.setDefault(locale);
+
+		final Configuration config = new Configuration();
 		config.locale = locale;
 		context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
 	}

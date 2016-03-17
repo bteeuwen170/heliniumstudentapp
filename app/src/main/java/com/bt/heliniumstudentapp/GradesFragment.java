@@ -44,7 +44,6 @@ import android.support.v7.internal.view.ContextThemeWrapper;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -68,6 +67,39 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GradesFragment extends Fragment {
+	private static final String GRADES_START	= "<th class=\"wp3-rotate\" width=\"1%\" title=\"Rapportcijfer\" alt=\"Rapportcijfer\">";
+	private static final String GRADES_END		= "<div id=\"jTooltip\" class=\"jTooltip default\" style=\"display: none;\">";
+	private static final String COURSE_IDENT	= "<span title";
+	private static final String COURSE_START	= "<td class=\"vak\">";
+
+	private static final String GR_START		= "<a href=\"javascript: void(0)\" rel=\"";
+	private static final String GR_END			= "</td></tr>";
+
+	private static final String GR_NORMAL_IDENT	= "<span class=\" wp3-cijfer \">";
+	private static final String GR_NORMAL_START	= GR_NORMAL_IDENT + GR_START;
+	private static final String GR_NORMAL_END	= "\" class=\"result__figure\"><span>";
+
+	private static final String GR_BUBBLE_IDENT	= "<span class=\"triggerBubble wp3-cijfer \">";
+	private static final String GR_BUBBLE_START = GR_BUBBLE_IDENT + GR_START;
+	private static final String GR_BUBBLE_END	= "<span class='closeBubble' title='Sluiten'></span></span>";
+
+	private static final String GR_GRADE_START	= "<td><strong>Cijfer</strong></td><td>:</td><td><strong>";
+	private static final String GR_GRADE_BUBBLE	= "<td><strong>Deelcijfer</strong></td><td>:</td><td><strong>";
+	private static final String GR_GRADE_END	= "</strong>" + GR_END;
+
+	private static final String GR_AVERAGE		= "<tr><td>Toetssoort</u></td><td>:</td><td>Berekend rapportcijfer</td></tr>";
+
+	private static final String GR_ADVICE		= "<tr><td>Toetssoort</u></td><td>:</td><td>Advies</td></tr>";
+	private static final String GR_ADVICE_ALT	= "&lt;tr&gt;&lt;td&gt;Toetssoort&lt;/u&gt;&lt;/td&gt;&lt;td&gt;:&lt;/td&gt;&lt;td&gt;Advies&lt;/td&gt;&lt;/tr&gt;";
+
+	private static final String GR_RETRY		= "<tr><td>Herkansing</u></td><td>:</td><td>";
+	private static final String GR_RETRY_ALT	= "&lt;tr&gt;&lt;td&gt;Herkansing&lt;/u&gt;&lt;/td&gt;&lt;td&gt;:&lt;/td&gt;";
+
+	private static final String GR_WEIGHT		= "<tr><td>Weging</u></td><td>:</td><td>";
+	private static final String GR_CODE			= "<tr><td>Toetscode</u></td><td>:</td><td>";
+	private static final String GR_CODE_ALT		= "&lt;tr&gt;&lt;td&gt;Toetscode&lt;/u&gt;&lt;/td&gt;&lt;td&gt;:&lt;/td&gt;&lt;td&gt;Berekend rapportcijfer&lt;/td&gt;&lt;/tr&gt;";
+	private static final String GR_DESC			= "<tr><td>Beschrijving</u></td><td>:</td><td>";
+
 	private static AppCompatActivity mainContext;
 	protected static View gradesLayout;
 	private static boolean init;
@@ -452,8 +484,7 @@ public class GradesFragment extends Fragment {
 					((HttpURLConnection) connection).disconnect();
 
 					if (((HttpURLConnection) connection).getResponseCode() == 200)
-						//if (!html.contains("<th class=\"wp3-rotate\" width=\"1%\" title=\"Rapportcijfer\" alt=\"Rapportcijfer\">") || html.contains("ajax-loader.gif"))
-						if (html.contains("ajax-loader.gif"))
+						if (!html.contains(GRADES_START) || html.contains("ajax-loader.gif"))
 							return HeliniumStudentApp.ERR_RETRY;
 						else if (html.contains("<h2>Er is een fout opgetreden</h2>") || html.contains("Leerlingnummer onbekend") || !html.contains("Periode") || html.contains("cross.png"))
 							return HeliniumStudentApp.ERR_UNDEFINED;
@@ -564,10 +595,9 @@ public class GradesFragment extends Fragment {
 			int averageCount = 0;
 			double averageTotal = 0;
 
-			String localHTML = gradesHtml.substring(gradesHtml.indexOf("<th class=\"wp3-rotate\" width=\"1%\" title=\"Rapportcijfer\" alt=\"Rapportcijfer\">"),
-					gradesHtml.indexOf("<div class=\"jTooltip-deelcijfers\"></div></div>")); //TODO Causes IndexOutOfBounds sometimes
+			String localHTML = gradesHtml.substring(gradesHtml.indexOf(GRADES_START), gradesHtml.indexOf(GRADES_END));
 
-			final Matcher courseMatcher = Pattern.compile("<span title").matcher(localHTML);
+			final Matcher courseMatcher = Pattern.compile(COURSE_IDENT).matcher(localHTML);
 			while (courseMatcher.find()) courseCount ++;
 
 			for (int currentCourseCount = 0; currentCourseCount < courseCount; currentCourseCount ++) {
@@ -575,16 +605,13 @@ public class GradesFragment extends Fragment {
 				String courseAverageRound = "0";
 				int gradeCount = 0;
 
-				String courseHTML = localHTML.substring(localHTML.indexOf("<td class=\"vak\">") + 16);
+				String courseHTML = localHTML.substring(localHTML.indexOf(COURSE_START) + COURSE_START.length());
 
-				if (courseHTML.contains("<td class=\"vak\">"))
-					courseHTML = courseHTML.substring(0, courseHTML.indexOf("<td class=\"vak\">"));
-				else
-					courseHTML = courseHTML.substring(0, courseHTML.indexOf("<div id=\"jTooltip\" class=\"jTooltip default\" style=\"display: none;\">"));
+				if (courseHTML.contains(COURSE_START)) courseHTML = courseHTML.substring(0, courseHTML.indexOf(COURSE_START));
 
-				localHTML = localHTML.replace("<td class=\"vak\">" + courseHTML, "");
+				localHTML = localHTML.replace(COURSE_START + courseHTML, "");
 
-				final Matcher courseCountBubbleGradeMatcher = Pattern.compile("<span class=\"triggerBubble wp3-cijfer \"").matcher(courseHTML);
+				final Matcher courseCountBubbleGradeMatcher = Pattern.compile(GR_BUBBLE_IDENT).matcher(courseHTML);
 				while (courseCountBubbleGradeMatcher.find()) gradeCount ++;
 
 				if (gradeCount != 0) { //TODO Review once more
@@ -593,45 +620,45 @@ public class GradesFragment extends Fragment {
 					String courseBubbleHTML = courseHTML;
 
 					for (int i = 0; i < bubbleCount; i++) {
-						String courseBubbleGradeHTML = courseBubbleHTML.substring(courseBubbleHTML.indexOf("<span class=\"triggerBubble wp3-cijfer \"><a href=\"javascript: void(0)\" rel=\""));
-						courseBubbleGradeHTML = courseBubbleGradeHTML.substring(0, courseBubbleGradeHTML.indexOf("<span class='closeBubble' title='Sluiten'></span></span>") + 56);
+						String courseBubbleGradeHTML = courseBubbleHTML.substring(courseBubbleHTML.indexOf(GR_BUBBLE_START));
+						courseBubbleGradeHTML = courseBubbleGradeHTML.substring(0, courseBubbleGradeHTML.indexOf(GR_BUBBLE_END) + GR_BUBBLE_END.length());
 						courseBubbleHTML = courseBubbleHTML.replace(courseBubbleGradeHTML, "");
 
-						final Matcher courseBubbleGradeCountMatcher = Pattern.compile("<span class=\" wp3-cijfer \">").matcher(courseBubbleGradeHTML);
+						final Matcher courseBubbleGradeCountMatcher = Pattern.compile(GR_NORMAL_IDENT).matcher(courseBubbleGradeHTML);
 						while (courseBubbleGradeCountMatcher.find()) gradeCount --;
 					}
 
 					gradeCount -= bubbleCount;
 				}
 
-				final Matcher courseCountGradeMatcher = Pattern.compile("&lt;tr&gt;&lt;td&gt;Herkansing&lt;/u&gt;&lt;/td&gt;&lt;td&gt;:&lt;/td&gt;").matcher(courseHTML);
+				final Matcher courseCountGradeMatcher = Pattern.compile(GR_RETRY_ALT).matcher(courseHTML);
 				while (courseCountGradeMatcher.find()) gradeCount ++;
 
-				final Matcher courseCountAverageMatcher = Pattern.compile("&lt;tr&gt;&lt;td&gt;Toetscode&lt;/u&gt;&lt;/td&gt;&lt;td&gt;:&lt;/td&gt;&lt;td&gt;Berekend rapportcijfer&lt;/td&gt;&lt;/tr&gt;")
+				final Matcher courseCountAverageMatcher = Pattern.compile(GR_CODE_ALT)
 						.matcher(courseHTML);
 				while (courseCountAverageMatcher.find()) gradeCount ++;
 
 				final String[][] courseArray = new String[gradeCount][3];
 
-				final Matcher courseCountAdviceMatcher = Pattern.compile("&lt;tr&gt;&lt;td&gt;Toetssoort&lt;/u&gt;&lt;/td&gt;&lt;td&gt;:&lt;/td&gt;&lt;td&gt;Advies&lt;/td&gt;&lt;/tr&gt;").matcher(courseHTML);
+				final Matcher courseCountAdviceMatcher = Pattern.compile(GR_ADVICE_ALT).matcher(courseHTML);
 				while (courseCountAdviceMatcher.find()) gradeCount += 2;
 
 				for (int i = 0; i < gradeCount; i++) {
-					if (courseHTML.contains("<span class=\"triggerBubble wp3-cijfer \"")) { //FIXME Adjust to ensure order is right
-						String gradesContainerHTML = courseHTML.substring(courseHTML.indexOf("<span class=\"triggerBubble wp3-cijfer \"><a href=\"javascript: void(0)\" rel=\"") + 75);
-						gradesContainerHTML = gradesContainerHTML.substring(0, gradesContainerHTML.indexOf("<span class=\'closeBubble\' title=\'Sluiten\'>"));
+					if (courseHTML.contains(GR_BUBBLE_IDENT)) { //FIXME Adjust to ensure order is right
+						String gradesContainerHTML = courseHTML.substring(courseHTML.indexOf(GR_BUBBLE_START) + GR_BUBBLE_START.length());
+						gradesContainerHTML = gradesContainerHTML.substring(0, gradesContainerHTML.indexOf(GR_BUBBLE_END)); //FIXME May be too long
 
-						courseHTML = courseHTML.replace("<span class=\"triggerBubble wp3-cijfer \"><a href=\"javascript: void(0)\" rel=\"" + gradesContainerHTML, "");
+						courseHTML = courseHTML.replace(GR_BUBBLE_START + gradesContainerHTML, "");
 
-						String wp3GradeContainerHTML = gradesContainerHTML.substring(0, gradesContainerHTML.indexOf("\" class=\"result__figure\"><span>"));
+						String wp3GradeContainerHTML = gradesContainerHTML.substring(0, gradesContainerHTML.indexOf(GR_NORMAL_END));
 						wp3GradeContainerHTML = Html.fromHtml(wp3GradeContainerHTML).toString();
 
-						String wp3GradeHTML = wp3GradeContainerHTML.substring(wp3GradeContainerHTML.indexOf("<td><strong>Cijfer</strong></td><td>:</td><td><strong>") + 54);
-						wp3GradeHTML = wp3GradeHTML.substring(0, wp3GradeHTML.indexOf("</strong></td></tr>"));
+						String wp3GradeHTML = wp3GradeContainerHTML.substring(wp3GradeContainerHTML.indexOf(GR_GRADE_START) + GR_GRADE_START.length());
+						wp3GradeHTML = wp3GradeHTML.substring(0, wp3GradeHTML.indexOf(GR_GRADE_END));
 
-						final String wp3WeightHTML = wp3GradeContainerHTML.substring(wp3GradeContainerHTML.indexOf("<tr><td>Weging</u></td><td>:</td><td>") + 37);
-						final String wp3CodeHTML = wp3GradeContainerHTML.substring(wp3GradeContainerHTML.indexOf("<tr><td>Toetscode</u></td><td>:</td><td>") + 40);
-						final String wp3DescTML = wp3GradeContainerHTML.substring(wp3GradeContainerHTML.indexOf("<tr><td>Beschrijving</u></td><td>:</td><td>") + 43);
+						final String wp3WeightHTML = wp3GradeContainerHTML.substring(wp3GradeContainerHTML.indexOf(GR_WEIGHT) + GR_WEIGHT.length());
+						final String wp3CodeHTML = wp3GradeContainerHTML.substring(wp3GradeContainerHTML.indexOf(GR_CODE) + GR_CODE.length());
+						final String wp3DescTML = wp3GradeContainerHTML.substring(wp3GradeContainerHTML.indexOf(GR_DESC) + GR_DESC.length());
 
 						double wp3Grade = 0.0;
 						try {
@@ -648,20 +675,20 @@ public class GradesFragment extends Fragment {
 
 						StringBuilder bubbleGrades = new StringBuilder();
 
-						while (gradesContainerHTML.contains("<span class=\" wp3-cijfer \">")) {
-							String bubbleGradeContainerHTML = gradesContainerHTML.substring(gradesContainerHTML.indexOf("<span class=\" wp3-cijfer \"><a href=\"javascript: void(0)\" rel=\"") + 62);
-							bubbleGradeContainerHTML = bubbleGradeContainerHTML.substring(0, gradesContainerHTML.indexOf("\" class=\"result__figure\"><span>"));
+						while (gradesContainerHTML.contains(GR_NORMAL_IDENT)) {
+							String bubbleGradeContainerHTML = gradesContainerHTML.substring(gradesContainerHTML.indexOf(GR_NORMAL_START) + GR_NORMAL_START.length());
+							bubbleGradeContainerHTML = bubbleGradeContainerHTML.substring(0, gradesContainerHTML.indexOf(GR_NORMAL_END));
 
-							gradesContainerHTML = gradesContainerHTML.replace("<span class=\" wp3-cijfer \"><a href=\"javascript: void(0)\" rel=\"" + bubbleGradeContainerHTML, "");
+							gradesContainerHTML = gradesContainerHTML.replace(GR_NORMAL_START + bubbleGradeContainerHTML, "");
 
 							bubbleGradeContainerHTML = Html.fromHtml(bubbleGradeContainerHTML).toString();
 
-							String bubbleGradeHTML = bubbleGradeContainerHTML.substring(bubbleGradeContainerHTML.indexOf("<td><strong>Deelcijfer</strong></td><td>:</td><td><strong>") + 58);
-							bubbleGradeHTML = bubbleGradeHTML.substring(0, bubbleGradeHTML.indexOf("</strong></td></tr>"));
+							String bubbleGradeHTML = bubbleGradeContainerHTML.substring(bubbleGradeContainerHTML.indexOf(GR_GRADE_BUBBLE) + GR_GRADE_BUBBLE.length());
+							bubbleGradeHTML = bubbleGradeHTML.substring(0, bubbleGradeHTML.indexOf(GR_GRADE_END));
 
-							final String bubbleWeightHTML = bubbleGradeContainerHTML.substring(bubbleGradeContainerHTML.indexOf("<tr><td>Weging</u></td><td>:</td><td>") + 37);
-							final String bubbleCodeHTML = bubbleGradeContainerHTML.substring(bubbleGradeContainerHTML.indexOf("<tr><td>Toetscode</u></td><td>:</td><td>") + 40);
-							final String bubbleDescHTML = bubbleGradeContainerHTML.substring(bubbleGradeContainerHTML.indexOf("<tr><td>Beschrijving</u></td><td>:</td><td>") + 43);
+							final String bubbleWeightHTML = bubbleGradeContainerHTML.substring(bubbleGradeContainerHTML.indexOf(GR_WEIGHT) + GR_WEIGHT.length());
+							final String bubbleCodeHTML = bubbleGradeContainerHTML.substring(bubbleGradeContainerHTML.indexOf(GR_CODE) + GR_CODE.length());
+							final String bubbleDescHTML = bubbleGradeContainerHTML.substring(bubbleGradeContainerHTML.indexOf(GR_DESC) + GR_DESC.length());
 
 							double bubbleGrade = 0.0;
 							try {
@@ -676,24 +703,24 @@ public class GradesFragment extends Fragment {
 								bubbleGrades.append("<br />&emsp;").append(bubbleGradeHTML);
 							}
 
-							bubbleGrades.append("<sup><small>" ).append(bubbleWeightHTML.substring(0, bubbleWeightHTML.indexOf("</td></tr>"))).append("</font></small></sup>").append(" ")
-									.append("<b>").append(bubbleCodeHTML.substring(0, bubbleCodeHTML.indexOf("</td></tr>"))).append("</b> - ")
-									.append(bubbleDescHTML.substring(0, bubbleDescHTML.indexOf("</td></tr>")));
+							bubbleGrades.append("<sup><small>" ).append(bubbleWeightHTML.substring(0, bubbleWeightHTML.indexOf(GR_END))).append("</font></small></sup>").append(" ")
+									.append("<b>").append(bubbleCodeHTML.substring(0, bubbleCodeHTML.indexOf(GR_END))).append("</b> - ")
+									.append(bubbleDescHTML.substring(0, bubbleDescHTML.indexOf(GR_END)));
 						}
 
-						courseArray[i][2] = "<b>" + wp3CodeHTML.substring(0, wp3CodeHTML.indexOf("</td></tr>")) + "</b> - " + wp3DescTML.substring(0, wp3DescTML.indexOf("</td></tr>")) + bubbleGrades.toString();
-					} else if (courseHTML.contains("<span class=\" wp3-cijfer \">")) {
-						String wp3GradeContainerHTML = courseHTML.substring(courseHTML.indexOf("<span class=\" wp3-cijfer \"><a href=\"javascript: void(0)\" rel=\"") + 62);
-						wp3GradeContainerHTML = wp3GradeContainerHTML.substring(0, wp3GradeContainerHTML.indexOf("\" class=\"result__figure\"><span>"));
+						courseArray[i][2] = "<b>" + wp3CodeHTML.substring(0, wp3CodeHTML.indexOf(GR_END)) + "</b> - " + wp3DescTML.substring(0, wp3DescTML.indexOf(GR_END)) + bubbleGrades.toString();
+					} else if (courseHTML.contains(GR_NORMAL_IDENT)) {
+						String wp3GradeContainerHTML = courseHTML.substring(courseHTML.indexOf(GR_NORMAL_START) + GR_NORMAL_START.length());
+						wp3GradeContainerHTML = wp3GradeContainerHTML.substring(0, wp3GradeContainerHTML.indexOf(GR_NORMAL_END));
 
-						courseHTML = courseHTML.replace("<span class=\" wp3-cijfer \"><a href=\"javascript: void(0)\" rel=\"" + wp3GradeContainerHTML, "");
+						courseHTML = courseHTML.replace(GR_NORMAL_IDENT + GR_START + wp3GradeContainerHTML, "");
 
 						wp3GradeContainerHTML = Html.fromHtml(wp3GradeContainerHTML).toString();
 
-						String wp3GradeHTML = wp3GradeContainerHTML.substring(wp3GradeContainerHTML.indexOf("<td><strong>Cijfer</strong></td><td>:</td><td><strong>") + 54);
-						wp3GradeHTML = wp3GradeHTML.substring(0, wp3GradeHTML.indexOf("</strong></td></tr>"));
+						String wp3GradeHTML = wp3GradeContainerHTML.substring(wp3GradeContainerHTML.indexOf(GR_GRADE_START) + GR_GRADE_START.length());
+						wp3GradeHTML = wp3GradeHTML.substring(0, wp3GradeHTML.indexOf(GR_GRADE_END));
 
-						if (wp3GradeContainerHTML.contains("<tr><td>Toetssoort</u></td><td>:</td><td>Berekend rapportcijfer</td></tr>")) {
+						if (wp3GradeContainerHTML.contains(GR_AVERAGE)) {
 							if (wp3GradeHTML.matches("[a-zA-Z ]*\\d+.*")) { //TODO ^^^ Not in function so 1 doesn't have to be subtracted from array-length in post parsing
 								courseAverage = Double.parseDouble(wp3GradeHTML);
 							} else { //TODO Any other value possible?
@@ -708,13 +735,13 @@ public class GradesFragment extends Fragment {
 								}
 							}
 
-							String averageRoundHTML = courseHTML.substring(courseHTML.indexOf("<span class=\" wp3-cijfer \"><a href=\"javascript: void(0)\" rel=\"") + 62);
-							averageRoundHTML = averageRoundHTML.substring(0, averageRoundHTML.indexOf("\" class=\"result__figure\"><span>"));
-							courseHTML = courseHTML.replace("<span class=\" wp3-cijfer \"><a href=\"javascript: void(0)\" rel=\"" + averageRoundHTML, "");
+							String averageRoundHTML = courseHTML.substring(courseHTML.indexOf(GR_NORMAL_START) + GR_NORMAL_START.length());
+							averageRoundHTML = averageRoundHTML.substring(0, averageRoundHTML.indexOf(GR_NORMAL_END));
+							courseHTML = courseHTML.replace(GR_NORMAL_START + averageRoundHTML, "");
 
 							averageRoundHTML = Html.fromHtml(averageRoundHTML).toString();
-							averageRoundHTML = averageRoundHTML.substring(averageRoundHTML.indexOf("<td><strong>Cijfer</strong></td><td>:</td><td><strong>") + 54);
-							averageRoundHTML = averageRoundHTML.substring(0, averageRoundHTML.indexOf("</strong></td></tr>"));
+							averageRoundHTML = averageRoundHTML.substring(averageRoundHTML.indexOf(GR_GRADE_START) + GR_GRADE_START.length());
+							averageRoundHTML = averageRoundHTML.substring(0, averageRoundHTML.indexOf(GR_GRADE_END));
 
 							courseAverageRound = averageRoundHTML;
 
@@ -722,10 +749,11 @@ public class GradesFragment extends Fragment {
 							averageTotal += courseAverage;
 						//} else if (wp3GradeContainerHTML.contains("<tr><td>Toetssoort</u></td><td>:</td><td>Advies</td></tr>")) {
 							//TODO Handle
-						} else if (!wp3GradeContainerHTML.contains("<tr><td>Toetssoort</u></td><td>:</td><td>Advies</td></tr>") && wp3GradeContainerHTML.contains("<tr><td>Herkansing</u></td><td>:</td><td>")) {
-							final String wp3WeightHTML = wp3GradeContainerHTML.substring(wp3GradeContainerHTML.indexOf("<tr><td>Weging</u></td><td>:</td><td>") + 37);
-							final String wp3CodeHTML = wp3GradeContainerHTML.substring(wp3GradeContainerHTML.indexOf("<tr><td>Toetscode</u></td><td>:</td><td>") + 40);
-							final String wp3DescHTML = wp3GradeContainerHTML.substring(wp3GradeContainerHTML.indexOf("<tr><td>Beschrijving</u></td><td>:</td><td>") + 43);
+						} else if (!wp3GradeContainerHTML.contains(GR_ADVICE) &&
+								wp3GradeContainerHTML.contains(GR_RETRY)) {
+							final String wp3WeightHTML = wp3GradeContainerHTML.substring(wp3GradeContainerHTML.indexOf(GR_WEIGHT) + GR_WEIGHT.length());
+							final String wp3CodeHTML = wp3GradeContainerHTML.substring(wp3GradeContainerHTML.indexOf(GR_CODE) + GR_CODE.length());
+							final String wp3DescHTML = wp3GradeContainerHTML.substring(wp3GradeContainerHTML.indexOf(GR_DESC) + GR_DESC.length());
 
 							double wp3Grade = 0.0;
 							try {
@@ -740,8 +768,8 @@ public class GradesFragment extends Fragment {
 								courseArray[i][0] = wp3GradeHTML;
 							}
 
-							courseArray[i][1] = "<sup><small>" + wp3WeightHTML.substring(0, wp3WeightHTML.indexOf("</td></tr>")) + "</font></small></sup>";
-							courseArray[i][2] = "<b>" + wp3CodeHTML.substring(0, wp3CodeHTML.indexOf("</td></tr>")) + "</b> - " + wp3DescHTML.substring(0, wp3DescHTML.indexOf("</td></tr>"));
+							courseArray[i][1] = "<sup><small>" + wp3WeightHTML.substring(0, wp3WeightHTML.indexOf(GR_END)) + "</font></small></sup>";
+							courseArray[i][2] = "<b>" + wp3CodeHTML.substring(0, wp3CodeHTML.indexOf(GR_END)) + "</b> - " + wp3DescHTML.substring(0, wp3DescHTML.indexOf(GR_END));
 						//} else {
 							//TODO Handle any other possibilities
 						}
@@ -754,9 +782,9 @@ public class GradesFragment extends Fragment {
 					if (courseAverageRound.equals("S") || courseAverageRound.equals("O") || Integer.parseInt(courseAverageRound) < 6) {
 						gradesMap.add(new CourseWrapper(Html.fromHtml(course.substring(0, course.indexOf("</td>"))).toString().trim(), courseArray, "<font color='#F44336'>" + String.valueOf(courseAverage),
 								"<font color='#F44336'>" + courseAverageRound));
-					} else if (Integer.parseInt(courseAverageRound) == 10) {
-						gradesMap.add(new CourseWrapper(Html.fromHtml(course.substring(0, course.indexOf("</td>"))).toString().trim(), courseArray, "<font color='#00B200'>" + String.valueOf(courseAverage),
-								"<font color='#00B200'>" + courseAverageRound));
+					//} else if (Integer.parseInt(courseAverageRound) == 10) {
+					//	gradesMap.add(new CourseWrapper(Html.fromHtml(course.substring(0, course.indexOf("</td>"))).toString().trim(), courseArray, "<font color='#00B200'>" + String.valueOf(courseAverage),
+					//			"<font color='#00B200'>" + courseAverageRound));
 					} else {
 						gradesMap.add(new CourseWrapper(Html.fromHtml(course.substring(0, course.indexOf("</td>"))).toString().trim(),
 								courseArray, String.valueOf(courseAverage), courseAverageRound));

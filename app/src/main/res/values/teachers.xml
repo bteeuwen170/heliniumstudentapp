@@ -69,9 +69,9 @@
 	<string name="Gaag" translatable="false">Geraldine van der Gaag</string>
 	<string name="Gelo" translatable="false">Mandy D.G. van \&#39;t Geloof</string>
 	<string name="Gess" translatable="false">Hendrik Jan van Gessel</string>
-	<string name="G&#246;nd" translatable="false">S. G&#246;nder</string>
 	<string name="Goed" translatable="false">Ronald de Goede</string>
-	<string name="Gond" translatable="false">G&#246;nder S&#252;meyye</string>
+	<string name="Gond" translatable="false">S. G&#246;nder</string> <!-- Gond or G&#246;nd -->
+	<string name="G&#246;nd" translatable="false">S. G&#246;nder</string> <!-- Gond or G&#246;nd -->
 	<string name="Goud" translatable="false">C. Goud</string>
 	<string name="Gron" translatable="false">Monique H. de Groen</string>
 	<string name="Groe" translatable="false">Roland Groenendijk</string>

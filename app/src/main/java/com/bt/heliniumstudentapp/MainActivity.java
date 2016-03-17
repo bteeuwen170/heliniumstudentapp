@@ -27,6 +27,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -80,7 +81,6 @@ import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 	protected static AppCompatActivity mainContext; //TODO Make private again
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
 
 			drawerDLtoggle = new ActionBarDrawerToggle(this, drawerDL, toolbarTB, 0, 0);
 			drawerDLtoggle.setDrawerIndicatorEnabled(false);
-			Drawable navigationIcon = getResources().getDrawable(R.drawable.ic_menu);
+			Drawable navigationIcon = ContextCompat.getDrawable(this, R.drawable.ic_menu);
 			navigationIcon.setColorFilter(ContextCompat.getColor(this, primaryTextColor), PorterDuff.Mode.SRC_ATOP);
 			drawerDLtoggle.setHomeAsUpIndicator(navigationIcon);
 			drawerDLtoggle.setToolbarNavigationClickListener(new View.OnClickListener() {
@@ -295,29 +295,33 @@ public class MainActivity extends AppCompatActivity {
 
 									aboutDialogBuilder.setTitle(R.string.about);
 									aboutDialogBuilder.setMessage(getResources().getString(R.string.app_name) +
-													"\n\nCopyright (C) 2016 Bastiaan Teeuwen <bastiaan.teeuwen170@gmail.com>\n\n" +
-													"This program is free software; you can redistribute it and/or " +
-													"modify it under the terms of the GNU General Public License " +
-													"as published by the Free Software Foundation; version 2" +
-													"of the License, or (at your option) any later version.\n\n" +
-													"This program is distributed in the hope that it will be useful, " +
-													"but WITHOUT ANY WARRANTY; without even the implied warranty of " +
-													"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the " +
-													"GNU General Public License for more details.\n\n" +
-													"You should have received a copy of the GNU General Public License " +
-													"along with this program; if not, write to the Free Software " +
-													"Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.");
+											"\n\nCopyright (C) 2016 Bastiaan Teeuwen <bastiaan.teeuwen170@gmail.com>\n\n" +
+											"This program is free software; you can redistribute it and/or " +
+											"modify it under the terms of the GNU General Public License " +
+											"as published by the Free Software Foundation; version 2" +
+											"of the License, or (at your option) any later version.\n\n" +
+											"This program is distributed in the hope that it will be useful, " +
+											"but WITHOUT ANY WARRANTY; without even the implied warranty of " +
+											"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the " +
+											"GNU General Public License for more details.\n\n" +
+											"You should have received a copy of the GNU General Public License " +
+											"along with this program; if not, write to the Free Software " +
+											"Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.");
 
 									aboutDialogBuilder.setNeutralButton(R.string.email, new DialogInterface.OnClickListener() {
 
 										@Override
 										public void onClick(DialogInterface dialog, int which) {
-											Intent email = new Intent(Intent.ACTION_SENDTO);
-											email.setType("text/plain");
-											email.setData(Uri.parse("mailto:" + HeliniumStudentApp.URL_EMAIL));
-											email.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.app_name));
-											email.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-											startActivity(email);
+											try {
+												Intent email = new Intent(Intent.ACTION_SENDTO);
+												email.setType("text/plain");
+												email.setData(Uri.parse("mailto:" + HeliniumStudentApp.URL_EMAIL));
+												email.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.app_name));
+												email.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+												startActivity(email);
+											} catch (ActivityNotFoundException e) {
+												Toast.makeText(mainContext, "Couldn't find an E-mail client", Toast.LENGTH_SHORT).show();
+											}
 										}
 									});
 
@@ -325,8 +329,11 @@ public class MainActivity extends AppCompatActivity {
 
 										@Override
 										public void onClick(DialogInterface dialog, int which) {
-											Intent github = new Intent(Intent.ACTION_VIEW, Uri.parse(HeliniumStudentApp.URL_GITHUB));
-											startActivity(github);
+											try {
+												startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(HeliniumStudentApp.URL_GITHUB)));
+											} catch (ActivityNotFoundException e) {
+												Toast.makeText(mainContext, "Couldn't find a browser", Toast.LENGTH_SHORT).show();
+											}
 										}
 									});
 
@@ -763,7 +770,7 @@ public class MainActivity extends AppCompatActivity {
 		}
 
 		if (colorAccent != HeliniumStudentApp.ACTION_NULL) {
-			accentPrimaryColor = mainContext.getResources().getIdentifier(colors[colorAccent] + "_accent", "color", mainContext.getPackageName());
+			accentPrimaryColor = mainContext.getResources().getIdentifier(colors[colorAccent] + "_dark", "color", mainContext.getPackageName());
 			accentSecondaryColor = mainContext.getResources().getIdentifier(colors[colorAccent], "color", mainContext.getPackageName());
 
 			if (colorAccent > 5)
