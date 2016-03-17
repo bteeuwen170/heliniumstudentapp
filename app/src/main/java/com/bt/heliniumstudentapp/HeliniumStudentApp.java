@@ -84,8 +84,8 @@ public class HeliniumStudentApp extends Application {
 	protected static final String URL_SCHEDULE = "https://leerlingen.helinium.nl/Portaal/Rooster?wis_ajax&ajax_object=293&startdate293=";
 	protected static final String URL_HOMEWORK = "https://leerlingen.helinium.nl/fs/SOMTools/Comps/Agenda.cfc?&method=getLeerlingRooster&so_id=319&start=";
 	protected static final String URL_GRADES = "https://leerlingen.helinium.nl/Portaal/Cijfers?wis_ajax&ajax_object=291&startdate=";
-	protected static final String URL_UPDATE_CHANGELOG = "https://dl.dropboxusercontent.com/u/9920547/BT/heliniumleerlingenweb/changelog";
-	protected static final String URL_UPDATE_RELEASE = "https://dl.dropboxusercontent.com/u/9920547/BT/heliniumleerlingenweb/release/app-release.apk";
+	protected static final String URL_UPDATE_CHANGELOG = "https://dl.dropboxusercontent.com/u/9920547/BT/heliniumstudentapp/changelog";
+	protected static final String URL_UPDATE_RELEASE = "https://dl.dropboxusercontent.com/u/9920547/BT/heliniumstudentapp/bin/app-release.apk";
 	protected static final String URL_EMAIL = "bastiaan.teeuwen170@gmail.com";
 	protected static final String URL_GITHUB = "https://github.com/bteeuwen170/heliniumstudentapp";
 
