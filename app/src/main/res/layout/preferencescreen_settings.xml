@@ -69,7 +69,7 @@
 			android:title="@string/customization_color_accent"
 			android:entries="@array/customization_color_accent_array"
 			android:entryValues="@array/customization_color_accent_values"
-			android:defaultValue="1"/>
+			android:defaultValue="14"/>
 
 		<CheckBoxPreference
 			android:key="pref_customization_compact"
