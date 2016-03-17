@@ -565,7 +565,7 @@ public class GradesFragment extends Fragment {
 			double averageTotal = 0;
 
 			String localHTML = gradesHtml.substring(gradesHtml.indexOf("<th class=\"wp3-rotate\" width=\"1%\" title=\"Rapportcijfer\" alt=\"Rapportcijfer\">"),
-					gradesHtml.indexOf("<div class=\"jTooltip-deelcijfers\"></div></div>"));
+					gradesHtml.indexOf("<div class=\"jTooltip-deelcijfers\"></div></div>")); //TODO Causes IndexOutOfBounds sometimes
 
 			final Matcher courseMatcher = Pattern.compile("<span title").matcher(localHTML);
 			while (courseMatcher.find()) courseCount ++;
@@ -843,7 +843,7 @@ public class GradesFragment extends Fragment {
 
 		@Override
 		public boolean isChildSelectable(int groupPosition, int position) {
-			return gradesArray.get(groupPosition).grades[position][0].equals("10.0");
+			return gradesArray.get(groupPosition).grades[position][0].contains("10.0");
 		}
 
 		@Override
