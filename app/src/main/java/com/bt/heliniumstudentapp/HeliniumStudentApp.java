@@ -122,7 +122,7 @@ public class HeliniumStudentApp extends Application {
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 
-		final TypedArray styledAttributes = getTheme().obtainStyledAttributes(new int[] { android.R.attr.actionBarSize }); //TODO This kind of works, but really doesn't
+		final TypedArray styledAttributes = getTheme().obtainStyledAttributes(new int[] { android.R.attr.actionBarSize }); //FIXME This kind of works, but really doesn't
 		RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) MainActivity.toolbarTB.getLayoutParams();
 		layoutParams.height = (int) styledAttributes.getDimension(0, 0);
 		MainActivity.toolbarTB.setLayoutParams(layoutParams);

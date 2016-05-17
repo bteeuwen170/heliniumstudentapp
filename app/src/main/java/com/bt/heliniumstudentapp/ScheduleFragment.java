@@ -407,15 +407,18 @@ public class ScheduleFragment extends Fragment {
 
 					((HttpURLConnection) connection).disconnect();
 
-					if (((HttpURLConnection) connection).getResponseCode() == 200)
-						if (html.contains("ajax-loader.gif"))
+					if (((HttpURLConnection) connection).getResponseCode() == 200) {
+						if (html.contains("<h2>Er is een fout opgetreden</h2>") || html.contains("Leerlingnummer onbekend")) //TODO Also html.contains("cross.png")?
+							return HeliniumStudentApp.ERR_UNDEFINED;
+						else if (html.contains("ajax-loader.gif"))
 							return HeliniumStudentApp.ERR_RETRY;
-						else if (html.contains("<h2>Er is een fout opgetreden</h2>") || html.contains("Leerlingnummer onbekend") || !html.contains("Week")) //TODO Also html.contains("cross.png")?
+						else if (!html.contains("Week"))
 							return HeliniumStudentApp.ERR_UNDEFINED;
 						else
 							return HeliniumStudentApp.OK;
-					else
+					} else {
 						return HeliniumStudentApp.ERR_OK;
+					}
 				} catch (IOException e) {
 					return HeliniumStudentApp.ERR_LOGIN;
 				}

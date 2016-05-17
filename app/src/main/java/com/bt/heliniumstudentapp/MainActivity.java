@@ -298,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
 											"\n\nCopyright (C) 2016 Bastiaan Teeuwen <bastiaan.teeuwen170@gmail.com>\n\n" +
 											"This program is free software; you can redistribute it and/or " +
 											"modify it under the terms of the GNU General Public License " +
-											"as published by the Free Software Foundation; version 2" +
+											"as published by the Free Software Foundation; version 2 " +
 											"of the License, or (at your option) any later version.\n\n" +
 											"This program is distributed in the hope that it will be useful, " +
 											"but WITHOUT ANY WARRANTY; without even the implied warranty of " +

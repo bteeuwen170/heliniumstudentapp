@@ -483,15 +483,16 @@ public class GradesFragment extends Fragment {
 
 					((HttpURLConnection) connection).disconnect();
 
-					if (((HttpURLConnection) connection).getResponseCode() == 200)
-						if (!html.contains(GRADES_START) || html.contains("ajax-loader.gif"))
-							return HeliniumStudentApp.ERR_RETRY;
-						else if (html.contains("<h2>Er is een fout opgetreden</h2>") || html.contains("Leerlingnummer onbekend") || !html.contains("Periode") || html.contains("cross.png"))
+					if (((HttpURLConnection) connection).getResponseCode() == 200) {
+						if (html.contains("<h2>Er is een fout opgetreden</h2>") || html.contains("Leerlingnummer onbekend") || html.contains("cross.png"))
 							return HeliniumStudentApp.ERR_UNDEFINED;
+						else if (!html.contains(GRADES_START) || html.contains("ajax-loader.gif"))
+							return HeliniumStudentApp.ERR_RETRY;
 						else
 							return HeliniumStudentApp.OK;
-					else
+					} else {
 						return HeliniumStudentApp.ERR_OK;
+					}
 				} catch (IOException e) {
 					return HeliniumStudentApp.ERR_LOGIN;
 				}
