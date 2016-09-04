@@ -35,6 +35,7 @@
 
 	<string name="about">About</string>
 	<string name="absence">Absence</string>
+	<string name="absent">Absent</string>
 	<string name="authenticating">Authenticating</string>
 	<string name="automatically">Automatically</string>
 	<string name="average">Average: %1$s</string>
@@ -54,6 +55,7 @@
 	<string name="logout">Logout</string>
 	<string name="logout_confirm">Are you sure you want to log out?</string>
 	<string name="medical">Medical</string>
+	<string name="removed">Removed</string>
 	<string name="retry">Retry</string>
 	<string name="truancy">Truancy</string>
 	<string name="update">Update</string>

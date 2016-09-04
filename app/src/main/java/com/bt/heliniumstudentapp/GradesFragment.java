@@ -592,8 +592,7 @@ public class GradesFragment extends Fragment {
 
 			final ArrayList<CourseWrapper> gradesMap = new ArrayList<>();
 
-			int courseCount = 0;
-			int averageCount = 0;
+			int courseCount = 0, averageCount = 0;
 			double averageTotal = 0;
 
 			String localHTML = gradesHtml.substring(gradesHtml.indexOf(GRADES_START), gradesHtml.indexOf(GRADES_END));

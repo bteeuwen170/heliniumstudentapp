@@ -36,6 +36,7 @@
 
 	<string name="about">Over</string>
 	<string name="absence">Absentie</string>
+	<string name="absent">Absent</string>
 	<string name="authenticating">Authenticeren</string>
 	<string name="automatically">Automatisch</string>
 	<string name="average">Gemiddelde: %1$s</string>
@@ -53,6 +54,7 @@
 	<string name="logout">Uitloggen</string>
 	<string name="logout_confirm">Weet je zeker dat je wilt uitloggen?</string>
 	<string name="medical">Medisch</string>
+	<string name="removed">Verwijderd</string>
 	<string name="retry">Opnieuw Proberen</string>
 	<string name="truancy">Spijbelen</string>
 	<string name="update">Update</string>

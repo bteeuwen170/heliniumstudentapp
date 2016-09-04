@@ -24,6 +24,49 @@
 
 <resources>
 
+	<string name="aardrijkskunde">Aardrijkskunde</string>
+	<string name="anglia">Anglia</string> <!-- TODO Confirm -->
+	<string name="biologie">Biologie</string>
+	<string name="beeldende_vorming">Beeldende Vorming</string>
+	<string name="culturele_en_kunstzinnige_vorming">Culturele en Kunstzinnige Vorming</string>
+	<string name="dans">Dans</string>
+	<string name="drama">Drama</string>
+	<string name="Duitse_taal">Duits</string>
+	<string name="Duitse_taal_en_literatuur">Duits</string>
+	<string name="economie">Economie</string> <!-- TODO Confirm -->
+	<string name="Engelse_taal">Engels</string>
+	<string name="Engelse_taal_en_literatuur">Engels</string>
+	<string name="Franse_taal">Frans</string>
+	<string name="Franse_taal_en_literatuur">Frans</string> <!-- TODO Confirm -->
+	<string name="Griekse_taal">Grieks</string> <!-- TODO Confirm -->
+	<string name="geschiedenis">Geschiedenis</string>
+	<string name="informatica">Informatica</string>
+	<string name="kunst_algemeen">Kunst Algemeen</string> <!-- TODO Confirm -->
+	<string name="Latijnse_taal">Latijn</string> <!-- TODO Confirm -->
+	<string name="lichamelijke_opvoeding">Lichamelijke Opvoeding</string>
+	<string name="maatschappijleer">Maatschappijleer</string> <!-- TODO Confirm -->
+	<string name="mentorles">Mentorles</string>
+	<string name="muziek">Muziek</string> <!-- TODO Confirm -->
+	<string name="natuurkunde">Natuurkunde</string>
+	<string name="Nederlandse_taal">Nederlands</string>
+	<string name="Nederlandse_taal_en_literatuur">Nederlands</string> <!-- TODO Confirm -->
+	<string name="onderzoeken_en_ontwerpen">o&amp;o</string>
+	<string name="podiumkunsten">Podium Kunsten</string>
+	<string name="projectonderwijs">Project Klas</string>
+	<string name="profielwerkstuk">Profielwerkstuk</string> <!-- TODO Confirm -->
+	<string name="rekenvaardigheid">Rekenvaardigheid</string>
+	<string name="reken_toets">Reken Toets</string> <!-- TODO Confirm -->
+	<string name="science">Science</string>
+	<string name="scheikunde">Scheikunde</string>
+	<string name="sportklas">Sport Klas</string> <!-- TODO Confirm -->
+	<string name="techniek">Techniek</string> <!-- TODO Confirm -->
+	<string name="taalvaardigheid">Taalvaardigheid</string> <!-- TODO Confirm -->
+	<string name="wiskunde">Wiskunde</string>
+	<string name="wiskunde_A">Wiskunde A</string>
+	<string name="wiskunde_B">Wiskunde B</string>
+	<string name="wiskunde_C">Wiskunde C</string>
+	<string name="wiskunde_D">Wiskunde D</string>
+
 	<string name="ak">Aardrijkskunde</string>
 	<string name="ang">Anglia</string>
 	<string name="bi">Biologie</string>

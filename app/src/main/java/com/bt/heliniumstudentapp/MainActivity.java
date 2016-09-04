@@ -115,11 +115,11 @@ public class MainActivity extends AppCompatActivity {
 
 		HeliniumStudentApp.setLocale(this);
 
-		if (!isOnline() && PreferenceManager.getDefaultSharedPreferences(this).getString("html_schedule_0", null) == null) { //TODO Keep app running and display empty ScheduleFragment with retry option
+		if (!isOnline() && PreferenceManager.getDefaultSharedPreferences(this).getString("schedule_0", null) == null) { //TODO Keep app running and display empty ScheduleFragment with retry option
 			Toast.makeText(this, getResources().getString(R.string.error_conn_no) + ". " + getResources().getString(R.string.database_no) + ".", Toast.LENGTH_LONG).show();
 			finish();
 		} else if ((PreferenceManager.getDefaultSharedPreferences(this).getString("username", null) == null || PreferenceManager.getDefaultSharedPreferences(this).getString("password", null) == null) &&
-				PreferenceManager.getDefaultSharedPreferences(this).getString("html_schedule_0", null) == null) {
+				PreferenceManager.getDefaultSharedPreferences(this).getString("schedule_0", null) == null) {
 			startActivity(new Intent(this, LoginActivity.class));
 			finish();
 		} else {
@@ -246,21 +246,19 @@ public class MainActivity extends AppCompatActivity {
 
 											@Override
 											public void onClick(DialogInterface dialog, int which) {
-												ScheduleFragment.scheduleHtml = null;
-												ScheduleFragment.homeworkJson = null;
+												ScheduleFragment.scheduleJson = null;
 												GradesFragment.gradesHtml = null;
 
 												PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("username", null).apply();
 												PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("password", null).apply();
 												PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("pref_general_class", "0").apply();
 
-												PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("html_schedule_0", null).apply();
-												PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("json_homework_0", null).apply();
-												PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("html_schedule_start_0", null).apply();
+												PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("schedule_0", null).apply();
+												PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("schedule_start_0", null).apply();
 												PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("pref_schedule_version_0", null).apply();
 
-												PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("html_schedule_1", null).apply();
-												PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("html_schedule_start_1", null).apply();
+												PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("schedule_1", null).apply();
+												PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("schedule_start_1", null).apply();
 												PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("pref_schedule_version_1", null).apply();
 
 												PreferenceManager.getDefaultSharedPreferences(mainContext).edit().putString("html_grades", null).apply();
@@ -374,9 +372,6 @@ public class MainActivity extends AppCompatActivity {
 			case HeliniumStudentApp.VIEW_SCHEDULE:
 				postfixError = mainContext.getResources().getString(R.string.while_schedule);
 				break;
-			case HeliniumStudentApp.VIEW_SCHEDULE_HOMEWORK:
-				postfixError = mainContext.getResources().getString(R.string.while_homework);
-				break;
 			case HeliniumStudentApp.VIEW_GRADES:
 				postfixError = mainContext.getResources().getString(R.string.while_grades);
 				break;
@@ -408,15 +403,14 @@ public class MainActivity extends AppCompatActivity {
 				switch (transition) {
 					case HeliniumStudentApp.ACTION_INIT_OUT:
 					case HeliniumStudentApp.ACTION_SHORT_OUT:
-						if (PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_0", null) == null) { //TODO Does this ever happen or is this handled by checkDatabase?
+						if (PreferenceManager.getDefaultSharedPreferences(mainContext).getString("schedule_0", null) == null) { //TODO Does this ever happen or is this handled by checkDatabase?
 							Toast.makeText(mainContext, mainContext.getResources().getString(R.string.database_no), Toast.LENGTH_SHORT).show();
 
 							mainContext.finish(); //FIXME Properly close, otherwise app will become really glitchy...
 						} else {
 							setStatusBar(mainContext);
 
-							ScheduleFragment.scheduleHtml = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_0", null);
-							ScheduleFragment.homeworkJson = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("json_homework_0", null);
+							ScheduleFragment.scheduleJson = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("schedule_0", null);
 
 							ScheduleFragment.parseData(transition);
 						}
@@ -425,14 +419,12 @@ public class MainActivity extends AppCompatActivity {
 
 				switch (direction) {
 					case HeliniumStudentApp.DIREC_BACK:
-						if (ScheduleFragment.scheduleFocus > currentWeek && PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_1", null) != null) {
+						if (ScheduleFragment.scheduleFocus > currentWeek && PreferenceManager.getDefaultSharedPreferences(mainContext).getString("schedule_1", null) != null) {
 							ScheduleFragment.scheduleFocus = currentWeek + 1;
-							ScheduleFragment.scheduleHtml = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_1", null);
-							ScheduleFragment.homeworkJson = null;
+							ScheduleFragment.scheduleJson = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("schedule_1", null);
 						} else {
 							ScheduleFragment.scheduleFocus = currentWeek;
-							ScheduleFragment.scheduleHtml = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_0", null);
-							ScheduleFragment.homeworkJson = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("json_homework_0", null);
+							ScheduleFragment.scheduleJson = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("schedule_0", null);
 						}
 
 						ScheduleFragment.parseData(transition);
@@ -441,30 +433,23 @@ public class MainActivity extends AppCompatActivity {
 						setUI(view, transition);
 						break;
 					case HeliniumStudentApp.DIREC_NEXT:
-						if (ScheduleFragment.scheduleFocus > currentWeek && PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_1", null) != null) {
+						if (ScheduleFragment.scheduleFocus > currentWeek && PreferenceManager.getDefaultSharedPreferences(mainContext).getString("schedule_1", null) != null) {
 							ScheduleFragment.scheduleFocus = currentWeek + 1;
-							ScheduleFragment.scheduleHtml = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_1", null);
-							ScheduleFragment.homeworkJson = null;
+							ScheduleFragment.scheduleJson = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("schedule_1", null);
 						} else {
 							ScheduleFragment.scheduleFocus = currentWeek;
-							ScheduleFragment.scheduleHtml = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_0", null);
-							ScheduleFragment.homeworkJson = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("json_homework_0", null);
+							ScheduleFragment.scheduleJson = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("schedule_0", null);
 						}
 
 						ScheduleFragment.parseData(transition);
 						break;
 					case HeliniumStudentApp.DIREC_OTHER:
 						ScheduleFragment.scheduleFocus = new GregorianCalendar(HeliniumStudentApp.LOCALE).get(Calendar.WEEK_OF_YEAR);
-						ScheduleFragment.scheduleHtml = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_0", null);
-						ScheduleFragment.homeworkJson = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("json_homework_0", null);
+						ScheduleFragment.scheduleJson = PreferenceManager.getDefaultSharedPreferences(mainContext).getString("schedule_0", null);
 
 						ScheduleFragment.parseData(transition);
 						break;
 				}
-				break;
-			case HeliniumStudentApp.VIEW_SCHEDULE_HOMEWORK:
-				ScheduleFragment.homeworkJson = null;
-				ScheduleFragment.parseData(transition); //TODO Crappy solution
 				break;
 			case HeliniumStudentApp.VIEW_GRADES:
 				if (direction >= HeliniumStudentApp.FOCUS_YEAR) {
@@ -596,7 +581,7 @@ public class MainActivity extends AppCompatActivity {
 							break;
 						case HeliniumStudentApp.ACTION_OFFLINE:
 						case HeliniumStudentApp.ACTION_OFFLINE_1:
-							if (PreferenceManager.getDefaultSharedPreferences(mainContext).getString("html_schedule_1", null) == null) {
+							if (PreferenceManager.getDefaultSharedPreferences(mainContext).getString("schedule_1", null) == null) {
 								prevIV.setAlpha(130);
 								historyIV.setAlpha(130);
 								nextIV.setAlpha(130);
