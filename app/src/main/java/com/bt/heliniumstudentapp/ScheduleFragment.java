@@ -105,18 +105,6 @@ public class ScheduleFragment extends Fragment
 		ABSENT			/* Other reason for absence */
 	}
 
-	//private static final Integer[] day_hours = new Integer[] {
-	//	495,			/* 1st hour */
-	//	545,			/* 2nd hour */
-	//	610,			/* 3rd hour */
-	//	660,			/* 4th hour */
-	//	740,			/* 5th hour */
-	//	790,			/* 6th hour */
-	//	855,			/* 7th hour */
-	//	905,			/* 8th hour */
-	//	955				/* 9th hour */
-	//};
-
 	/* This . is . just a mess... */
 	protected static class week implements Serializable
 	{
@@ -175,7 +163,6 @@ public class ScheduleFragment extends Fragment
 		protected class day implements Serializable
 		{
 			protected final ArrayList<hour> hours = new ArrayList<>();
-			/* FIXME Probably doesn't work */
 			private final ArrayList<floating> floatings = new ArrayList<>();
 
 			protected String day, date;
@@ -185,7 +172,14 @@ public class ScheduleFragment extends Fragment
 			{
 				final GregorianCalendar ld = getDate();
 				ld.set(Calendar.DAY_OF_WEEK, n);
+
+				final GregorianCalendar td = new GregorianCalendar(HeliniumStudentApp.LOCALE);
 				final String wd = HeliniumStudentApp.df_weekday().format(ld.getTime());
+
+				/* FIXME Inefficient */
+				if (ld.get(Calendar.DAY_OF_YEAR) == td.get(Calendar.DAY_OF_YEAR) &&
+						ld.get(Calendar.YEAR) == td.get(Calendar.YEAR))
+					today = true;
 
 				this.day = Character.toUpperCase(wd.charAt(0)) + wd.substring(1);
 				this.date = DateFormat.getDateFormat(mainContext).format(ld.getTime());
@@ -214,6 +208,16 @@ public class ScheduleFragment extends Fragment
 				return new floating(type, course, text);
 			}
 
+			protected floating floating_get(final int n)
+			{
+				return floatings.get(n);
+			}
+
+			protected int floatings_get()
+			{
+				return floatings.size();
+			}
+
 			protected class hour implements Serializable
 			{
 				/* TODO Confirm 2 is max */
@@ -225,9 +229,26 @@ public class ScheduleFragment extends Fragment
 				protected String teacher;
 				protected String group;
 
-				private hour(final int n, final String course, final String classroom, final String teacher,
+				private hour(int n, final String course, final String classroom, final String teacher,
 							 final String group)
 				{
+					if (n < 0) {
+						this.hour = n * -1;
+
+						hours.add(this);
+
+						return;
+					}
+
+					if (n > 2) {
+						if (n < 5)
+							n++;
+						else if (n < 7)
+							n += 2;
+						else
+							n += 3;
+					}
+
 					this.hour = n;
 					this.course = course;
 					this.classroom = classroom;
@@ -264,11 +285,11 @@ public class ScheduleFragment extends Fragment
 			}
 
 			/* This can be either extra_t.HOMEWORK, (extra_t.HOMEWORK_DONE ?) or extra_t.TEST */
-			private class floating implements Serializable
+			protected class floating implements Serializable
 			{
-				private extra_t type;
-				private String course;
-				private String text;
+				protected extra_t type;
+				protected String course;
+				protected String text;
 
 				private floating(final extra_t type, final String course, final String text)
 				{
@@ -414,7 +435,8 @@ public class ScheduleFragment extends Fragment
 
 						weekpickerDialogBuilder.setTitle(getString(R.string.go_to));
 
-						weekpickerDialogBuilder.setPositiveButton(getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+						weekpickerDialogBuilder.setPositiveButton(getString(android.R.string.ok),
+								new DialogInterface.OnClickListener() {
 
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
@@ -879,12 +901,10 @@ public class ScheduleFragment extends Fragment
 			JSONArray data;
 			final week schedule = new week();
 			final GregorianCalendar today = new GregorianCalendar(HeliniumStudentApp.LOCALE);
-			int i;
+			int i, j = 0, k = 0, l;
 
 			mainContext = ScheduleFragment.mainContext;
 			transition = (Integer) attrs[0];
-
-			////////////day.today = (scheduleFocus == today.get(Calendar.WEEK_OF_YEAR) && i == today.get(Calendar.DAY_OF_WEEK));
 
 			try {
 				json = (JSONObject) new JSONTokener(scheduleJson).nextValue();
@@ -905,12 +925,66 @@ public class ScheduleFragment extends Fragment
 					final String teacher = hour_data.getJSONArray("docent").getJSONObject(0).getString("afkorting");
 					final String group = hour_data.getString("lesgroep");
 
-					final week.day day_p = schedule.day_get(day);
-					if (day_p == null)
-						schedule.day_add(day);
+					week.day day_p = schedule.day_get(day);
+
+					/* XXX This is a mess..... Clean it up */
+					if (day_p == null) {
+						day_p = schedule.day_add(day);
+						k = day;
+
+						for (l = 1; l < hour; l++) {
+							day_p.hour_add(l, null, null, null, null);
+
+							switch (l) {
+							case 2:
+								day_p.hour_add(-3, null, null, null, null);
+								break;
+							case 4:
+								day_p.hour_add(-6, null, null, null, null);
+								break;
+							case 6:
+								day_p.hour_add(-9, null, null, null, null);
+								break;
+							}
+						}
+						j = l - 1;
+					}
+
+					if (day == k) {
+						for (l = 1; j + l < hour; l++) {
+							day_p.hour_add(j + l, null, null, null, null);
+
+							switch (j + l) {
+							case 2:
+								day_p.hour_add(-3, null, null, null, null);
+								break;
+							case 4:
+								day_p.hour_add(-6, null, null, null, null);
+								break;
+							case 6:
+								day_p.hour_add(-9, null, null, null, null);
+								break;
+							}
+						}
+						j += l - 1;
+
+						if (hour > j) {
+							switch (j) {
+							case 2:
+								day_p.hour_add(-3, null, null, null, null);
+								break;
+							case 4:
+								day_p.hour_add(-6, null, null, null, null);
+								break;
+							case 6:
+								day_p.hour_add(-9, null, null, null, null);
+								break;
+							}
+						}
+					}
 
 					final week.day.hour hour_p =
-							schedule.day_get(day).hour_add(hour, course, classroom, teacher, group);
+							day_p.hour_add(hour, course, classroom, teacher, group);
 
 					if (hour_data.has("huiswerk")) {
 						final JSONObject hw_data = hour_data.getJSONObject("huiswerk");
@@ -963,6 +1037,8 @@ public class ScheduleFragment extends Fragment
 							}
 						}
 					}
+
+					j = hour;
 				}
 			} catch (JSONException | NullPointerException e) {
 				//TODO
@@ -984,14 +1060,14 @@ public class ScheduleFragment extends Fragment
 
 					final String course = hw_data.getString("vak");
 
-					final week.day day_p = schedule.day_get(day);
+					week.day day_p = schedule.day_get(day);
 					if (day_p == null)
-						schedule.day_add(day);
+						day_p = schedule.day_add(day);
 
 					if (hw_data.has("toets") && hw_data.getBoolean("toets"))
-						schedule.day_get(day).floating_add(extra_t.TEST, course, hw_data.getString("omschrijving"));
+						day_p.floating_add(extra_t.TEST, course, hw_data.getString("omschrijving"));
 					else
-						schedule.day_get(day).floating_add(extra_t.HOMEWORK, course, hw_data.getString("omschrijving"));
+						day_p.floating_add(extra_t.HOMEWORK, course, hw_data.getString("omschrijving"));
 				}
 			} catch (JSONException | ParseException e) {
 				//TODO
@@ -1050,7 +1126,7 @@ public class ScheduleFragment extends Fragment
 		protected void onPostExecute(final week schedule) {
 			/* TODO Handle */
 			if (schedule == null)
-				Log.v("err", "The new homework/schedule parser has failed :(");
+				Toast.makeText(mainContext, "The new homework/schedule parser has failed :(", Toast.LENGTH_LONG).show();
 
 			final ScheduleAdapter scheduleLVadapter = new ScheduleAdapter(schedule);
 			weekDaysLV.setAdapter(scheduleLVadapter);
@@ -1072,6 +1148,8 @@ public class ScheduleFragment extends Fragment
 			((TextView) mainContext.findViewById(R.id.tv_class_hd)).setText((nameHtml.substring(nameHtml.indexOf("(") + 1, nameHtml.indexOf(")")) +
 					(PreferenceManager.getDefaultSharedPreferences(mainContext).getString("pref_general_class", "0").equals("0") ? "" :
 							" (" + mainContext.getString(R.string.general_class) + ' ' + PreferenceManager.getDefaultSharedPreferences(mainContext).getString("pref_general_class", "") + ')')));*/
+			((TextView) mainContext.findViewById(R.id.tv_name_hd)).setText("Name temp. unavail.");
+			((TextView) mainContext.findViewById(R.id.tv_class_hd)).setText("Class temp. unavail.");
 
 			weekDaysLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -1100,10 +1178,8 @@ public class ScheduleFragment extends Fragment
 			return schedule.days_get();
 		}
 
-		/* XXX ??? */
 		public Object getItem(int pos) {
-			return 0;
-			//return weekDays.get(pos);
+			return null;
 		}
 
 		public long getItemId(int pos) {
@@ -1141,7 +1217,6 @@ public class ScheduleFragment extends Fragment
 			else
 				convertView.setBackgroundResource(R.drawable.listselector_light);
 
-			/* TODO FIXME */
 			if (day.today) {
 				dayTV.setTypeface(Typeface.DEFAULT_BOLD);
 				dateTV.setTypeface(Typeface.DEFAULT_BOLD);

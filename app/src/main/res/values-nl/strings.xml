@@ -48,6 +48,8 @@
 	<string name="fulough">Verlof</string>
 	<string name="go_to">Ga naar</string>
 	<string name="homework">Huiswerk</string>
+	<string name="homework_floating">Zwevend huiswerk (beta)</string>
+	<string name="homework_floating_no">Geen zwevend huiswerk beschikbaar</string>
 	<string name="license">Licentie</string>
 	<string name="late">Te laat</string>
 	<string name="login">Inloggen</string>

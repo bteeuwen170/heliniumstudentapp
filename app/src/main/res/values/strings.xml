@@ -49,6 +49,8 @@
 	<string name="github" translatable="false">GitHub</string>
 	<string name="go_to">Go to</string>
 	<string name="homework">Homework</string>
+	<string name="homework_floating">Floating homework (beta)</string>
+	<string name="homework_floating_no">No floating homework available</string>
 	<string name="license">License</string>
 	<string name="late">Late</string>
 	<string name="login">Login</string>

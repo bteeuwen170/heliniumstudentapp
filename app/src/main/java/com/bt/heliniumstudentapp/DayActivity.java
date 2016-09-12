@@ -29,7 +29,6 @@ import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -44,9 +43,10 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.method.ScrollingMovementMethod;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -54,32 +54,74 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.lang.reflect.Array;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Objects;
 
 public class DayActivity extends AppCompatActivity {
-	private static final Integer[] schoolMinutes = new Integer[] {
-			495, 545, 595, 610, 660, 710, 740, 790, 840, 855, 905, 955,
-			545, 595, 610, 660, 710, 740, 790, 840, 855, 905, 955, 1005
+	private static final String[] school_hours = new String[]{
+		"8:15 - 9:05",
+		"9:05 - 9:55",
+		"10:10 - 11:00",
+		"11:00 - 11:50",
+		"12:20 - 13:10",
+		"13:10 - 14:00",
+		"14:15 - 15:05",
+		"15:05 - 15:55",
+		"15:55 - 16:45"
 	};
 
-	//private static final Integer[] homeworkMinutes = new Integer[] { 495, 545, 610, 660, 740, 790, 855, 905, 955 };
+	private static final Integer[] school_minutes = new Integer[] {
+		/* Start */
+		495,	/* 8:15 */
+		545,	/* 9:05 */
+
+		595,	/* 9:55 */
+
+		610,	/* 10:10 */
+		660,	/* 11:00 */
+
+		710,	/* 11:50 */
+
+		740,	/* 12:20 */
+		790,	/* 13:10 */
+
+		840,	/* 14:00 */
+
+		855,	/* 14:15 */
+		905,	/* 15:05 */
+
+		955,	/* 15:55 */
+
+
+		/* End */
+		545,	/* 9:05 */
+		595,	/* 9:55 */
+
+		610,	/* 10:10 */
+
+		660,	/* 11:00 */
+		710,	/* 11:50 */
+
+		740,	/* 12:20 */
+
+		790,	/* 13:10 */
+		840,	/* 14:00 */
+
+		855,	/* 14:15 */
+
+		905,	/* 15:05 */
+		955,	/* 15:55 */
+		1005	/* 16:45 */
+	};
 
 	private static ScheduleFragment.week schedule;
 
-	private static int lastPosition;
+	private static int lastPosition, currentTime;
 
-	private static int currentTime;
-
-	private static boolean compactView;
+	private static boolean compactView, hw_floating;
 
 	@SuppressWarnings("ConstantConditions")
 	@Override
@@ -111,29 +153,18 @@ public class DayActivity extends AppCompatActivity {
 		compactView =
 				PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_customization_compact", false);
 
-		MainActivity.setToolbarTitle(this, schedule.day_get(lastPosition + 2).day, schedule.day_get(lastPosition + 2).date);
+		MainActivity.setToolbarTitle(this,
+				schedule.day_get(lastPosition + 2).day, schedule.day_get(lastPosition + 2).date);
 
 		daysVP.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
 			@Override
 			public void onPageSelected(int position) {
-				/*GregorianCalendar chosenWeekDay = new GregorianCalendar(HeliniumStudentApp.LOCALE);
-				chosenWeekDay.set(Calendar.DAY_OF_WEEK, position + 2);
+				MainActivity.setToolbarTitle(DayActivity.this,
+						schedule.day_get(position + 2).day, schedule.day_get(position + 2).date);
 
-				GregorianCalendar chosenWeekDate = new GregorianCalendar(HeliniumStudentApp.LOCALE);
-				try {
-					chosenWeekDate.setTime(android.text.format.DateFormat.getDateFormat(getApplicationContext()).parse(getSupportActionBar().getSubtitle().toString()));
-
-					if (position > lastPosition) {
-						chosenWeekDate.add(Calendar.DATE, 1);
-					} else {
-						chosenWeekDate.add(Calendar.DATE, -1);
-					}
-				} catch (ParseException ignored) {}*/
-
-				MainActivity.setToolbarTitle(DayActivity.this, schedule.day_get(position + 2).day, schedule.day_get(position + 2).date);
-				/*MainActivity.setToolbarTitle(DayActivity.this, Character.toUpperCase(weekDay.charAt(0)) + weekDay.substring(1),
-						android.text.format.DateFormat.getDateFormat(getApplicationContext()).format(chosenWeekDate.getTime()));*/
+				hw_floating = (schedule.day_get(position + 2).floatings_get() != 0);
+				invalidateOptionsMenu();
 
 				lastPosition = position;
 			}
@@ -145,86 +176,6 @@ public class DayActivity extends AppCompatActivity {
 			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 		});
 	}
-
-	/*private static HashMap<Integer, HomeworkWrapper> parseHomework(Context dayContext) {
-		if (ScheduleFragment.homeworkJson != null) {
-			final HashMap<Integer, HomeworkWrapper> homeworkArray = new HashMap<>();
-
-			JSONObject json;
-			try {
-				json = (JSONObject) new JSONTokener(ScheduleFragment.homeworkJson).nextValue();
-
-				final JSONArray homeworkJson = json.getJSONArray("events");
-
-				for (int event = 0; event < homeworkJson.length(); event++) {
-					final JSONObject courseJson = homeworkJson.getJSONObject(event).getJSONObject("afspraakObject");
-
-					final GregorianCalendar startDate = new GregorianCalendar(TimeZone.getTimeZone("Europe/Amsterdam"), HeliniumStudentApp.LOCALE);
-					startDate.setTimeInMillis(homeworkJson.getJSONObject(event).getLong("start"));
-
-					final int dayOfWeek = startDate.get(Calendar.DAY_OF_WEEK);
-					final int hourOfDay = Arrays.asList(homeworkMinutes).indexOf(startDate.get(Calendar.HOUR_OF_DAY) * 60 + startDate.get(Calendar.MINUTE)) + 1;
-
-					String homework, absence;
-					homework = absence = null;
-					final StringBuilder options = new StringBuilder();
-
-					if (courseJson.has("huiswerk")) {
-						final JSONObject courseHomeworkJson = courseJson.getJSONObject("huiswerk");
-
-						homework = courseHomeworkJson.getString("omschrijving");
-
-						if (courseHomeworkJson.has("gemaakt"))
-							if (courseHomeworkJson.getBoolean("gemaakt"))
-								options.append("<done>");
-							else
-								options.append("<late>");
-
-						if (courseHomeworkJson.has("toets") && courseHomeworkJson.getBoolean("toets")) options.append("<test>");
-					}
-
-					if (courseJson.has("absentie")) {
-						final JSONObject courseAbsenceJson = courseJson.getJSONObject("absentie");
-
-						if (courseAbsenceJson.has("reden")) //TODO Does "reden" always have to be provided?
-							switch (courseAbsenceJson.getString("reden")) {
-								case "Schoolverlof":
-									absence = "[fulough]" + dayContext.getString(R.string.fulough);
-									break;
-								case "te laat-T":
-									absence = "[late]" + dayContext.getString(R.string.late);
-									break;
-								case "Ziek / medisch":
-									absence = "[medical]" + dayContext.getString(R.string.medical);
-									break;
-								case "Ongeoorloofd verzuim":
-									absence = "[truancy]" + dayContext.getString(R.string.truancy);
-									break;
-								default:
-									absence = "[late]" + dayContext.getString(R.string.late);
-							}
-					}
-
-					homeworkArray.put(dayOfWeek * 100 + hourOfDay, new HomeworkWrapper(homework, options.toString(), absence));
-				}
-
-				return homeworkArray;
-			} catch (JSONException  | NullPointerException e) { //TODO NullPointerException needed?
-				//FIXME Handle, neither floating nor normal homework?
-				//FIXME No homework this week or error? Probably error
-
-				return null;
-			}
-
-		try {
-			final JSONArray floatingHomework = json.getJSONArray("huiswerkEvents");
-		} catch (JSONException | NullPointerException e) {
-			//TODO <strike>No floating homework this week</strike> Probably never called, have a global JSON Exception handler...
-		}
-		} else {
-			return null;
-		}
-	}*/
 
 	private static class DaysAdapter extends FragmentPagerAdapter {
 		private static AppCompatActivity dayContext;
@@ -277,37 +228,40 @@ public class DayActivity extends AppCompatActivity {
 			hoursLV.setAdapter(hoursLVadapter);
 			hoursLVadapter.notifyDataSetChanged();
 
-			/*hoursLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-				final String[] hours = new String[]{ "8:15 - 9:05", "9:05 - 9:55", "10:10 - 11:00", "11:00 - 11:50", "12:20 - 13:10", "13:10 - 14:00", "14:15 - 15:05", "15:05 - 15:55", "15:55 - 16:45" };
+			hoursLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-				public void onItemClick(AdapterView<?> parent, View view, final int position, long id)
+				public void onItemClick(AdapterView<?> parent, View view, final int pos, long id)
 				{
-					final ScheduleFragment.week.day.hour hour_data = schedule.day_get(day + 2).hour_get(pos);
-					String course, classroom, teacher;
-					ScheduleFragment.week.day.hour.extra absence, homework;
-					int hour = hour_data.hour;
+					final AlertDialog.Builder dayDialogBuilder =
+							new AlertDialog.Builder(new ContextThemeWrapper(dayContext, MainActivity.themeDialog));
+					final View dayLayout = View.inflate(dayContext, R.layout.dialog_day, null);
 
+					final ScheduleFragment.week.day.hour hour_data =
+							schedule.day_get(getArguments().getInt("pos") + 2).hour_get(pos);
+					int hour;
+					String course, classroom, teacher, group;
+					ScheduleFragment.week.day.hour.extra absence, homework;
+
+					hour = hour_data.hour;
 					course = hour_data.course;
 					classroom = hour_data.classroom;
 					teacher = hour_data.teacher;
+					group = hour_data.group;
 					absence = hour_data.extra_get(ScheduleFragment.extra_i.ABSENCE.value());
 					homework = hour_data.extra_get(ScheduleFragment.extra_i.HOMEWORK.value());
 
-					final AlertDialog.Builder dayDialogBuilder =
-							new AlertDialog.Builder(new ContextThemeWrapper(dayContext, MainActivity.themeDialog));
-
-					final View dayLayout = View.inflate(dayContext, R.layout.dialog_day, null);
 					dayDialogBuilder.setView(dayLayout);
 
-					if (hour > 3)
+					if (hour > 3) {
 						if (hour < 6)
-							dayDialogBuilder.setTitle(hours[hour - 2]);
+							hour--;
 						else if (hour < 9)
-							dayDialogBuilder.setTitle(hours[hour - 3]);
+							hour -= 2;
 						else
-							dayDialogBuilder.setTitle(hours[hour - 4]);
-					else
-						dayDialogBuilder.setTitle(hours[hour - 1]);
+							hour -= 3;
+					}
+
+					dayDialogBuilder.setTitle(school_hours[hour - 1]);
 
 					dayDialogBuilder.setPositiveButton(android.R.string.ok, null);
 
@@ -326,13 +280,15 @@ public class DayActivity extends AppCompatActivity {
 					groupTV.setTextColor(textColor);
 
 					try {
-						courseTV.setText(getResources().getIdentifier(course, "string", dayContext.getPackageName()));
+						courseTV.setText(getResources().getIdentifier(course.replaceAll(" ", "_"), "string",
+								dayContext.getPackageName()));
 					} catch (Resources.NotFoundException e) {
 						courseTV.setText(course);
 					}
 
 					try {
-						teacherTV.setText(getString(getResources().getIdentifier(teacher, "string", dayContext.getPackageName())));
+						teacherTV.setText(getString(getResources().getIdentifier(teacher, "string",
+								dayContext.getPackageName())));
 					} catch (Resources.NotFoundException e) {
 						teacherTV.setText(teacher);
 					}
@@ -343,26 +299,31 @@ public class DayActivity extends AppCompatActivity {
 
 					groupTV.setText(group);
 
+					/* TODO Handle icons */
 					if (homework != null) {
 						dayLayout.findViewById(R.id.rl_hseperator3_dd).setVisibility(View.VISIBLE);
-						dayLayout.findViewById(R.id.v_hseperator3l_dd).setBackgroundResource(MainActivity.themeDividerColor);
-						dayLayout.findViewById(R.id.v_hseperator3r_dd).setBackgroundResource(MainActivity.themeDividerColor);
+						dayLayout.findViewById(R.id.v_hseperator3l_dd)
+								.setBackgroundResource(MainActivity.themeDividerColor);
+						dayLayout.findViewById(R.id.v_hseperator3r_dd)
+								.setBackgroundResource(MainActivity.themeDividerColor);
 
 						homeworkTV.setVisibility(View.VISIBLE);
 						homeworkTV.setMovementMethod(new ScrollingMovementMethod());
 						homeworkTV.setTextColor(textColor);
-						homeworkTV.setText(Html.fromHtml(homework.homework));
+						homeworkTV.setText(Html.fromHtml(homework.text));
 					}
 
 					if (absence != null) {
 						dayLayout.findViewById(R.id.rl_hseperator4_dd).setVisibility(View.VISIBLE);
-						dayLayout.findViewById(R.id.v_hseperator4l_dd).setBackgroundResource(MainActivity.themeDividerColor);
-						dayLayout.findViewById(R.id.v_hseperator4r_dd).setBackgroundResource(MainActivity.themeDividerColor);
+						dayLayout.findViewById(R.id.v_hseperator4l_dd)
+								.setBackgroundResource(MainActivity.themeDividerColor);
+						dayLayout.findViewById(R.id.v_hseperator4r_dd)
+								.setBackgroundResource(MainActivity.themeDividerColor);
 
 						absenceTV.setVisibility(View.VISIBLE);
 						absenceTV.setMovementMethod(new ScrollingMovementMethod());
 						absenceTV.setTextColor(textColor);
-						absenceTV.setText(Html.fromHtml(homework.absence.replaceFirst("\\[.*?\\]", "")));
+						absenceTV.setText(absence.text);
 					}
 
 					final AlertDialog dayDialog = dayDialogBuilder.create();
@@ -370,9 +331,10 @@ public class DayActivity extends AppCompatActivity {
 					dayDialog.setCanceledOnTouchOutside(true);
 					dayDialog.show();
 
-					dayDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(dayContext, MainActivity.accentSecondaryColor));
+					dayDialog.getButton(AlertDialog.BUTTON_POSITIVE)
+							.setTextColor(ContextCompat.getColor(dayContext, MainActivity.accentSecondaryColor));
 				}
-			});*/
+			});
 		}
 
 		@Override
@@ -390,7 +352,6 @@ public class DayActivity extends AppCompatActivity {
 		{
 			private ScheduleFragment.week schedule;
 			private int day;
-			//private boolean pbreak;
 
 			public DayAdapter(final ScheduleFragment.week schedule, final int day)
 			{
@@ -400,15 +361,12 @@ public class DayActivity extends AppCompatActivity {
 
 			public int getCount()
 			{
-				// TODO + 3
 				return schedule.day_get(day + 2).hours_get();
 			}
 
-			/* XXX ??? */
 			public Object getItem(int pos)
 			{
-				return 0;
-				//return hours.get(pos);
+				return null;
 			}
 
 			public long getItemId(int pos)
@@ -420,33 +378,19 @@ public class DayActivity extends AppCompatActivity {
 			{
 				final LayoutInflater inflater =
 						(LayoutInflater) dayContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
 				final ScheduleFragment.week.day.hour hour_data = schedule.day_get(day + 2).hour_get(pos);
-				String course, classroom, teacher;
-				ScheduleFragment.week.day.hour.extra absence, homework;
-				boolean current = false;
+				boolean current;
 				int hour = hour_data.hour;
 
-				course = hour_data.course;
-				classroom = hour_data.classroom;
-				teacher = hour_data.teacher;
-				absence = hour_data.extra_get(ScheduleFragment.extra_i.ABSENCE.value());
-				homework = hour_data.extra_get(ScheduleFragment.extra_i.HOMEWORK.value());
+				/* FIXME Inefficient */
+				current = ScheduleFragment.scheduleFocus ==
+						new GregorianCalendar(HeliniumStudentApp.LOCALE).get(Calendar.WEEK_OF_YEAR) &&
+						pos + 2 == new GregorianCalendar(HeliniumStudentApp.LOCALE).get(Calendar.DAY_OF_WEEK) &&
+						currentTime >= school_minutes[hour] &&
+						currentTime < school_minutes[hour + 13];
 
-				/*if (hour > 3) {
-					if (hour < 6)
-						hour--;
-					else if (hour < 9)
-						hour -= 2;
-					else
-						hour -= 3;
-				}*/
-
-				//if (hours.get(pos).get("now").equals("true"))
-				//	current = true; //TODO Put everything in parser
-
-				/*if (pbreak) {
-					pbreak = false;
-				} else if (hour == 3 || hour == 6 || hour == 9) {
+				if (hour == 3 || hour == 6 || hour == 9) {
 					if (compactView)
 						convertView = inflater.inflate(R.layout.listitem_day_divider_compact, viewGroup, false);
 					else
@@ -462,11 +406,17 @@ public class DayActivity extends AppCompatActivity {
 					convertView.setEnabled(false);
 					convertView.setOnClickListener(null);
 
-					pbreak = true;
-					k--;
-
 					return convertView;
-				}*/
+				}
+
+				if (hour > 3) {
+					if (hour < 6)
+						hour--;
+					else if (hour < 9)
+						hour -= 2;
+					else
+						hour -= 3;
+				}
 
 				if (compactView)
 					convertView = inflater.inflate(R.layout.listitem_day_compact, viewGroup, false);
@@ -488,118 +438,161 @@ public class DayActivity extends AppCompatActivity {
 
 				hourTV.setText(String.valueOf(hour));
 
-				if (course == null) {
+				if (hour_data.course == null) {
 					convertView.setEnabled(false);
 					convertView.setOnClickListener(null);
 
 					if (current)
 						hourTV.setTypeface(Typeface.DEFAULT_BOLD);
+
+					return convertView;
+				}
+
+				courseTV.setTextColor(ContextCompat.getColor(dayContext, MainActivity.themePrimaryTextColor));
+				ctTV.setTextColor(ContextCompat.getColor(dayContext, MainActivity.themePrimaryTextColor));
+
+				if (current) {
+					hourTV.setTypeface(Typeface.DEFAULT_BOLD);
+					courseTV.setTypeface(Typeface.DEFAULT_BOLD);
+					ctTV.setTypeface(Typeface.DEFAULT_BOLD);
+				}
+
+				try {
+					courseTV.setText(
+							getString(getResources().getIdentifier(hour_data.course.replaceAll(" ", "_"), "string",
+							dayContext.getPackageName())));
+				} catch (Resources.NotFoundException e) {
+					courseTV.setText(hour_data.course);
+				}
+
+				Spannable ct;
+				try {
+					ct = new SpannableString(Html.fromHtml(hour_data.classroom + " &ndash; " + getString(
+							getResources().getIdentifier(hour_data.teacher, "string", dayContext.getPackageName()))));
+				} catch (Resources.NotFoundException e) {
+					ct = new SpannableString(Html.fromHtml(hour_data.classroom + " &ndash; " + hour_data.teacher));
+				}
+
+				ct.setSpan(new ForegroundColorSpan(ContextCompat.getColor(dayContext,
+						MainActivity.themeSecondaryTextColor)), hour_data.classroom.length(), ct.length(),
+						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				ctTV.setText(ct);
+
+				final ImageView homeworkIV = (ImageView) convertView.findViewById(R.id.iv_hw_ld);
+				ImageView absenceIV;
+
+				homeworkIV.setColorFilter(ContextCompat.getColor(dayContext, MainActivity.themePrimaryTextColor),
+						PorterDuff.Mode.SRC_ATOP);
+
+				if (hour_data.extra_get(ScheduleFragment.extra_i.HOMEWORK.value()) == null) {
+					absenceIV = homeworkIV;
 				} else {
-					courseTV.setTextColor(ContextCompat.getColor(dayContext, MainActivity.themePrimaryTextColor));
-					ctTV.setTextColor(ContextCompat.getColor(dayContext, MainActivity.themePrimaryTextColor));
-
-					if (current) {
-						hourTV.setTypeface(Typeface.DEFAULT_BOLD);
-						courseTV.setTypeface(Typeface.DEFAULT_BOLD);
-						ctTV.setTypeface(Typeface.DEFAULT_BOLD);
-					}
-
-					/* FIXME Broken */
-					try {
-						courseTV.setText(getString(getResources().getIdentifier(course.replaceAll(" ", "_"), "string",
-								dayContext.getPackageName())));
-					} catch (Resources.NotFoundException e) {
-						courseTV.setText(course);
-					}
-
-					Spannable ct;
-					try {
-						ct = new SpannableString(Html.fromHtml(classroom + " &ndash; " + getString(
-								getResources().getIdentifier(teacher, "string", dayContext.getPackageName()))));
-					} catch (Resources.NotFoundException e) {
-						ct = new SpannableString(Html.fromHtml(classroom + " &ndash; " + teacher));
-					}
-
-					ct.setSpan(new ForegroundColorSpan(ContextCompat.getColor(dayContext,
-							MainActivity.themeSecondaryTextColor)), classroom.length(), ct.length(),
-							Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-					ctTV.setText(ct);
-
-					final ImageView homeworkIV = (ImageView) convertView.findViewById(R.id.iv_hw_ld);
-					ImageView absenceIV;
-
-					homeworkIV.setColorFilter(ContextCompat.getColor(dayContext, MainActivity.themePrimaryTextColor),
-							PorterDuff.Mode.SRC_ATOP);
-
-					if (homework != null) {
 						/*
 						 * TODO Support for multiple icons at the same time,
 						 * TODO confirm is possible as well (e.g. Done test or Late test) ?
 						 */
-						switch (homework.type) {
-						case TEST:
-							homeworkIV.setImageDrawable(ContextCompat.getDrawable(dayContext,
-									R.drawable.ic_homework_test));
-							break;
-						case HOMEWORKDONE:
-							homeworkIV.setImageDrawable(ContextCompat.getDrawable(dayContext,
-									R.drawable.ic_homework_done));
-							break;
-						case HOMEWORKLATE:
-							homeworkIV.setImageDrawable(ContextCompat.getDrawable(dayContext,
-									R.drawable.ic_homework_late));
-							break;
-						case HOMEWORK:
-						default:
-							homeworkIV.setImageDrawable(ContextCompat.getDrawable(dayContext,
-									R.drawable.ic_homework));
-							break;
-						}
-
-						absenceIV = (ImageView) convertView.findViewById(R.id.iv_ab_ld);
-					} else {
-						absenceIV = homeworkIV;
+					switch (hour_data.extra_get(ScheduleFragment.extra_i.HOMEWORK.value()).type) {
+					case TEST:
+						homeworkIV.setImageDrawable(ContextCompat.getDrawable(dayContext, R.drawable.ic_homework_test));
+						break;
+					case HOMEWORKDONE:
+						homeworkIV.setImageDrawable(ContextCompat.getDrawable(dayContext, R.drawable.ic_homework_done));
+						break;
+					case HOMEWORKLATE:
+						homeworkIV.setImageDrawable(ContextCompat.getDrawable(dayContext, R.drawable.ic_homework_late));
+						break;
+					case HOMEWORK:
+					default:
+						homeworkIV.setImageDrawable(ContextCompat.getDrawable(dayContext, R.drawable.ic_homework));
+						break;
 					}
 
-					absenceIV.setColorFilter(ContextCompat.getColor(dayContext, MainActivity.themePrimaryTextColor),
-							PorterDuff.Mode.SRC_ATOP);
+					absenceIV = (ImageView) convertView.findViewById(R.id.iv_ab_ld);
+				}
 
-					if (absence != null) {
-						switch (absence.type) {
-							/* TODO Other icon */
-						case LATE:
-							absenceIV.setImageDrawable(ContextCompat.getDrawable(dayContext,
-									R.drawable.ic_absent));
-							break;
-						case FULOUGH:
-							absenceIV.setImageDrawable(ContextCompat.getDrawable(dayContext,
-									R.drawable.ic_absent_fulough));
-							break;
-						case MEDICAL:
-							absenceIV.setImageDrawable(ContextCompat.getDrawable(dayContext,
-									R.drawable.ic_absent_medical));
-							break;
-							/* TODO Other icon */
-						case TRUANCY:
-							absenceIV.setImageDrawable(ContextCompat.getDrawable(dayContext,
-									R.drawable.ic_absent));
-							break;
-							/* TODO New icon */
-						case REMOVED:
-							absenceIV.setImageDrawable(ContextCompat.getDrawable(dayContext,
-									R.drawable.ic_absent));
-							break;
-						case ABSENT:
-						default:
-							absenceIV.setImageDrawable(ContextCompat.getDrawable(dayContext,
-									R.drawable.ic_absent));
-							break;
-						}
+				absenceIV.setColorFilter(ContextCompat.getColor(dayContext, MainActivity.themePrimaryTextColor),
+						PorterDuff.Mode.SRC_ATOP);
+
+				if (hour_data.extra_get(ScheduleFragment.extra_i.ABSENCE.value()) != null) {
+					switch (hour_data.extra_get(ScheduleFragment.extra_i.ABSENCE.value()).type) {
+					case LATE:
+						absenceIV.setImageDrawable(ContextCompat.getDrawable(dayContext, R.drawable.ic_absent));
+						break;
+					case FULOUGH:
+						absenceIV.setImageDrawable(ContextCompat.getDrawable(dayContext, R.drawable.ic_absent_fulough));
+						break;
+					case MEDICAL:
+						absenceIV.setImageDrawable(ContextCompat.getDrawable(dayContext, R.drawable.ic_absent_medical));
+						break;
+					case TRUANCY:
+						absenceIV.setImageDrawable(ContextCompat.getDrawable(dayContext, R.drawable.ic_absent_truancy));
+						break;
+					case REMOVED:
+						absenceIV.setImageDrawable(ContextCompat.getDrawable(dayContext, R.drawable.ic_absent_removed));
+						break;
+					case ABSENT:
+					default:
+						absenceIV.setImageDrawable(ContextCompat.getDrawable(dayContext, R.drawable.ic_absent));
+						break;
 					}
 				}
 
 				return convertView;
 			}
 		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		if (hw_floating) {
+			getMenuInflater().inflate(R.menu.menu_day, menu);
+
+			return true;
+		}
+
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() != R.id.i_hwfloating_md)
+			return super.onOptionsItemSelected(item);
+
+		final ScheduleFragment.week.day day_data = schedule.day_get(lastPosition + 2);
+
+		if (day_data.floatings_get() == 0) {
+			Toast.makeText(this, getString(R.string.homework_floating_no), Toast.LENGTH_SHORT).show();
+			return true;
+		}
+
+		final AlertDialog.Builder hwf_dialog_builder =
+				new AlertDialog.Builder(new ContextThemeWrapper(this, MainActivity.themeDialog));
+		AlertDialog hwf_dialog;
+		StringBuilder s;
+		int i;
+
+		hwf_dialog_builder.setTitle(getString(R.string.homework_floating));
+
+		hwf_dialog_builder.setPositiveButton(android.R.string.ok, null);
+
+		s = new StringBuilder();
+		for (i = 0; i < day_data.floatings_get(); i++) {
+			s.append(day_data.floating_get(i).course);
+			s.append("\n");
+			s.append(Html.fromHtml(day_data.floating_get(i).text));
+		}
+
+		hwf_dialog_builder.setMessage(s.toString());
+
+		hwf_dialog = hwf_dialog_builder.create();
+
+		hwf_dialog.setCanceledOnTouchOutside(true);
+		hwf_dialog.show();
+
+		hwf_dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+				.setTextColor(ContextCompat.getColor(this, MainActivity.accentSecondaryColor));
+
+		return true;
 	}
 }
