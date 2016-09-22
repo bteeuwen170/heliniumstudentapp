@@ -27,8 +27,6 @@ import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.widget.RelativeLayout;
 
@@ -87,7 +85,7 @@ public class HeliniumStudentApp extends Application
 	protected static final String URL_GRADES = "https://leerlingen.helinium.nl/Portaal/Cijfers?wis_ajax&ajax_object=291&startdate=";
 	protected static final String URL_UPDATE_CHANGELOG = "https://dl.dropboxusercontent.com/u/9920547/BT/heliniumstudentapp/changelog";
 	protected static final String URL_UPDATE_RELEASE = "https://dl.dropboxusercontent.com/u/9920547/BT/heliniumstudentapp/bin/app-release.apk";
-	protected static final String URL_EMAIL = "bastiaan.teeuwen170@gmail.com";
+	protected static final String URL_WEBSITE = "https://teeuwen.github.io/";
 	protected static final String URL_GITHUB = "https://github.com/bteeuwen170/heliniumstudentapp";
 
 	protected static SimpleDateFormat df_homework()

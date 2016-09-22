@@ -24,15 +24,15 @@
 apply plugin: 'com.android.application'
 
 android {
-	buildToolsVersion "23.0.3"
-	compileSdkVersion 23
+	buildToolsVersion "24.0.2"
+	compileSdkVersion 24
 
 	defaultConfig {
 		applicationId "com.bt.heliniumstudentapp"
-		versionName "6.0.0 beta"
+		versionName "6.0.0"
 		versionCode 600
 		minSdkVersion 14
-		targetSdkVersion 23
+		targetSdkVersion 24
 	}
 
 	buildTypes {
@@ -45,9 +45,8 @@ android {
 }
 
 dependencies {
-	//This is just temporarily because > 23.0.1 _STILL_ has a bug with the navigation drawer
 	compile fileTree(include: ['*.jar'], dir: 'libs')
-	compile 'com.android.support:appcompat-v7:23.0.1'
-	compile 'com.android.support:support-v4:23.0.1'
-	compile 'com.android.support:design:23.0.1'
+	compile 'com.android.support:appcompat-v7:24.2.1'
+	compile 'com.android.support:support-v4:24.2.1'
+	compile 'com.android.support:design:24.2.1'
 }

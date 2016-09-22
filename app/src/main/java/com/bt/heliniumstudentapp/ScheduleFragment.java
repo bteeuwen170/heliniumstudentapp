@@ -36,10 +36,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.internal.view.ContextThemeWrapper;
+import android.support.v7.view.ContextThemeWrapper;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -901,7 +900,7 @@ public class ScheduleFragment extends Fragment
 			JSONArray data;
 			final week schedule = new week();
 			final GregorianCalendar today = new GregorianCalendar(HeliniumStudentApp.LOCALE);
-			int i, j = 0, k = 0, l;
+			int i, j = 0, k = -1, l;
 
 			mainContext = ScheduleFragment.mainContext;
 			transition = (Integer) attrs[0];
@@ -928,6 +927,40 @@ public class ScheduleFragment extends Fragment
 					week.day day_p = schedule.day_get(day);
 
 					/* XXX This is a mess..... Clean it up */
+					if (day == k) {
+						for (l = 1; j + l < hour; l++) {
+							switch (j) {
+							case 2:
+								day_p.hour_add(-3, null, null, null, null);
+								break;
+							case 4:
+								day_p.hour_add(-6, null, null, null, null);
+								break;
+							case 6:
+								day_p.hour_add(-9, null, null, null, null);
+								break;
+							}
+
+							day_p.hour_add(j + l, null, null, null, null);
+
+							j++;
+						}
+
+						if (hour > j) {
+							switch (j) {
+							case 2:
+								day_p.hour_add(-3, null, null, null, null);
+								break;
+							case 4:
+								day_p.hour_add(-6, null, null, null, null);
+								break;
+							case 6:
+								day_p.hour_add(-9, null, null, null, null);
+								break;
+							}
+						}
+					}
+
 					if (day_p == null) {
 						day_p = schedule.day_add(day);
 						k = day;
@@ -936,40 +969,6 @@ public class ScheduleFragment extends Fragment
 							day_p.hour_add(l, null, null, null, null);
 
 							switch (l) {
-							case 2:
-								day_p.hour_add(-3, null, null, null, null);
-								break;
-							case 4:
-								day_p.hour_add(-6, null, null, null, null);
-								break;
-							case 6:
-								day_p.hour_add(-9, null, null, null, null);
-								break;
-							}
-						}
-						j = l - 1;
-					}
-
-					if (day == k) {
-						for (l = 1; j + l < hour; l++) {
-							day_p.hour_add(j + l, null, null, null, null);
-
-							switch (j + l) {
-							case 2:
-								day_p.hour_add(-3, null, null, null, null);
-								break;
-							case 4:
-								day_p.hour_add(-6, null, null, null, null);
-								break;
-							case 6:
-								day_p.hour_add(-9, null, null, null, null);
-								break;
-							}
-						}
-						j += l - 1;
-
-						if (hour > j) {
-							switch (j) {
 							case 2:
 								day_p.hour_add(-3, null, null, null, null);
 								break;
@@ -1148,8 +1147,8 @@ public class ScheduleFragment extends Fragment
 			((TextView) mainContext.findViewById(R.id.tv_class_hd)).setText((nameHtml.substring(nameHtml.indexOf("(") + 1, nameHtml.indexOf(")")) +
 					(PreferenceManager.getDefaultSharedPreferences(mainContext).getString("pref_general_class", "0").equals("0") ? "" :
 							" (" + mainContext.getString(R.string.general_class) + ' ' + PreferenceManager.getDefaultSharedPreferences(mainContext).getString("pref_general_class", "") + ')')));*/
-			((TextView) mainContext.findViewById(R.id.tv_name_hd)).setText("Name temp. unavail.");
-			((TextView) mainContext.findViewById(R.id.tv_class_hd)).setText("Class temp. unavail.");
+			//((TextView) mainContext.findViewById(R.id.tv_name_hd)).setText("Name unavail.");
+			//((TextView) mainContext.findViewById(R.id.tv_class_hd)).setText("Class unavail.");
 
 			weekDaysLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 

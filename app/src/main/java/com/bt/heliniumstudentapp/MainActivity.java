@@ -55,7 +55,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.internal.view.ContextThemeWrapper;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -200,15 +200,17 @@ public class MainActivity extends AppCompatActivity {
 			drawerNV.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
 				@Override
-				public boolean onNavigationItemSelected(final MenuItem menuItem) {
+				public boolean onNavigationItemSelected(@NonNull final MenuItem menuItem) {
 					drawerDL.closeDrawers();
-					menuItem.setChecked(true);
+
 					new Handler().postDelayed(new Runnable() {
 
 						@Override
 						public void run() {
 							switch (menuItem.getItemId()) {
 								case R.id.i_schedule_md:
+									menuItem.setChecked(true);
+
 									if (!FM.findFragmentById(R.id.fl_container_am).getTag().equals("SCHEDULE")) {
 										weekTV.setText("");
 										yearTV.setText("");
@@ -221,6 +223,8 @@ public class MainActivity extends AppCompatActivity {
 									}
 									break;
 								case R.id.i_grades_md:
+									menuItem.setChecked(true);
+
 									if (!FM.findFragmentById(R.id.fl_container_am).getTag().equals("GRADES")) {
 										weekTV.setText("");
 										yearTV.setText("");
@@ -306,24 +310,21 @@ public class MainActivity extends AppCompatActivity {
 											"along with this program; if not, write to the Free Software " +
 											"Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.");
 
-									aboutDialogBuilder.setNeutralButton(R.string.email, new DialogInterface.OnClickListener() {
+									aboutDialogBuilder.setNeutralButton(R.string.website,
+											new DialogInterface.OnClickListener() {
 
 										@Override
 										public void onClick(DialogInterface dialog, int which) {
 											try {
-												Intent email = new Intent(Intent.ACTION_SENDTO);
-												email.setType("text/plain");
-												email.setData(Uri.parse("mailto:" + HeliniumStudentApp.URL_EMAIL));
-												email.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.app_name));
-												email.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-												startActivity(email);
+												startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(HeliniumStudentApp.URL_WEBSITE)));
 											} catch (ActivityNotFoundException e) {
-												Toast.makeText(mainContext, "Couldn't find an E-mail client", Toast.LENGTH_SHORT).show();
+												Toast.makeText(mainContext, "Couldn't find a browser", Toast.LENGTH_SHORT).show();
 											}
 										}
 									});
 
-									aboutDialogBuilder.setPositiveButton(R.string.github, new DialogInterface.OnClickListener() {
+									aboutDialogBuilder.setPositiveButton(R.string.github,
+											new DialogInterface.OnClickListener() {
 
 										@Override
 										public void onClick(DialogInterface dialog, int which) {
@@ -786,14 +787,15 @@ public class MainActivity extends AppCompatActivity {
 
 		try {
 			context.getSupportActionBar().setTitle(toolbarTitle);
-
-			if (subtitle != null) {
-				final Spannable toolbarSubtitle = new SpannableString(subtitle);
-				toolbarSubtitle.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, secondaryTextColor)), 0, toolbarSubtitle.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-				context.getSupportActionBar().setSubtitle(toolbarSubtitle);
-			}
 		} catch (NullPointerException e) {
-			//TODO Handle
+			return;
+		}
+
+		if (subtitle != null) {
+			final Spannable toolbarSubtitle = new SpannableString(subtitle);
+			toolbarSubtitle.setSpan(new ForegroundColorSpan(ContextCompat.getColor(context, secondaryTextColor)), 0,
+					toolbarSubtitle.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			context.getSupportActionBar().setSubtitle(toolbarSubtitle);
 		}
 	}
 
