@@ -156,7 +156,8 @@ public class DayActivity extends AppCompatActivity {
 		MainActivity.setToolbarTitle(this,
 				schedule.day_get(lastPosition + 2).day, schedule.day_get(lastPosition + 2).date);
 
-		daysVP.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+		daysVP.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
+		{
 
 			@Override
 			public void onPageSelected(int position) {
@@ -177,30 +178,36 @@ public class DayActivity extends AppCompatActivity {
 		});
 	}
 
-	private static class DaysAdapter extends FragmentPagerAdapter {
+	private static class DaysAdapter extends FragmentPagerAdapter
+	{
 		private static AppCompatActivity dayContext;
 
-		public DaysAdapter(AppCompatActivity dayContext, FragmentManager fragmentManager) {
+		public DaysAdapter(AppCompatActivity dayContext, FragmentManager fragmentManager)
+		{
 			super(fragmentManager);
 			DaysAdapter.dayContext = dayContext;
 		}
 
 		@Override
-		public int getCount() {
+		public int getCount()
+		{
 			return 5;
 		}
 
 		@Override
-		public Fragment getItem(int position) {
+		public Fragment getItem(int position)
+		{
 			return DayFragment.newInstance(dayContext, position);
 		}
 	}
 
-	public static class DayFragment extends Fragment {
+	public static class DayFragment extends Fragment
+	{
 		private static AppCompatActivity dayContext;
 		private ListView hoursLV;
 
-		private static DayFragment newInstance(AppCompatActivity dayContext, int pos) {
+		private static DayFragment newInstance(AppCompatActivity dayContext, int pos)
+		{
 			final DayFragment dayFragment = new DayFragment();
 			DayFragment.dayContext = dayContext;
 
@@ -212,7 +219,8 @@ public class DayActivity extends AppCompatActivity {
 		}
 
 		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState) {
+		public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState)
+		{
 			final View dayLayout = inflater.inflate(R.layout.fragment_day, viewGroup, false);
 
 			hoursLV = (ListView) dayLayout.findViewById(R.id.lv_hours_fd);
@@ -228,7 +236,8 @@ public class DayActivity extends AppCompatActivity {
 			hoursLV.setAdapter(hoursLVadapter);
 			hoursLVadapter.notifyDataSetChanged();
 
-			hoursLV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			hoursLV.setOnItemClickListener(new AdapterView.OnItemClickListener()
+			{
 
 				public void onItemClick(AdapterView<?> parent, View view, final int pos, long id)
 				{
@@ -386,9 +395,9 @@ public class DayActivity extends AppCompatActivity {
 				/* FIXME Inefficient */
 				current = ScheduleFragment.scheduleFocus ==
 						new GregorianCalendar(HeliniumStudentApp.LOCALE).get(Calendar.WEEK_OF_YEAR) &&
-						pos + 2 == new GregorianCalendar(HeliniumStudentApp.LOCALE).get(Calendar.DAY_OF_WEEK) &&
-						currentTime >= school_minutes[hour] &&
-						currentTime < school_minutes[hour + 13];
+						day + 2 == new GregorianCalendar(HeliniumStudentApp.LOCALE).get(Calendar.DAY_OF_WEEK) &&
+						currentTime >= school_minutes[hour - 1] &&
+						currentTime < school_minutes[hour + 11];
 
 				if (hour == 3 || hour == 6 || hour == 9) {
 					if (compactView)
@@ -487,10 +496,10 @@ public class DayActivity extends AppCompatActivity {
 				if (hour_data.extra_get(ScheduleFragment.extra_i.HOMEWORK.value()) == null) {
 					absenceIV = homeworkIV;
 				} else {
-						/*
-						 * TODO Support for multiple icons at the same time,
-						 * TODO confirm is possible as well (e.g. Done test or Late test) ?
-						 */
+					/*
+					 * TODO Support for multiple icons at the same time,
+					 * TODO confirm is possible as well (e.g. Done test or Late test) ?
+					 */
 					switch (hour_data.extra_get(ScheduleFragment.extra_i.HOMEWORK.value()).type) {
 					case TEST:
 						homeworkIV.setImageDrawable(ContextCompat.getDrawable(dayContext, R.drawable.ic_homework_test));

@@ -929,7 +929,7 @@ public class ScheduleFragment extends Fragment
 					/* XXX This is a mess..... Clean it up */
 					if (day == k) {
 						for (l = 1; j + l < hour; l++) {
-							switch (j) {
+							switch (j + l - 1) {
 							case 2:
 								day_p.hour_add(-3, null, null, null, null);
 								break;
@@ -942,9 +942,9 @@ public class ScheduleFragment extends Fragment
 							}
 
 							day_p.hour_add(j + l, null, null, null, null);
-
-							j++;
 						}
+
+						j += l - 1;
 
 						if (hour > j) {
 							switch (j) {
@@ -965,21 +965,8 @@ public class ScheduleFragment extends Fragment
 						day_p = schedule.day_add(day);
 						k = day;
 
-						for (l = 1; l < hour; l++) {
+						for (l = 1; l < hour; l++)
 							day_p.hour_add(l, null, null, null, null);
-
-							switch (l) {
-							case 2:
-								day_p.hour_add(-3, null, null, null, null);
-								break;
-							case 4:
-								day_p.hour_add(-6, null, null, null, null);
-								break;
-							case 6:
-								day_p.hour_add(-9, null, null, null, null);
-								break;
-							}
-						}
 					}
 
 					final week.day.hour hour_p =
