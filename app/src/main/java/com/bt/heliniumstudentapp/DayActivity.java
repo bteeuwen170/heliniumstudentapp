@@ -153,8 +153,8 @@ public class DayActivity extends AppCompatActivity {
 		compactView =
 				PreferenceManager.getDefaultSharedPreferences(this).getBoolean("pref_customization_compact", false);
 
-		MainActivity.setToolbarTitle(this,
-				schedule.day_get(lastPosition + 2).day, schedule.day_get(lastPosition + 2).date);
+		MainActivity.setToolbarTitle(this, schedule.day_get(schedule.day_get_index(lastPosition) + 2).day,
+				schedule.day_get(schedule.day_get_index(lastPosition) + 2).date);
 
 		daysVP.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
 		{
@@ -162,9 +162,10 @@ public class DayActivity extends AppCompatActivity {
 			@Override
 			public void onPageSelected(int position) {
 				MainActivity.setToolbarTitle(DayActivity.this,
-						schedule.day_get(position + 2).day, schedule.day_get(position + 2).date);
+						schedule.day_get(schedule.day_get_index(position) + 2).day,
+						schedule.day_get(schedule.day_get_index(position) + 2).date);
 
-				hw_floating = (schedule.day_get(position + 2).floatings_get() != 0);
+				hw_floating = (schedule.day_get(schedule.day_get_index(position) + 2).floatings_get() != 0);
 				invalidateOptionsMenu();
 
 				lastPosition = position;
@@ -191,7 +192,7 @@ public class DayActivity extends AppCompatActivity {
 		@Override
 		public int getCount()
 		{
-			return 5;
+			return schedule.days_get();
 		}
 
 		@Override
@@ -246,7 +247,7 @@ public class DayActivity extends AppCompatActivity {
 					final View dayLayout = View.inflate(dayContext, R.layout.dialog_day, null);
 
 					final ScheduleFragment.week.day.hour hour_data =
-							schedule.day_get(getArguments().getInt("pos") + 2).hour_get(pos);
+							schedule.day_get(schedule.day_get_index(getArguments().getInt("pos")) + 2).hour_get(pos);
 					int hour;
 					String course, classroom, teacher, group;
 					ScheduleFragment.week.day.hour.extra absence, homework;
@@ -370,7 +371,7 @@ public class DayActivity extends AppCompatActivity {
 
 			public int getCount()
 			{
-				return schedule.day_get(day + 2).hours_get();
+				return schedule.day_get(schedule.day_get_index(day) + 2).hours_get();
 			}
 
 			public Object getItem(int pos)
@@ -388,7 +389,8 @@ public class DayActivity extends AppCompatActivity {
 				final LayoutInflater inflater =
 						(LayoutInflater) dayContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-				final ScheduleFragment.week.day.hour hour_data = schedule.day_get(day + 2).hour_get(pos);
+				final ScheduleFragment.week.day.hour hour_data =
+						schedule.day_get(schedule.day_get_index(day) + 2).hour_get(pos);
 				boolean current;
 				int hour = hour_data.hour;
 
@@ -568,7 +570,7 @@ public class DayActivity extends AppCompatActivity {
 		if (item.getItemId() != R.id.i_hwfloating_md)
 			return super.onOptionsItemSelected(item);
 
-		final ScheduleFragment.week.day day_data = schedule.day_get(lastPosition + 2);
+		final ScheduleFragment.week.day day_data = schedule.day_get(schedule.day_get_index(lastPosition) + 2);
 
 		if (day_data.floatings_get() == 0) {
 			Toast.makeText(this, getString(R.string.homework_floating_no), Toast.LENGTH_SHORT).show();

@@ -131,7 +131,7 @@ public class ScheduleFragment extends Fragment
 			return days[n - 2];
 		}
 
-		private int day_get_index(final int n)
+		protected int day_get_index(final int n)
 		{
 			final ArrayList<Integer> t = new ArrayList<>();
 			int i;
@@ -143,7 +143,7 @@ public class ScheduleFragment extends Fragment
 			return t.get(n);
 		}
 
-		private int days_get()
+		protected int days_get()
 		{
 			int i, n = 0;
 
@@ -156,7 +156,13 @@ public class ScheduleFragment extends Fragment
 
 		private String footer_get()
 		{
-			return mainContext.getString(R.string.updated_last) + ' ' + footer + ' ' + mainContext.getString(R.string.ago);
+			GregorianCalendar today = new GregorianCalendar(HeliniumStudentApp.LOCALE);
+
+			if (scheduleFocus == today.get(Calendar.WEEK_OF_YEAR) ||
+					scheduleFocus == today.get(Calendar.WEEK_OF_YEAR) + 1)
+				return mainContext.getString(R.string.updated_last) + ' ' + footer + ' ' + mainContext.getString(R.string.ago);
+
+			return "";
 		}
 
 		protected class day implements Serializable
@@ -1064,24 +1070,21 @@ public class ScheduleFragment extends Fragment
 			/* FIXME Returns wrong results */
 			/* TODO Run at interval? */
 			/* TODO What about leap years or daylight saving? */
-			//if (scheduleFocus == today.get(Calendar.WEEK_OF_YEAR) ||
-			//		scheduleFocus == today.get(Calendar.WEEK_OF_YEAR) + 1)
-			if (scheduleFocus != today.get(Calendar.WEEK_OF_YEAR))
-				return schedule;
 
 			final SimpleDateFormat format = HeliniumStudentApp.df_save();
+			long td;
 
 			try {
-				long td;
-
 				if (scheduleFocus == today.get(Calendar.WEEK_OF_YEAR))
 					td = System.currentTimeMillis() - format.parse(PreferenceManager
 							.getDefaultSharedPreferences(mainContext)
 							.getString("pref_schedule_version_0", "")).getTime();
-				else
+				else if (scheduleFocus == today.get(Calendar.WEEK_OF_YEAR) + 1)
 					td = System.currentTimeMillis() - format.parse(PreferenceManager
 							.getDefaultSharedPreferences(mainContext)
 							.getString("pref_schedule_version_1", "")).getTime();
+				else
+					return schedule;
 
 				final long minutes = td / (60 * 1000) % 60;
 				final long hours = td / (60 * 60 * 1000) % 24;
@@ -1175,7 +1178,7 @@ public class ScheduleFragment extends Fragment
 		}
 
 		public long getItemId(int pos) {
-			return schedule.day_get_index(pos);
+			return pos;
 		}
 
 		public View getView(int pos, View convertView, ViewGroup viewGroup) {

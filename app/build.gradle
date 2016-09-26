@@ -29,8 +29,8 @@ android {
 
 	defaultConfig {
 		applicationId "com.bt.heliniumstudentapp"
-		versionName "6.0.0"
-		versionCode 600
+		versionName "6.0.1"
+		versionCode 601
 		minSdkVersion 14
 		targetSdkVersion 24
 	}

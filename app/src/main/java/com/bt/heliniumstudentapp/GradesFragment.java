@@ -44,7 +44,6 @@ import android.support.v7.view.ContextThemeWrapper;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -514,7 +513,6 @@ public class GradesFragment extends Fragment {
 			if (MainActivity.cookies == null) {
 				return HeliniumStudentApp.ERR_LOGIN;
 			} else {
-				Log.v("url", url);
 				try {
 					final URLConnection connection = new URL(url).openConnection();
 
