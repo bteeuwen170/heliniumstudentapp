@@ -88,15 +88,6 @@ public class GradesFragment extends Fragment {
 	private static final String GR_GRADE_BUBBLE	= "<td><strong>Deelcijfer</strong></td><td>:</td><td><strong>";
 	private static final String GR_GRADE_END	= "</strong>" + GR_END;
 
-	/* Types */
-	private static final String TT_AVERAGE		= "Berekend rapportcijfer";
-	private static final String TT_ADVICE		= "Advies";
-
-	private static final String TT_TT			= "Theoretische toets";
-	private static final String TT_SO			= "schriftelijke overhoring";
-	private static final String TT_REP			= "repetitie";
-	private static final String TT_PRAC			= "practikum";
-	private static final String TT_PA			= "Praktische opdracht";
 	private static final String GR_AVERAGE		= "<tr><td>Toetssoort</u></td><td>:</td><td>Berekend rapportcijfer</td></tr>";
 
 	private static final String GR_ADVICE		= "<tr><td>Toetssoort</u></td><td>:</td><td>Advies</td></tr>";
@@ -242,25 +233,25 @@ public class GradesFragment extends Fragment {
 						startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/dQw4w9WgXcQ")));
 					} else {
 						switch (clickCount) {
-							case 2:
-								Toast.makeText(mainContext, "Good for you!", Toast.LENGTH_SHORT).show();
-								break;
-							case 10:
-								Toast.makeText(mainContext, "You're really proud of that, aren't you?",
-										Toast.LENGTH_SHORT).show();
-								break;
-							case 20:
-								Toast.makeText(mainContext, "It's really not that big of a deal...",
-										Toast.LENGTH_SHORT).show();
-								break;
-							case 40:
-								Toast.makeText(mainContext, "You can stop now.", Toast.LENGTH_SHORT).show();
-								break;
-							case 50:
-								Toast.makeText(mainContext, "Please...", Toast.LENGTH_SHORT).show();
-							case 60:
-								Toast.makeText(mainContext, "F* OFF!", Toast.LENGTH_SHORT).show();
-								break;
+						case 2:
+							Toast.makeText(mainContext, "Good for you!", Toast.LENGTH_SHORT).show();
+							break;
+						case 10:
+							Toast.makeText(mainContext, "You're really proud of that, aren't you?",
+									Toast.LENGTH_SHORT).show();
+							break;
+						case 20:
+							Toast.makeText(mainContext, "It's really not that big of a deal...",
+									Toast.LENGTH_SHORT).show();
+							break;
+						case 40:
+							Toast.makeText(mainContext, "You can stop now.", Toast.LENGTH_SHORT).show();
+							break;
+						case 50:
+							Toast.makeText(mainContext, "Please...", Toast.LENGTH_SHORT).show();
+						case 60:
+							Toast.makeText(mainContext, "F* OFF!", Toast.LENGTH_SHORT).show();
+							break;
 						}
 					}
 
@@ -326,21 +317,21 @@ public class GradesFragment extends Fragment {
 							gradesDialogBuilder.setPositiveButton(android.R.string.ok,
 									new DialogInterface.OnClickListener() {
 
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									if (MainActivity.isOnline()) {
-										final int oldValue = yearFocus;
+										@Override
+										public void onClick(DialogInterface dialog, int which) {
+											if (MainActivity.isOnline()) {
+												final int oldValue = yearFocus;
 
-										yearFocus = yearNP.getValue() - maxYear;
-										getGrades(termFocus, HeliniumStudentApp.df_grades(yearFocus),
-												oldValue + HeliniumStudentApp.FOCUS_YEAR,
-												HeliniumStudentApp.ACTION_REFRESH_IN);
-									} else {
-										Toast.makeText(mainContext,
-												getString(R.string.error_conn_no), Toast.LENGTH_SHORT).show();
-									}
-								}
-							});
+												yearFocus = yearNP.getValue() - maxYear;
+												getGrades(termFocus, HeliniumStudentApp.df_grades(yearFocus),
+														oldValue + HeliniumStudentApp.FOCUS_YEAR,
+														HeliniumStudentApp.ACTION_REFRESH_IN);
+											} else {
+												Toast.makeText(mainContext,
+														getString(R.string.error_conn_no), Toast.LENGTH_SHORT).show();
+											}
+										}
+									});
 
 							yearNP.setMinValue(1);
 							yearNP.setMaxValue(maxYear);
@@ -456,8 +447,8 @@ public class GradesFragment extends Fragment {
 					MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, HeliniumStudentApp.ACTION_ONLINE);
 				else
 					MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, HeliniumStudentApp.ACTION_OFFLINE);
-		else
-			init = true;
+			else
+				init = true;
 	}
 
 	private void refresh() {
@@ -564,39 +555,39 @@ public class GradesFragment extends Fragment {
 		@Override
 		protected void onPostExecute(Integer returnCode) {
 			switch (returnCode) {
-				case HeliniumStudentApp.ERR_LOGIN:
-					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-						new MainActivity.GetLoginCookie().execute(
-								HeliniumStudentApp.VIEW_GRADES, url, direction, transition);
-					else
-						new MainActivity.GetLoginCookie().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-								HeliniumStudentApp.VIEW_GRADES, url, direction, transition);
-					break;
-				case HeliniumStudentApp.ERR_RETRY:
-					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
-						new GetGradesData().execute(url, direction, transition);
-					else
-						new GetGradesData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-								url, direction, transition);
-					break;
-				case HeliniumStudentApp.ERR_OK:
-				case HeliniumStudentApp.ERR_UNDEFINED:
-					MainActivity.recoverError(HeliniumStudentApp.VIEW_GRADES, returnCode, direction, transition);
-					break;
-				case HeliniumStudentApp.OK:
-					gradesHtml = html;
+			case HeliniumStudentApp.ERR_LOGIN:
+				if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
+					new MainActivity.GetLoginCookie().execute(
+							HeliniumStudentApp.VIEW_GRADES, url, direction, transition);
+				else
+					new MainActivity.GetLoginCookie().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+							HeliniumStudentApp.VIEW_GRADES, url, direction, transition);
+				break;
+			case HeliniumStudentApp.ERR_RETRY:
+				if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB)
+					new GetGradesData().execute(url, direction, transition);
+				else
+					new GetGradesData().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+							url, direction, transition);
+				break;
+			case HeliniumStudentApp.ERR_OK:
+			case HeliniumStudentApp.ERR_UNDEFINED:
+				MainActivity.recoverError(HeliniumStudentApp.VIEW_GRADES, returnCode, direction, transition);
+				break;
+			case HeliniumStudentApp.OK:
+				gradesHtml = html;
 
-					if (termFocus == Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(mainContext)
-							.getString("pref_grades_term", "1")) && yearFocus == 0) {
-						PreferenceManager.getDefaultSharedPreferences(mainContext).edit()
-								.putString("html_grades", html).apply();
-						PreferenceManager.getDefaultSharedPreferences(mainContext).edit()
-								.putString("pref_grades_version", HeliniumStudentApp.df_save()
-										.format(new Date())).apply();
-					}
+				if (termFocus == Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(mainContext)
+						.getString("pref_grades_term", "1")) && yearFocus == 0) {
+					PreferenceManager.getDefaultSharedPreferences(mainContext).edit()
+							.putString("html_grades", html).apply();
+					PreferenceManager.getDefaultSharedPreferences(mainContext).edit()
+							.putString("pref_grades_version", HeliniumStudentApp.df_save()
+									.format(new Date())).apply();
+				}
 
-					parseData(transition);
-					break;
+				parseData(transition);
+				break;
 			}
 		}
 	}
@@ -833,7 +824,7 @@ public class GradesFragment extends Fragment {
 
 							averageCount++;
 							averageTotal += courseAverage;
-						//} else if (wp3GradeContainerHTML.contains("<tr><td>Toetssoort</u></td><td>:</td><td>Advies</td></tr>")) {
+							//} else if (wp3GradeContainerHTML.contains("<tr><td>Toetssoort</u></td><td>:</td><td>Advies</td></tr>")) {
 							//TODO Handle
 						} else if (!wp3GradeContainerHTML.contains(GR_ADVICE) &&
 								wp3GradeContainerHTML.contains(GR_RETRY)) {
@@ -856,7 +847,7 @@ public class GradesFragment extends Fragment {
 
 							courseArray[i][1] = "<sup><small>" + wp3WeightHTML.substring(0, wp3WeightHTML.indexOf(GR_END)) + "</font></small></sup>";
 							courseArray[i][2] = "<b>" + wp3CodeHTML.substring(0, wp3CodeHTML.indexOf(GR_END)) + "</b> - " + wp3DescHTML.substring(0, wp3DescHTML.indexOf(GR_END));
-						//} else {
+							//} else {
 							//TODO Handle any other possibilities
 						}
 					}
@@ -868,9 +859,9 @@ public class GradesFragment extends Fragment {
 					if (courseAverageRound.equals("S") || courseAverageRound.equals("O") || Integer.parseInt(courseAverageRound) < 6) {
 						gradesMap.add(new CourseWrapper(Html.fromHtml(course.substring(0, course.indexOf("</td>"))).toString().trim(), courseArray, "<font color='#F44336'>" + String.valueOf(courseAverage),
 								"<font color='#F44336'>" + courseAverageRound));
-					//} else if (Integer.parseInt(courseAverageRound) == 10) {
-					//	gradesMap.add(new CourseWrapper(Html.fromHtml(course.substring(0, course.indexOf("</td>"))).toString().trim(), courseArray, "<font color='#00B200'>" + String.valueOf(courseAverage),
-					//			"<font color='#00B200'>" + courseAverageRound));
+						//} else if (Integer.parseInt(courseAverageRound) == 10) {
+						//	gradesMap.add(new CourseWrapper(Html.fromHtml(course.substring(0, course.indexOf("</td>"))).toString().trim(), courseArray, "<font color='#00B200'>" + String.valueOf(courseAverage),
+						//			"<font color='#00B200'>" + courseAverageRound));
 					} else {
 						gradesMap.add(new CourseWrapper(Html.fromHtml(course.substring(0, course.indexOf("</td>"))).toString().trim(),
 								courseArray, String.valueOf(courseAverage), courseAverageRound));
