@@ -665,7 +665,8 @@ public class ScheduleFragment extends Fragment
 					final int responseCode = ((HttpURLConnection) connection).getResponseCode();
 
 					/* XXX Room for improvement here */
-					if (responseCode == 201 || responseCode == 202)
+					/*if (json.contains("Er is een fout"))
+					else */if (responseCode == 201 || responseCode == 202)
 						return HeliniumStudentApp.ERR_RETRY;
 					else if (responseCode == 200)
 						//if (json.contains("null")) //TODO Enter
@@ -1071,37 +1072,37 @@ public class ScheduleFragment extends Fragment
 			final SimpleDateFormat format = HeliniumStudentApp.df_save();
 
 			try {
-				long timeDifference;
+				long td;
 
 				if (scheduleFocus == today.get(Calendar.WEEK_OF_YEAR))
-					timeDifference = System.currentTimeMillis() - format.parse(PreferenceManager
+					td = System.currentTimeMillis() - format.parse(PreferenceManager
 							.getDefaultSharedPreferences(mainContext)
 							.getString("pref_schedule_version_0", "")).getTime();
 				else
-					timeDifference = System.currentTimeMillis() - format.parse(PreferenceManager
+					td = System.currentTimeMillis() - format.parse(PreferenceManager
 							.getDefaultSharedPreferences(mainContext)
 							.getString("pref_schedule_version_1", "")).getTime();
 
-				final long minutes = timeDifference / (60 * 1000) % 60;
-				final long hours = timeDifference / (60 * 60 * 1000) % 24;
-				final long days = timeDifference / (24 * 60 * 60 * 1000);
+				final long minutes = td / (60 * 1000) % 60;
+				final long hours = td / (60 * 60 * 1000) % 24;
+				final long days = td / (24 * 60 * 60 * 1000);
 
 				if (days == 0) {
 					if (hours == 0) {
 						if (minutes == 1)
-							schedule.footer = minutes + ' ' + mainContext.getString(R.string.minute);
+							schedule.footer = minutes + " " + mainContext.getString(R.string.minute);
 						else
-							schedule.footer = minutes + ' ' + mainContext.getString(R.string.minutes);
+							schedule.footer = minutes + " " + mainContext.getString(R.string.minutes);
 					} else if (hours == 1) {
-						schedule.footer = hours + ' ' + mainContext.getString(R.string.hour);
+						schedule.footer = hours + " " + mainContext.getString(R.string.hour);
 					} else {
-						schedule.footer = hours + ' ' + mainContext.getString(R.string.hours);
+						schedule.footer = hours + " " + mainContext.getString(R.string.hours);
 					}
 				} else {
 					if (days == 1)
-						schedule.footer = days + ' ' + mainContext.getString(R.string.day);
+						schedule.footer = days + " " + mainContext.getString(R.string.day);
 					else
-						schedule.footer = days + ' ' + mainContext.getString(R.string.days);
+						schedule.footer = days + " " + mainContext.getString(R.string.days);
 				}
 			} catch (ParseException ignored) {}
 
@@ -1130,10 +1131,15 @@ public class ScheduleFragment extends Fragment
 
 			/*String nameHtml = scheduleJson; //TODO Implement differently
 			nameHtml = nameHtml.substring(nameHtml.indexOf("Rooster van "));
-			((TextView) mainContext.findViewById(R.id.tv_name_hd)).setText((nameHtml.substring(12, nameHtml.indexOf(" ("))));
-			((TextView) mainContext.findViewById(R.id.tv_class_hd)).setText((nameHtml.substring(nameHtml.indexOf("(") + 1, nameHtml.indexOf(")")) +
-					(PreferenceManager.getDefaultSharedPreferences(mainContext).getString("pref_general_class", "0").equals("0") ? "" :
-							" (" + mainContext.getString(R.string.general_class) + ' ' + PreferenceManager.getDefaultSharedPreferences(mainContext).getString("pref_general_class", "") + ')')));*/
+			((TextView) mainContext.findViewById(R.id.tv_name_hd))
+					.setText((nameHtml.substring(12, nameHtml.indexOf(" ("))));
+			((TextView) mainContext.findViewById(R.id.tv_class_hd))
+					.setText((nameHtml.substring(nameHtml.indexOf("(") + 1, nameHtml.indexOf(")")) +
+					(PreferenceManager.getDefaultSharedPreferences(mainContext)
+					.getString("pref_general_class", "0").equals("0") ? "" :
+					" (" + mainContext.getString(R.string.general_class) + ' ' +
+					PreferenceManager.getDefaultSharedPreferences(mainContext).getString("pref_general_class", "") +
+					')')));*/
 			//((TextView) mainContext.findViewById(R.id.tv_name_hd)).setText("Name unavail.");
 			//((TextView) mainContext.findViewById(R.id.tv_class_hd)).setText("Class unavail.");
 
@@ -1161,7 +1167,7 @@ public class ScheduleFragment extends Fragment
 		}
 
 		public int getCount() {
-			return schedule.days_get();
+			return schedule.days_get() + 1;
 		}
 
 		public Object getItem(int pos) {
@@ -1178,7 +1184,7 @@ public class ScheduleFragment extends Fragment
 			week.day day;
 			TextView averageTV, dayTV, dateTV;
 
-			if (pos == getCount()) {
+			if (pos == getCount() - 1) {
 				convertView = inflater.inflate(R.layout.listitem_footer, viewGroup, false);
 				convertView.setEnabled(false);
 				convertView.setOnClickListener(null);
