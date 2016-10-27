@@ -61,7 +61,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class DayActivity extends AppCompatActivity {
-	private static final String[] school_hours = new String[]{
+	private static final String[] school_hours = new String[] {
 		"8:15 - 9:05",
 		"9:05 - 9:55",
 		"10:10 - 11:00",

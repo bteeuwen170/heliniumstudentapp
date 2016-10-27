@@ -114,8 +114,6 @@ public class GradesFragment extends Fragment {
 		mainContext = (AppCompatActivity) getActivity();
 		gradesLayout = inflater.inflate(R.layout.fragment_grades, viewGroup, false);
 
-		boolean pass = true;
-
 		if (gradesHtml == null) {
 			termFocus = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(mainContext)
 					.getString("pref_grades_term", "1"));
@@ -127,8 +125,6 @@ public class GradesFragment extends Fragment {
 					maxYear = Integer.parseInt(((TextView) mainContext.findViewById(R.id.tv_class_hd))
 							.getText().toString().replaceAll("\\D+", ""));
 				} catch (NumberFormatException e) {
-					pass = false;
-
 					MainActivity.drawerNV.getMenu().findItem(R.id.i_schedule_md).setChecked(true);
 					MainActivity.FM.beginTransaction()
 							.replace(R.id.fl_container_am, new ScheduleFragment(), "SCHEDULE").commit();
@@ -160,6 +156,8 @@ public class GradesFragment extends Fragment {
 							.setTextColor(ContextCompat.getColor(mainContext, MainActivity.accentSecondaryColor));
 					classDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
 							.setTextColor(ContextCompat.getColor(mainContext, MainActivity.accentSecondaryColor));
+
+					return gradesLayout;
 				}
 			} else {
 				maxYear = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(mainContext)
@@ -167,186 +165,185 @@ public class GradesFragment extends Fragment {
 			}
 		}
 
-		if (pass) {
-			MainActivity.setToolbarTitle(mainContext, getString(R.string.grades), null);
+		MainActivity.setToolbarTitle(mainContext, getString(R.string.grades), null);
 
-			gradesELV = (ExpandableListView) gradesLayout.findViewById(R.id.lv_course_fg);
+		gradesELV = (ExpandableListView) gradesLayout.findViewById(R.id.lv_course_fg);
 
-			final boolean online = MainActivity.isOnline();
+		final boolean online = MainActivity.isOnline();
 
-			if (PreferenceManager.getDefaultSharedPreferences(mainContext)
-					.getString("html_grades", null) == null) { //TODO Simpler
-				if (online) {
-					getGrades(termFocus, HeliniumStudentApp.df_date()
-							.format(new Date()), HeliniumStudentApp.DIREC_CURRENT, HeliniumStudentApp.ACTION_INIT_IN);
-				} else { //TODO Display empty GradesFragment with retry option
-					Toast.makeText(mainContext, getString(R.string.database_no), Toast.LENGTH_SHORT).show();
-
-					MainActivity.drawerNV.getMenu().findItem(R.id.i_schedule_md).setChecked(true);
-					MainActivity.FM.beginTransaction()
-							.replace(R.id.fl_container_am, new ScheduleFragment(), "SCHEDULE").commit();
-				}
-			} else if (online && gradesHtml == null &&
-					PreferenceManager.getDefaultSharedPreferences(mainContext).getBoolean("pref_grades_init", true)) {
+		if (PreferenceManager.getDefaultSharedPreferences(mainContext)
+				.getString("html_grades", null) == null) { //TODO Simpler
+			if (online) {
 				getGrades(termFocus, HeliniumStudentApp.df_date()
 						.format(new Date()), HeliniumStudentApp.DIREC_CURRENT, HeliniumStudentApp.ACTION_INIT_IN);
-			} else {
-				if (gradesHtml == null)
-					gradesHtml = PreferenceManager.getDefaultSharedPreferences(mainContext)
-							.getString("html_grades", null);
+			} else { //TODO Display empty GradesFragment with retry option
+				Toast.makeText(mainContext, getString(R.string.database_no), Toast.LENGTH_SHORT).show();
 
-				if (online)
-					parseData(HeliniumStudentApp.ACTION_ONLINE);
-				else
-					parseData(HeliniumStudentApp.ACTION_OFFLINE);
+				MainActivity.drawerNV.getMenu().findItem(R.id.i_schedule_md).setChecked(true);
+				MainActivity.FM.beginTransaction()
+						.replace(R.id.fl_container_am, new ScheduleFragment(), "SCHEDULE").commit();
 			}
+		} else if (online && gradesHtml == null &&
+				PreferenceManager.getDefaultSharedPreferences(mainContext).getBoolean("pref_grades_init", true)) {
+			getGrades(termFocus, HeliniumStudentApp.df_date()
+					.format(new Date()), HeliniumStudentApp.DIREC_CURRENT, HeliniumStudentApp.ACTION_INIT_IN);
+		} else {
+			if (gradesHtml == null)
+				gradesHtml = PreferenceManager.getDefaultSharedPreferences(mainContext)
+						.getString("html_grades", null);
 
-			((SwipeRefreshLayout) gradesLayout).setColorSchemeResources(
-					MainActivity.accentSecondaryColor,MainActivity.accentPrimaryColor, MainActivity.primaryColor);
-			((SwipeRefreshLayout) gradesLayout).setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+			if (online)
+				parseData(HeliniumStudentApp.ACTION_ONLINE);
+			else
+				parseData(HeliniumStudentApp.ACTION_OFFLINE);
+		}
 
-				@Override
-				public void onRefresh() {
-					refresh();
-				}
-			});
+		((SwipeRefreshLayout) gradesLayout).setColorSchemeResources(
+				MainActivity.accentSecondaryColor,MainActivity.accentPrimaryColor, MainActivity.primaryColor);
+		((SwipeRefreshLayout) gradesLayout).setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
-			gradesELV.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-				int previousPosition = -1;
+			@Override
+			public void onRefresh() {
+				refresh();
+			}
+		});
 
-				@Override
-				public void onGroupExpand(int position) {
-					if (position != previousPosition) gradesELV.collapseGroup(previousPosition);
-					previousPosition = position;
-				}
-			});
+		gradesELV.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
+			int previousPosition = -1;
 
-			gradesELV.setOnChildClickListener(new ExpandableListView.OnChildClickListener() { //Just a little easter egg
-				int clickCount = 1;
+			@Override
+			public void onGroupExpand(int position) {
+				if (position != previousPosition) gradesELV.collapseGroup(previousPosition);
+				previousPosition = position;
+			}
+		});
 
-				@Override
-				public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int position, long id)
-				{
-					if (clickCount >= 80) {
-						Toast.makeText(mainContext, "Is this what you wanted?", Toast.LENGTH_SHORT).show();
-						startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/dQw4w9WgXcQ")));
-					} else {
-						switch (clickCount) {
-						case 2:
-							Toast.makeText(mainContext, "Good for you!", Toast.LENGTH_SHORT).show();
-							break;
-						case 10:
-							Toast.makeText(mainContext, "You're really proud of that, aren't you?",
-									Toast.LENGTH_SHORT).show();
-							break;
-						case 20:
-							Toast.makeText(mainContext, "It's really not that big of a deal...",
-									Toast.LENGTH_SHORT).show();
-							break;
-						case 40:
-							Toast.makeText(mainContext, "You can stop now.", Toast.LENGTH_SHORT).show();
-							break;
-						case 50:
-							Toast.makeText(mainContext, "Please...", Toast.LENGTH_SHORT).show();
-						case 60:
-							Toast.makeText(mainContext, "F* OFF!", Toast.LENGTH_SHORT).show();
-							break;
-						}
-					}
+		gradesELV.setOnChildClickListener(new ExpandableListView.OnChildClickListener() { //Just a little easter egg
+			int clickCount = 1;
 
-					clickCount ++;
-					return false;
-				}
-			});
-
-			MainActivity.prevIV.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					if (MainActivity.isOnline()) {
-						if (termFocus != 1) {
-							termFocus--;
-
-							getGrades(termFocus, HeliniumStudentApp.df_grades(yearFocus),
-									HeliniumStudentApp.DIREC_BACK, HeliniumStudentApp.ACTION_REFRESH_IN);
-						} else {
-							MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, HeliniumStudentApp.ACTION_ONLINE);
-						}
-					} else {
-						final int databaseFocus = Integer.parseInt(PreferenceManager
-								.getDefaultSharedPreferences(mainContext).getString("pref_grades_term", "1"));
-
-						if (PreferenceManager.getDefaultSharedPreferences(mainContext)
-								.getString("html_grades", null) != null &&
-								yearFocus == 0 && termFocus > databaseFocus) {
-							yearFocus = 0;
-							termFocus = databaseFocus;
-
-							gradesHtml = PreferenceManager.getDefaultSharedPreferences(mainContext)
-									.getString("html_grades", null);
-							parseData(HeliniumStudentApp.ACTION_OFFLINE);
-						} else {
-							MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, HeliniumStudentApp.ACTION_OFFLINE);
-						}
+			@Override
+			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int position, long id)
+			{
+				if (clickCount >= 80) {
+					Toast.makeText(mainContext, "Is this what you wanted?", Toast.LENGTH_SHORT).show();
+					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/dQw4w9WgXcQ")));
+				} else {
+					switch (clickCount) {
+					case 2:
+						Toast.makeText(mainContext, "Good for you!", Toast.LENGTH_SHORT).show();
+						break;
+					case 10:
+						Toast.makeText(mainContext, "You're really proud of that, aren't you?",
+								Toast.LENGTH_SHORT).show();
+						break;
+					case 20:
+						Toast.makeText(mainContext, "It's really not that big of a deal...",
+								Toast.LENGTH_SHORT).show();
+						break;
+					case 40:
+						Toast.makeText(mainContext, "You can stop now.", Toast.LENGTH_SHORT).show();
+						break;
+					case 50:
+						Toast.makeText(mainContext, "Please...", Toast.LENGTH_SHORT).show();
+					case 60:
+						Toast.makeText(mainContext, "F* OFF!", Toast.LENGTH_SHORT).show();
+						break;
 					}
 				}
-			});
 
-			MainActivity.historyIV.setOnClickListener(new OnClickListener() {
+				clickCount ++;
+				return false;
+			}
+		});
 
-				@Override
-				public void onClick(View v)
-				{
-					if (MainActivity.isOnline()) {
-						if (maxYear != 1) {
-							MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, HeliniumStudentApp.ACTION_ONLINE);
+		MainActivity.prevIV.setOnClickListener(new OnClickListener() {
 
-							final AlertDialog.Builder gradesDialogBuilder =new AlertDialog.Builder(
-									new ContextThemeWrapper(mainContext, MainActivity.themeDialog));
-							final View gradesLayout = View.inflate(mainContext, R.layout.dialog_grades, null);
+			@Override
+			public void onClick(View v) {
+				if (MainActivity.isOnline()) {
+					if (termFocus != 1) {
+						termFocus--;
 
-							gradesDialogBuilder.setTitle(getString(R.string.year, maxYear));
+						getGrades(termFocus, HeliniumStudentApp.df_grades(yearFocus),
+								HeliniumStudentApp.DIREC_BACK, HeliniumStudentApp.ACTION_REFRESH_IN);
+					} else {
+						MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, HeliniumStudentApp.ACTION_ONLINE);
+					}
+				} else {
+					final int databaseFocus = Integer.parseInt(PreferenceManager
+							.getDefaultSharedPreferences(mainContext).getString("pref_grades_term", "1"));
 
-							final NumberPicker yearNP = (NumberPicker) gradesLayout.findViewById(R.id.np_year_dg);
+					if (PreferenceManager.getDefaultSharedPreferences(mainContext)
+							.getString("html_grades", null) != null &&
+							yearFocus == 0 && termFocus > databaseFocus) {
+						yearFocus = 0;
+						termFocus = databaseFocus;
 
-							gradesDialogBuilder.setView(gradesLayout);
+						gradesHtml = PreferenceManager.getDefaultSharedPreferences(mainContext)
+								.getString("html_grades", null);
+						parseData(HeliniumStudentApp.ACTION_OFFLINE);
+					} else {
+						MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, HeliniumStudentApp.ACTION_OFFLINE);
+					}
+				}
+			}
+		});
 
-							//TODO Listen for year change.
+		MainActivity.historyIV.setOnClickListener(new OnClickListener() {
 
-							gradesDialogBuilder.setPositiveButton(android.R.string.ok,
-									new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(View v)
+			{
+				if (MainActivity.isOnline()) {
+					if (maxYear != 1) {
+						MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, HeliniumStudentApp.ACTION_ONLINE);
 
-										@Override
-										public void onClick(DialogInterface dialog, int which) {
-											if (MainActivity.isOnline()) {
-												final int oldValue = yearFocus;
+						final AlertDialog.Builder gradesDialogBuilder =new AlertDialog.Builder(
+								new ContextThemeWrapper(mainContext, MainActivity.themeDialog));
+						final View gradesLayout = View.inflate(mainContext, R.layout.dialog_grades, null);
 
-												yearFocus = yearNP.getValue() - maxYear;
-												getGrades(termFocus, HeliniumStudentApp.df_grades(yearFocus),
-														oldValue + HeliniumStudentApp.FOCUS_YEAR,
-														HeliniumStudentApp.ACTION_REFRESH_IN);
-											} else {
-												Toast.makeText(mainContext,
-														getString(R.string.error_conn_no), Toast.LENGTH_SHORT).show();
-											}
+						gradesDialogBuilder.setTitle(getString(R.string.year, maxYear));
+
+						final NumberPicker yearNP = (NumberPicker) gradesLayout.findViewById(R.id.np_year_dg);
+
+						gradesDialogBuilder.setView(gradesLayout);
+
+						//TODO Listen for year change.
+
+						gradesDialogBuilder.setPositiveButton(android.R.string.ok,
+								new DialogInterface.OnClickListener() {
+
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										if (MainActivity.isOnline()) {
+											final int oldValue = yearFocus;
+
+											yearFocus = yearNP.getValue() - maxYear;
+											getGrades(termFocus, HeliniumStudentApp.df_grades(yearFocus),
+													oldValue + HeliniumStudentApp.FOCUS_YEAR,
+													HeliniumStudentApp.ACTION_REFRESH_IN);
+										} else {
+											Toast.makeText(mainContext,
+													getString(R.string.error_conn_no), Toast.LENGTH_SHORT).show();
 										}
-									});
+									}
+								});
 
-							yearNP.setMinValue(1);
-							yearNP.setMaxValue(maxYear);
+						yearNP.setMinValue(1);
+						yearNP.setMaxValue(maxYear);
 
-							yearNP.setValue(maxYear);
+						yearNP.setValue(maxYear);
 
-							java.lang.reflect.Field[] pickerFields = NumberPicker.class.getDeclaredFields();
-							for (java.lang.reflect.Field pf : pickerFields) {
-								if (pf.getName().equals("mSelectionDivider")) {
-									pf.setAccessible(true);
+						java.lang.reflect.Field[] pickerFields = NumberPicker.class.getDeclaredFields();
+						for (java.lang.reflect.Field pf : pickerFields) {
+							if (pf.getName().equals("mSelectionDivider")) {
+								pf.setAccessible(true);
 
-									try {
-										pf.set(yearNP, new ColorDrawable(ContextCompat
-												.getColor(mainContext, MainActivity.accentPrimaryColor)));
-									} catch (IllegalArgumentException | IllegalAccessException ignored) {}
-									break;
+								try {
+									pf.set(yearNP, new ColorDrawable(ContextCompat
+											.getColor(mainContext, MainActivity.accentPrimaryColor)));
+								} catch (IllegalArgumentException | IllegalAccessException ignored) {}
+								break;
 									/*} else if(pf.getName().equals("mSelectorWheelPaint")) {
 										pf.setAccessible(true);
 
@@ -355,83 +352,82 @@ public class GradesFragment extends Fragment {
 													.setColor(getColor(MainActivity.themePrimaryTextColor));
 										} catch (IllegalArgumentException |
 												IllegalAccessException ignored) {}*/ //FIXME Doesn't work... yet
-								} else if (pf.getName().equals("mInputText")) {
-									pf.setAccessible(true);
+							} else if (pf.getName().equals("mInputText")) {
+								pf.setAccessible(true);
 
-									try {
-										((EditText) pf.get(yearNP)).setTextColor(ContextCompat
-												.getColor(mainContext, MainActivity.themePrimaryTextColor));
-									} catch (IllegalArgumentException | IllegalAccessException ignored) {}
-								}
+								try {
+									((EditText) pf.get(yearNP)).setTextColor(ContextCompat
+											.getColor(mainContext, MainActivity.themePrimaryTextColor));
+								} catch (IllegalArgumentException | IllegalAccessException ignored) {}
 							}
-
-							yearNP.invalidate();
-
-							gradesDialogBuilder.setNegativeButton(android.R.string.cancel, null);
-
-							AlertDialog gradesDialog = gradesDialogBuilder.create();
-
-							gradesDialog.setCanceledOnTouchOutside(true);
-							gradesDialog.show();
-
-							gradesDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat
-									.getColor(mainContext, MainActivity.accentSecondaryColor));
-							gradesDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat
-									.getColor(mainContext, MainActivity.accentSecondaryColor));
 						}
+
+						yearNP.invalidate();
+
+						gradesDialogBuilder.setNegativeButton(android.R.string.cancel, null);
+
+						AlertDialog gradesDialog = gradesDialogBuilder.create();
+
+						gradesDialog.setCanceledOnTouchOutside(true);
+						gradesDialog.show();
+
+						gradesDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat
+								.getColor(mainContext, MainActivity.accentSecondaryColor));
+						gradesDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat
+								.getColor(mainContext, MainActivity.accentSecondaryColor));
+					}
+				} else {
+					final int databaseFocus = Integer.parseInt(PreferenceManager
+							.getDefaultSharedPreferences(mainContext).getString("pref_grades_term", "1"));
+
+					if (PreferenceManager.getDefaultSharedPreferences(mainContext)
+							.getString("html_grades", null) != null &&
+							yearFocus != 0 || termFocus != databaseFocus) {
+						yearFocus = 0;
+						termFocus = databaseFocus;
+
+						gradesHtml = PreferenceManager.getDefaultSharedPreferences(mainContext)
+								.getString("html_grades", null);
+						parseData(HeliniumStudentApp.ACTION_OFFLINE);
 					} else {
-						final int databaseFocus = Integer.parseInt(PreferenceManager
-								.getDefaultSharedPreferences(mainContext).getString("pref_grades_term", "1"));
-
-						if (PreferenceManager.getDefaultSharedPreferences(mainContext)
-								.getString("html_grades", null) != null &&
-								yearFocus != 0 || termFocus != databaseFocus) {
-							yearFocus = 0;
-							termFocus = databaseFocus;
-
-							gradesHtml = PreferenceManager.getDefaultSharedPreferences(mainContext)
-									.getString("html_grades", null);
-							parseData(HeliniumStudentApp.ACTION_OFFLINE);
-						} else {
-							MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, HeliniumStudentApp.ACTION_OFFLINE);
-						}
+						MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, HeliniumStudentApp.ACTION_OFFLINE);
 					}
 				}
-			});
+			}
+		});
 
-			MainActivity.nextIV.setOnClickListener(new OnClickListener() {
+		MainActivity.nextIV.setOnClickListener(new OnClickListener() {
 
-				@Override
-				public void onClick(View v) {
-					if (MainActivity.isOnline()) {
-						if (termFocus != 4) {
-							termFocus ++;
+			@Override
+			public void onClick(View v) {
+				if (MainActivity.isOnline()) {
+					if (termFocus != 4) {
+						termFocus ++;
 
-							getGrades(termFocus, HeliniumStudentApp.df_grades(yearFocus),
-									HeliniumStudentApp.DIREC_NEXT, HeliniumStudentApp.ACTION_REFRESH_IN);
-						} else {
-							MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, HeliniumStudentApp.ACTION_ONLINE);
-						}
+						getGrades(termFocus, HeliniumStudentApp.df_grades(yearFocus),
+								HeliniumStudentApp.DIREC_NEXT, HeliniumStudentApp.ACTION_REFRESH_IN);
 					} else {
-						final int databaseFocus = Integer.parseInt(PreferenceManager
-								.getDefaultSharedPreferences(mainContext).getString("pref_grades_term", "1"));
+						MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, HeliniumStudentApp.ACTION_ONLINE);
+					}
+				} else {
+					final int databaseFocus = Integer.parseInt(PreferenceManager
+							.getDefaultSharedPreferences(mainContext).getString("pref_grades_term", "1"));
 
-						if (PreferenceManager.getDefaultSharedPreferences(mainContext)
-								.getString("html_grades", null) != null &&
-								yearFocus == 0 && termFocus < databaseFocus) {
-							yearFocus = 0;
-							termFocus = databaseFocus;
+					if (PreferenceManager.getDefaultSharedPreferences(mainContext)
+							.getString("html_grades", null) != null &&
+							yearFocus == 0 && termFocus < databaseFocus) {
+						yearFocus = 0;
+						termFocus = databaseFocus;
 
-							gradesHtml = PreferenceManager.getDefaultSharedPreferences(mainContext)
-									.getString("html_grades", null);
-							parseData(HeliniumStudentApp.ACTION_OFFLINE);
-						} else {
-							MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, HeliniumStudentApp.ACTION_OFFLINE);
-						}
+						gradesHtml = PreferenceManager.getDefaultSharedPreferences(mainContext)
+								.getString("html_grades", null);
+						parseData(HeliniumStudentApp.ACTION_OFFLINE);
+					} else {
+						MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, HeliniumStudentApp.ACTION_OFFLINE);
 					}
 				}
-			});
-		}
+			}
+		});
 
 		return gradesLayout;
 	}
@@ -895,6 +891,19 @@ public class GradesFragment extends Fragment {
 			MainActivity.yearTV.setText(mainContext.getString(R.string.year, maxYear + yearFocus));
 
 			MainActivity.setUI(HeliniumStudentApp.VIEW_GRADES, transition);
+
+			/* TODO This should be stored somewhere */
+			String nameHtml = gradesHtml;
+			nameHtml = nameHtml.substring(nameHtml.indexOf("<h3>"));
+			((TextView) mainContext.findViewById(R.id.tv_name_hd))
+					.setText((nameHtml.substring(5, nameHtml.indexOf(" ("))));
+			((TextView) mainContext.findViewById(R.id.tv_class_hd))
+					.setText((nameHtml.substring(nameHtml.indexOf("(") + 1, nameHtml.indexOf(")")) +
+					(PreferenceManager.getDefaultSharedPreferences(mainContext)
+					.getString("pref_general_class", "0").equals("0") ? "" :
+					" (" + mainContext.getString(R.string.general_class) + ' ' +
+					PreferenceManager.getDefaultSharedPreferences(mainContext).getString("pref_general_class", "") +
+					')')));
 		}
 	}
 
