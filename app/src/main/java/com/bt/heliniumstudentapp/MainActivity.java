@@ -2,7 +2,7 @@
  *
  * Helinium Studentapp
  *
- * Copyright (C) 2016 Bastiaan Teeuwen <bastiaan.teeuwen170@gmail.com>
+ * Copyright (C) 2016 Bastiaan Teeuwen <bastiaan@mkcl.nl>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -297,7 +297,7 @@ public class MainActivity extends AppCompatActivity {
 
 									aboutDialogBuilder.setTitle(R.string.about);
 									aboutDialogBuilder.setMessage(getResources().getString(R.string.app_name) +
-											"\n\nCopyright (C) 2016 Bastiaan Teeuwen <bastiaan.teeuwen170@gmail.com>\n\n" +
+											"\n\nCopyright (C) 2016 Bastiaan Teeuwen <bastiaan@mkcl.nl>\n\n" +
 											"This program is free software; you can redistribute it and/or " +
 											"modify it under the terms of the GNU General Public License " +
 											"as published by the Free Software Foundation; version 2 " +
